@@ -1,5 +1,5 @@
 package com.kh.sixmusic.member.model.service;
 
-public class MemberService {
+public interface MemberService {
 
 }

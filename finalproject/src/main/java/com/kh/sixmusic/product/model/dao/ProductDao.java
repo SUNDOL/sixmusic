@@ -1,8 +1,8 @@
-package com.kh.sixmusic.member.model.dao;
+package com.kh.sixmusic.product.model.dao;
 
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class MemberDao {
+public class ProductDao {
 
 }

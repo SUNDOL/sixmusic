@@ -34,7 +34,7 @@ public class MemberController {
 	public String signUpMember(Member m, HttpSession session) {
 		int result = memberService.signUpMember(m);
 		if (result > 0) {
-			session.setAttribute("alertMsg", "성공!"); //임시 데이터 수정 필요 
+			session.setAttribute("alertMsg", "success!!"); //임시 데이터 수정 필요 
 			return "redirect:/";
 		}
 		return "common/error"; //임시 데이터 수정 필요 

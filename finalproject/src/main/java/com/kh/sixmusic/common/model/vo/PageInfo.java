@@ -1,4 +1,4 @@
-package com.kh.sixmusic.common.vo;
+package com.kh.sixmusic.common.model.vo;
 import org.apache.ibatis.session.RowBounds;
 
 import lombok.AllArgsConstructor;

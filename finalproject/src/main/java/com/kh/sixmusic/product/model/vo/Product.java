@@ -17,4 +17,5 @@ public class Product {
 	private int price;//	PRODUCT_PRICE	상품_가격
 	private int quantity;//	PRODUCT_QUANTITY	상품_수량
 	private String status;//	STATUS	상태값(Y/N)
+	private int rating;//	REVIEW 테이블의  RATING의 평균 값
 }

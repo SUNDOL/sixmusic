@@ -1,4 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
 <mapper namespace="dataMapper">
+	<!-- category -->
+	<resultMap type="category" id="categoryResult">
+		<result column="CATEGORY_NO" property="categoryNo"/>
+		<result column="CATEGORY_NAME" property="name"/>
+		<result column="STATUS" property="status"/>
+	</resultMap>
+	<select id="selectCategory" resultMap="categoryResult">
+		SELECT
+		    CATEGORY_NO ,
+			CATEGORY_NAME ,
+			STATUS  
+		FROM CATEGORY
+	    WHERE STATUS LIKE 'Y'
+	    ORDER BY CATEGORY_NO
+	</select>
+	<!-- price -->
+	<resultMap type="Price" id="priceResult">
+		<result column="PRICE_NO" property="priceNo"/>
+		<result column="PRICE_MIN" property="min"/>
+		<result column="PRICE_MAX" property="max"/>
+	</resultMap>
+	<select id="selectPrice" resultMap="priceResult">
+		SELECT
+			PRICE_NO ,
+			PRICE_MIN ,
+			PRICE_MAX  
+		FROM PRICE
+		ORDER BY PRICE_MIN
+	</select>
 </mapper>

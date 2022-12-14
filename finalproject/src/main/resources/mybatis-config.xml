@@ -14,8 +14,18 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "mybatis-3-config.dtd" >
 		<typeAlias type="com.kh.sixmusic.order.model.vo.ProductOrder" alias="productOrder"/>
 		<typeAlias type="com.kh.sixmusic.order.model.vo.TotalOrder" alias="totalOrder"/>
 		<typeAlias type="com.kh.sixmusic.order.model.vo.Cart" alias="cart"/>
+		<typeAlias type="com.kh.sixmusic.order.model.vo.Wishlist" alias="wishlist"/>
+		<typeAlias type="com.kh.sixmusic.data.model.vo.Model" alias="model"/>
+		<typeAlias type="com.kh.sixmusic.data.model.vo.Type" alias="type"/>
+		<typeAlias type="com.kh.sixmusic.data.model.vo.Brand" alias="brand"/>
+		<typeAlias type="com.kh.sixmusic.data.model.vo.Category" alias="category"/>
+		<typeAlias type="com.kh.sixmusic.data.model.vo.Filter" alias="filter"/>
+		<typeAlias type="com.kh.sixmusic.data.model.vo.Price" alias="price"/>
 	</typeAliases>
 	<mappers>
 		<mapper resource="/mappers/member-mapper.xml"/>
+		<mapper resource="/mappers/data-mapper.xml"/>
+		<mapper resource="/mappers/order-mapper.xml"/>
+		<mapper resource="/mappers/product-mapper.xml"/>
 	</mappers>
 </configuration>

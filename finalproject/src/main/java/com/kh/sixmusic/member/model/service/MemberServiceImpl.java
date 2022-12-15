@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.sixmusic.member.model.dao.MemberDao;
+import com.kh.sixmusic.member.model.vo.Member;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -12,4 +13,24 @@ public class MemberServiceImpl implements MemberService {
 	private SqlSessionTemplate sqlSession;
 	@Autowired
 	private MemberDao memberDao;
+	@Override
+	public Member loginMember(Member m) {
+		return memberDao.loginMember(sqlSession,m);
+	}
+	@Override
+	public int checkId(String MemberId) {
+		return memberDao.checkId(sqlSession,MemberId);
+	}
+	@Override
+	public int signUpMember(Member m) {
+		return memberDao.signUpMember(sqlSession,m);
+	}
+	@Override
+	public int updateMemner(Member m) {
+		return memberDao.updateMemner(sqlSession,m);
+	}
+	@Override
+	public int deleteMember(Member m) {
+		return memberDao.deleteMember(sqlSession,m);
+	}
 }

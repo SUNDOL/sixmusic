@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="orderMapper">
+
+<!-- product -->
+<resultMap type="product" id="productResult">
+	<result column="PRODUCT_NAME" property="name"/>
+	<result column="PRODUCT_PRICE" property="price"/>
+	<result column="PRODUCT_QUANTITY" property="quantity"/>
+</resultMap>
+<!-- 주문할 상품의 정보 -->
+<select id="seletOrderProduct" resultMap="productResult">
+	SELECT
+		P.PRODUCT_NAME ,
+		P.PRODUCT_PRICE ,
+		C.QUANTITY AS PRODUCT_QUANTITY 
+	FROM PRODUCT
+    JOIN CART C ON(P.PRODUCT_NO=C.REF_PRODUCT_NO)
+	WHERE CART_NO IN
+	<foreach collection="array" item="cartNo" open="(" close=")" separator=",">
+	 	#{cartNo}
+	</foreach>
+    ORDER BY P.PRODUCT_PRICE DESC
+</select>
+
+<!-- totalOrder -->
+<!-- 주문정보에 데이터를 입력 -->
+<insert id="insertTotalOrder" parameterType="totalOrder">
+	INSERT INTO TOTAL_ORDER(
+	    ORDER_NO ,
+		REF_MEMBER_NO ,
+		ORDER_DATE ,
+		PAYMENT
+		)
+	VALUES(
+		SEQ_ORDER.NEXTVAL,
+		#{memberNo},
+		SYSDATE,
+		#{payment}
+	)
+</insert>
+<update id="updateTotalOrder" parameterType="_int">
+	UPDATE TOTAL_ORDER
+	SET STATUS = 'Y'
+	WHERE STATUS LIKE 'N'
+	AND REF_MEMBER_NO LIKE #{memberNo}
+	AND ORDER_DATE LIKE (
+		SELECT MAX(ORDER_DATE) 
+		FROM TOTAL_ORDER 
+		WHERE REF_MEMBER_NO LIKE #{memberNo}
+	)
+</update>
+<delete id="deleteTotalOrder" parameterType="_int">
+	DELETE FORM  TOTAL_ORDER
+	WHERE STATUS LIKE 'N'
+	AND REF_MEMBER_NO LIKE #{memberNo}
+</delete>
+<!-- 결제할 주문정보에 주문번호 -->
+<select id="selectOrderNo" parameterType="_int" resultType="_int">
+	SELECT ORDER_NO
+	FROM (
+		SELECT ORDER_NO
+		FROM TOTAL_ORDER
+		WHERE STATUS LIKE 'N'
+		AND REF_MEMBER_NO LIKE #{memberNo}
+		ORDER BY ORDER_DATE DESC
+		)
+	WHERE ROWNUM = 1
+</select>
+
+<!-- cart -->
+<resultMap type="cart" id="cartResult">
+	<result column="CART_NO" property="cartNo"/>
+	<result column="REF_MEMBER_NO" property="memberNo"/>
+	<result column="REF_PRODUCT_NO" property="productNo"/>
+	<result column="QUANTITY" property="quantity"/>
+</resultMap>
+<!-- 주문할 장바구니에 담긴 정보 -->
+<select id="selectOrderCart" resultMap="cartResult">
+	SELECT
+		CART_NO ,
+		REF_MEMBER_NO ,
+		REF_PRODUCT_NO ,
+		QUANTITY 
+	FROM CART
+	WHERE CART_NO IN
+	<foreach collection="array" item="cartNo" open="(" close=")" separator=",">
+	 	#{cartNo}
+	</foreach>
+</select>
+<delete id="deleteOrderCart" parameterType="_int">
+	DELETE FROM CART
+	WHERE REF_MEMBER_NO LIKE #{memberNo}
+</delete>
+<!-- productOrder -->
+<resultMap type="productOrderResult" id="productOrderResult">
+	<result column="REF_ORDER_NO" property="orderNo"/>
+	<result column="REF_PRODUCT_NO" property="productNo"/>
+	<result column="QUANTITY" property="quantity"/>
+</resultMap>
+
+<!-- 주문내역정보 입력 -->
+<select id="insertProductOrder" parameterType="ArrayList" resultMap="productOrderResult">
+	INSERT INTO PRODUCT_ORDER(
+		REF_ORDER_NO ,
+		REF_PRODUCT_NO ,
+		QUANTITY
+	)
+	VALUES
+	<foreach item="po" index="index" collection="list">
+	(
+		 #{po.orderNo}
+		 ,#{po.productNo}
+		 ,#{po.quantity}
+	)
+	</foreach>
+</select>
+<delete id="deleteProductOrder" parameterType="_int">
+	DELETE FROM PRODUCT_ORDER
+	WHERE  REF_ORDER_NO IN(
+		SELECT ORDER_NO
+		FROM TOTAL_ORDER 
+		WHERE STATUS LIKE 'N'
+		AND REF_MEMBER_NO LIKE #{memberNo}
+	)
+</delete>
+</mapper>

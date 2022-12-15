@@ -9,6 +9,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
 
@@ -37,21 +38,30 @@ public class OrderController {
 	@ResponseBody
 	@RequestMapping("kakaopay.cls")
 	public String kakaoPay(int[] cartNo, HttpSession session) throws IOException {
-		
-		ArrayList<Product> pList = orderService.seletProductList(cartNo);
 		Member loginUser = (Member) session.getAttribute("loginUser");
-		int payment = 0;
-		int sum = 0;
+
+		//결제할 제품의 정보를 받기
+		ArrayList<Product> pList = orderService.seletOrderProduct(cartNo);
+		
+		//총지불액
+		int totalPayment = 0;
+		//총수량
+		int totalQuantity = 0;
 		for (Product p : pList) {
-			payment += p.getPrice() * p.getQuantity();
-			sum += p.getQuantity();
+			totalPayment += p.getPrice() * p.getQuantity();
+			totalQuantity += p.getQuantity();
 		}
 		
+		//주문 테이블에 데이터 작성
 		TotalOrder to = new TotalOrder();
-		to.setPayment(payment);
+		to.setPayment(totalPayment);
 		to.setMemberNo(loginUser.getMemberNo());
 		
-		int result = orderService.insertOrder(to,cartNo);
+		int result = orderService.insertTotalOrder(to,cartNo);
+		
+		if (result>0) {
+			return null;
+		}
 		
 		// 결제정보를 작성
 		URL url = new URL("https://kapi.kakao.com/v1/payment/ready");
@@ -63,23 +73,25 @@ public class OrderController {
 		urlConn.setDoOutput(true);
 		
 		// 상품명칭 ex) 5건
-		String item_name = sum+"건";
+		String item_name = totalQuantity+"건";
 		// 수량 ex) 5
-		String quantity = String.valueOf(sum);
+		String quantity = String.valueOf(totalQuantity);
 		// 총 금액 ex) 5000
 		String total_amount = String.valueOf(to.getPayment());
-		// 성공시 이동 페이지
-		String approval_url = "success.or";
-		// 실패시 이동 페이지
-		String fail_url = "error.or";
-		// 취소시 이동 페이지
-		String cancel_url = "cancel.or";
-
-		String parm = "cid=TC0ONETIME" + "&partner_order_id=partner_order_id" + "&partner_user_id=partner_user_id"
-				+ "&item_name=" + URLEncoder.encode(item_name, "UTF-8") + "&quantity=" + quantity + "&total_amount="
-				+ total_amount + "&tax_free_amount=0" + "&approval_url=http://localhost:8887/sixmusic/" + approval_url
-				+ "&fail_url=http://localhost:8887/sixmusic/" + fail_url + "&cancel_url=http://localhost:8887/sixmusic/"
-				+ cancel_url;
+		//서버 주소
+		String locatin = "http://localhost:8887/sixmusic/";
+				
+		//카카오페이로 넘길 값
+		String parm = "cid=TC0ONETIME"
+				+ "&partner_order_id=partner_order_id"
+				+ "&partner_user_id=partner_user_id"
+				+ "&item_name=" + URLEncoder.encode(item_name, "UTF-8") 
+				+ "&quantity=" + quantity 
+				+ "&total_amount=" + total_amount 
+				+ "&tax_free_amount=0" 
+				+ "&approval_url=" + locatin.concat(approval_url)
+				+ "&fail_url=" + locatin.concat(fail_url)
+				+ "&cancel_url="+ locatin.concat(cancel_url);
 		DataOutputStream output = new DataOutputStream(urlConn.getOutputStream());
 		output.writeBytes(parm);
 		output.close();
@@ -97,23 +109,38 @@ public class OrderController {
 
 	}
 	
+
+	// 성공시 Mapping
+	private String approval_url = "success.or";
+	// 실패시 Mapping
+	private String fail_url = "falure.or";
+	// 취소시 Mapping
+	private String cancel_url = "cancel.or";
+	// 카카오페이지 이동 페이지
+	private String result_url = "common/payResult";
 	
 	@GetMapping("success.or")
-	public ModelAndView paySuccess(ModelAndView mv) {
+	public ModelAndView paySuccess(ModelAndView mv, HttpSession session) {
+		Member loginUser = (Member) session.getAttribute("loginUser");
+		orderService.updateOrderData(loginUser.getMemberNo());
 		mv.addObject("result", "success");
-		mv.setViewName("common/payResult");
+		mv.setViewName(result_url);
 		return mv;
 	}
-	@GetMapping("error.or")
-	public ModelAndView payError(ModelAndView mv) {
+	@GetMapping("falure.or")
+	public ModelAndView payFalure(ModelAndView mv, HttpSession session) {
+		Member loginUser = (Member) session.getAttribute("loginUser");
+		orderService.deleteOrderData(loginUser.getMemberNo());
 		mv.addObject("result", "error");
-		mv.setViewName("common/payResult");
+		mv.setViewName(result_url);
 		return mv;
 	}
 	@GetMapping("cancel.or")
-	public ModelAndView payCancel(ModelAndView mv) {
+	public ModelAndView payCancel(ModelAndView mv, HttpSession session) {
+		Member loginUser = (Member) session.getAttribute("loginUser");
+		orderService.deleteOrderData(loginUser.getMemberNo());
 		mv.addObject("result", "cancel");
-		mv.setViewName("common/payResult");
+		mv.setViewName(result_url);
 		return mv;
 	}
 }

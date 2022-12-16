@@ -52,7 +52,6 @@
                 </select>
             </div>
         </div>
-
         
 	<%@ include file="common/filter.jsp" %>
 </body>

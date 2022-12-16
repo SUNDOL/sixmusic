@@ -1,6 +1,6 @@
 function kakaoPay(){
     $.ajax({
-        url:'kakaopay.cls',
+        url:'kakaopay/pay.or',
         dataType:'json',
         success:function(data){
         	if(data!=null){

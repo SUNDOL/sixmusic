@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @Data
 public class Model {
 	private int modelNo;//	MODEL_NO	모델_번호
-	private int name;//	MODEL_NAME	모델명
+	private String name;//	MODEL_NAME	모델명
 	private int brandNo;//	REF_BRAND_NO	회사_번호(FK)
-	private int status;//	STATUS	상태값(Y/N)
+	private String status;//	STATUS	상태값(Y/N)
+	private int quantity;// 제품의 갯수
 }

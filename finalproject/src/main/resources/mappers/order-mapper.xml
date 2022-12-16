@@ -4,10 +4,20 @@
 
 <!-- product -->
 <resultMap type="product" id="productResult">
-	<result column="PRODUCT_NAME" property="name"/>
+	<result column="PRODUCT_NO" property="productNo"/>
 	<result column="PRODUCT_PRICE" property="price"/>
 	<result column="PRODUCT_QUANTITY" property="quantity"/>
 </resultMap>
+<!-- 사용자의 장바구니 정보 출력 -->
+<select id="selectCartProduct" parameterType="_int" resultMap="productResult">
+	SELECT
+	P.PRODUCT_NO,
+	P.PRODUCT_PRICE
+	FROM PRODUCT P
+	JOIN CART C ON(C.CART_NO = P.PRODUCT_NO)
+	WHERE CT.REF_MEMBER_NO = #{memberNo}
+	ORDER BY C.CART_NO DESC
+</select>
 <!-- 주문할 상품의 정보 -->
 <select id="seletOrderProduct" resultMap="productResult">
 	SELECT
@@ -22,20 +32,62 @@
 	</foreach>
     ORDER BY P.PRODUCT_PRICE DESC
 </select>
-
+<!-- productAttachment -->
+<resultMap type="productAttachment" id="productAttachmentResult">
+	<result column="REF_PRODUCT_NO" property="productNo"/>
+	<result column="PRODUCT_ATTACHMENT_CHANGE_NAME" property="changeName"/>
+	<result column="PRODUCT_ATTACHMENT_CHANGE_NAME" property="changeName"/>
+	<result column="PRODUCT_ATTACHMENT_FILE_PATH" property="filePath"/>
+</resultMap>
+<!-- 즐겨찾기에 보여질 상품 사진 -->
+<select id="selectWishlistAttachment" parameterType="_int">
+	SELECT
+		MIN(PA.PRODUCT_ATTACHMENT_NO) ,
+		PA.REF_PRODUCT_NO ,
+		PA.PRODUCT_ATTACHMENT_ORIGIN_NAME ,
+		PA.PRODUCT_ATTACHMENT_CHANGE_NAME ,
+		PA.PRODUCT_ATTACHMENT_FILE_PATH 
+	FROM PRODUCT_ATTACHMENT PA
+	JOIN WISHLIST W ON(W.REF_PRODUCT_NO = PA.REF_PRODUCT_NO)
+	WHERE W.REF_MEMBER_NO LIKE #{memberNo}
+	GROUP BY 
+		PA.REF_PRODUCT_NO ,
+		PA.PRODUCT_ATTACHMENT_ORIGIN_NAME ,
+		PA.PRODUCT_ATTACHMENT_CHANGE_NAME ,
+		PA.PRODUCT_ATTACHMENT_FILE_PATH 
+	ORDER BY W.REF_PRODUCT_NO DESC
+</select>
+<!-- 장바구니에 보여질 상품 사진 -->
+<select id="selectCartAttachment" parameterType="_int" resultMap="productAttachmentResult">
+	SELECT 
+		MIN(PA.PRODUCT_ATTACHMENT_NO),
+		PA.REF_PRODUCT_NO ,
+		PA.PRODUCT_ATTACHMENT_ORIGIN_NAME,
+		PA.PRODUCT_ATTACHMENT_CHANGE_NAME ,
+		PA.PRODUCT_ATTACHMENT_FILE_PATH
+	FROM PRODUCT_ATTACHMENT PA
+	JOIN CART C ON(C.REF_PRODUCT_NO=PA.REF_PRODUCT_NO)
+	WHERE C.REF_MEMBER_NO LIKE #{memberNo}
+	GROUP BY 
+		PA.REF_PRODUCT_NO ,
+		PA.PRODUCT_ATTACHMENT_ORIGIN_NAME,
+		PA.PRODUCT_ATTACHMENT_CHANGE_NAME ,
+		PA.PRODUCT_ATTACHMENT_FILE_PATH
+	ORDER BY C.CART_NO DESC
+</select>
 <!-- totalOrder -->
 <!-- 주문정보에 데이터를 입력 -->
 <insert id="insertTotalOrder" parameterType="totalOrder">
 	INSERT INTO TOTAL_ORDER(
 	    ORDER_NO ,
 		REF_MEMBER_NO ,
-		ORDER_DATE ,
+		REF_ZIPCODE ,
 		PAYMENT
 		)
 	VALUES(
 		SEQ_ORDER.NEXTVAL,
 		#{memberNo},
-		SYSDATE,
+		#{zipcode},
 		#{payment}
 	)
 </insert>
@@ -67,7 +119,22 @@
 		)
 	WHERE ROWNUM = 1
 </select>
-
+<!-- wishlist -->
+<insert id="insertWishlist" parameterType="wishlist">
+	INSERT INTO WISHLIST(
+		REF_MEMBER_NO, 
+		REF_PRODUCT_NO
+	)
+	VALUES(
+		#{memberNo},
+		#{productNo}
+	)
+</insert>
+<delete id="deleteWishlist"  parameterType="wishlist">
+	DELETE FROM WISHLIST
+	WHERE REF_MEMBER_NO LIKE #{memberNo}
+	AND REF_PRODUCT_NO LIKE #{productNo}
+</delete>
 <!-- cart -->
 <resultMap type="cart" id="cartResult">
 	<result column="CART_NO" property="cartNo"/>
@@ -75,6 +142,27 @@
 	<result column="REF_PRODUCT_NO" property="productNo"/>
 	<result column="QUANTITY" property="quantity"/>
 </resultMap>
+
+<!-- 장바구니 추가 -->
+<insert id="insertCart" parameterType="cart">
+	INSERT INTO CART(
+		CART_NO ,
+		REF_MEMBER_NO ,
+		REF_PRODUCT_NO ,
+		QUANTITY 
+	)
+	VALUES(
+		SEQ_CART.NEXTVAL,
+		#{memberNo},
+		#{productNo},
+		#{quantity}
+	)
+</insert>
+<!-- 장바구니 삭제 -->
+<delete id="deleteCart" parameterType="_int">
+	DELETE FROM CART
+	WHERE CART_NO LIKE #{cartNo}
+</delete>
 <!-- 주문할 장바구니에 담긴 정보 -->
 <select id="selectOrderCart" resultMap="cartResult">
 	SELECT
@@ -93,7 +181,7 @@
 	WHERE REF_MEMBER_NO LIKE #{memberNo}
 </delete>
 <!-- productOrder -->
-<resultMap type="productOrderResult" id="productOrderResult">
+<resultMap type="productOrder" id="productOrderResult">
 	<result column="REF_ORDER_NO" property="orderNo"/>
 	<result column="REF_PRODUCT_NO" property="productNo"/>
 	<result column="QUANTITY" property="quantity"/>

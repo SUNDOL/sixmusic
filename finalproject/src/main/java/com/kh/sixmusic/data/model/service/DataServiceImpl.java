@@ -7,8 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.sixmusic.data.model.dao.DataDao;
+import com.kh.sixmusic.data.model.vo.Brand;
 import com.kh.sixmusic.data.model.vo.Category;
+import com.kh.sixmusic.data.model.vo.Model;
 import com.kh.sixmusic.data.model.vo.Price;
+import com.kh.sixmusic.data.model.vo.Type;
 
 @Service
 public class DataServiceImpl implements DataService {
@@ -23,5 +26,17 @@ public class DataServiceImpl implements DataService {
 	@Override
 	public ArrayList<Price> selectPrice() {
 		return dataDao.selectPrice(sqlSession);
+	}
+	@Override
+	public ArrayList<Type> selectType(int categoryNo) {
+		return dataDao.selectType(sqlSession, categoryNo);
+	}
+	@Override
+	public ArrayList<Brand> selectBrand(int typeNo) {
+		return dataDao.selectBrand(sqlSession, typeNo);
+	}
+	@Override
+	public ArrayList<Model> selectModel(int brandNo) {
+		return dataDao.selectModel(sqlSession, brandNo);
 	}
 }

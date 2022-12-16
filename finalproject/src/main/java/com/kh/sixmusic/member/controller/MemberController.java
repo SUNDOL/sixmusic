@@ -10,13 +10,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.kh.sixmusic.member.model.service.MemberService;
 import com.kh.sixmusic.member.model.vo.Member;
+import com.kh.sixmusic.order.model.vo.Address;
 
 @Controller
 public class MemberController {
 	@Autowired
 	private MemberService memberService;
 
-	@PostMapping("login.me")
+	@PostMapping("member/login.me")
 	public String loginMember(Member m, HttpSession session) {
 		Member loginUser = memberService.loginMember(m);
 		if (loginUser != null) {
@@ -25,14 +26,33 @@ public class MemberController {
 		return "redirect:/";
 	}
 
-	@GetMapping("signUp.me")
+	@GetMapping("member/logout.me")
+	public ModelAndView logoutMember(ModelAndView mv, HttpSession session) {
+		session.removeAttribute("loginUser");
+		mv.setViewName("redirect:/");
+		return mv;
+		
+	}
+	
+	
+	@PostMapping("member/signUp.me")
+	public String signUpMember(Member m, Address a, HttpSession session) {
+		int result = memberService.signUpMember(m, a);
+		if (result > 0) {
+			session.setAttribute("alertMsg", "success!!"); //임시 데이터 수정 필요 
+			return "redirect:/";
+		}
+		return "common/error"; //임시 데이터 수정 필요 
+	}
+	
+	@GetMapping("member/signUp.me")
 	public String signUpMember(Member m) {
 		return "/member/signUp"; //임시 데이터 수정 필요                                                                          
 	}
 
-	@PostMapping("signUp.me")
-	public String signUpMember(Member m, HttpSession session) {
-		int result = memberService.signUpMember(m);
+	@PostMapping("member/secession.me")
+	public String secessionMember(Member m, HttpSession session) {
+		int result = memberService.secessionMember(m);
 		if (result > 0) {
 			session.setAttribute("alertMsg", "success!!"); //임시 데이터 수정 필요 
 			return "redirect:/";
@@ -40,7 +60,8 @@ public class MemberController {
 		return "common/error"; //임시 데이터 수정 필요 
 	}
 
-	@GetMapping("kakao.me")
+	
+	@GetMapping("kakao/login.me")
 	public ModelAndView kakaoMember(Member m, ModelAndView mv, HttpSession session) {
 		Member loginUser = memberService.loginMember(m);
 		if (loginUser != null) {
@@ -52,4 +73,5 @@ public class MemberController {
 		}
 		return mv;
 	}
+	
 }

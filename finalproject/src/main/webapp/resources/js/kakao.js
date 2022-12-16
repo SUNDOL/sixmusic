@@ -15,9 +15,11 @@ function kakaoLogin() {
                 success: (res) => {
                     const kakao_account = res.kakao_account;
                     console.log(kakao_account.email); //사용자 정보
+                    let email = kakao_account.email;
+                    location.href='kakao/login.me?memberId='+email+'&refTypeNo=2';
                 }
             });
-            //window.location.href='/sixmusicTest1' //리다이렉트 되는 코드
+            location.href='/sixmusicTest1' //리다이렉트 되는 코드
         },
         fail: function (error) {
             console.log(error);
@@ -33,8 +35,7 @@ function kakaoLogout() {
     }
     Kakao.Auth.logout(function (response) {
         alert(response + ' logout');
-        console.log(response);
-        // window.location.href='/sixmusicTest1'
+        location.href='member/logout.me';
     });
 };
 

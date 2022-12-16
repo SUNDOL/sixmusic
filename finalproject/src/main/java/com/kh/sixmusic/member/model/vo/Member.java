@@ -18,7 +18,6 @@ public class Member {
 	private String nickname;//	MEMBER_NICKNAME	회원_닉네임
 	private String grade;//	REF_GRADE_NO	회원_등급번호
 	private String gender;//	GENDER	성별
-	private String address;//	ADDRESS	주소
 	private Date birthday;//	BIRTHDAY	생일
 	private Date createDate; //	CREATE_DATE	회원가입일
 	private int point; //	POINT	포인트

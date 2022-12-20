@@ -10,8 +10,7 @@ import lombok.NoArgsConstructor;
 public class Filter {
 	private int categoryNo;
 	private int typeNo;
-	private int modelNo;
 	private int brandNo;
-	private int priceMax;
-	private int priceMin;
+	private int[] modelNo;
+	private int[] priceNo;
 }

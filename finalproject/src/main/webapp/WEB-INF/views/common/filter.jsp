@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+
 <script src="resources/js/filter.js"></script>
 </head>
 <body>
@@ -82,7 +83,7 @@
                             <button class="accordion-button" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#panelsStayOpen-collapseFive" aria-expanded="true"
                                 aria-controls="panelsStayOpen-collapseFive">
-                                Model
+                                Price
                             </button>
                         </h2>
                         <div id="panelsStayOpen-collapseFive" class="accordion-collapse collapse show"

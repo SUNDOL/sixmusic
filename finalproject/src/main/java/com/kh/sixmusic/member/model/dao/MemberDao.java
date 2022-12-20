@@ -9,7 +9,7 @@ import com.kh.sixmusic.order.model.vo.Address;
 public class MemberDao {
 
 	public Member loginMember(SqlSessionTemplate sqlSession, Member m) {
-		return null;
+		return sqlSession.selectOne("memberMapper.loginMember", m);
 	}
 
 	public int checkId(SqlSessionTemplate sqlSession, String memberId) {

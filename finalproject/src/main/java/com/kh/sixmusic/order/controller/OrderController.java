@@ -9,8 +9,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.function.Supplier;
 
 import javax.servlet.http.HttpSession;
 
@@ -22,17 +20,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.kh.sixmusic.member.model.vo.Member;
 import com.kh.sixmusic.order.model.service.OrderService;
 import com.kh.sixmusic.order.model.vo.Cart;
-import com.kh.sixmusic.order.model.vo.ProductOrder;
 import com.kh.sixmusic.order.model.vo.TotalOrder;
 import com.kh.sixmusic.order.model.vo.Wishlist;
 import com.kh.sixmusic.product.model.vo.Product;
 
-import oracle.net.aso.s;
 
 @Controller
 public class OrderController {

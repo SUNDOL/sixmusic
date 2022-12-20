@@ -1,4 +1,4 @@
-//<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+//<script src="https://developers.kakao.com/sdk/js/kakao.js"></script> 
 
 //SIXMUSIC JavaScript 키
 const javaScriptKey = '626160912f25bfe80a223c04d175085d';

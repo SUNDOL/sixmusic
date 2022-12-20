@@ -5,13 +5,14 @@ import java.util.ArrayList;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import com.kh.sixmusic.product.model.vo.Review;
 import com.kh.sixmusic.common.model.vo.PageInfo;
 import com.kh.sixmusic.data.model.vo.Filter;
 import com.kh.sixmusic.product.model.dao.ProductDao;
 import com.kh.sixmusic.product.model.vo.Product;
 import com.kh.sixmusic.product.model.vo.ProductAttachment;
 import com.kh.sixmusic.product.model.vo.ReviewAttachment;
+
 
 @Service
 public class ProductServiceImpl implements ProductService{
@@ -20,15 +21,27 @@ public class ProductServiceImpl implements ProductService{
 	@Autowired
 	private ProductDao productDao;
 	@Override
-	public ArrayList<ProductAttachment> selectProductAttachmentList(PageInfo pi) {
+	public int selectProductCount() {
+		return 0;
+	}
+	@Override
+	public int selectProductCount(Filter f) {
+		return productDao.selectProductCount(sqlSession,f);
+	}
+	@Override
+	public ArrayList<Product> selectProductList(PageInfo pi, Filter f) {
+		return productDao.selectProductList(sqlSession,pi,f);
+	}
+	@Override
+	public ArrayList<Product> selectProductList(PageInfo pi) {
 		return null;
 	}
 	@Override
-	public Product selectProduct(int productNo) {
-		return null;
+	public ArrayList<ProductAttachment> selectProductAttachmentList(ArrayList<Product> pList) {
+		return productDao.selectProductAttachmentList(sqlSession,pList);
 	}
 	@Override
-	public ArrayList<com.kh.sixmusic.product.model.vo.Review> Review(int productNo) {
+	public ArrayList<Review> Review(int productNo) {
 		return null;
 	}
 	@Override
@@ -36,15 +49,15 @@ public class ProductServiceImpl implements ProductService{
 		return null;
 	}
 	@Override
-	public com.kh.sixmusic.product.model.vo.Review selectReview(int reviewNo) {
+	public Product selectProduct(int productNo) {
+		return null;
+	}
+	@Override
+	public Review selectReview(int reviewNo) {
 		return null;
 	}
 	@Override
 	public ReviewAttachment selectReviewAttachment(int reviewNo) {
-		return null;
-	}
-	@Override
-	public ArrayList<Product> selectProductList(PageInfo pi, Filter f) {
 		return null;
 	}
 }

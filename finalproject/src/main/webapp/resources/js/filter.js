@@ -136,5 +136,6 @@ $(function(){
                 $("#model-area").empty();
         }
     }
+
 });
     

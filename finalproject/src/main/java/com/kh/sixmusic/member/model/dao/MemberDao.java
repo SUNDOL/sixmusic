@@ -2,7 +2,6 @@ package com.kh.sixmusic.member.model.dao;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
-
 import com.kh.sixmusic.member.model.vo.Member;
 import com.kh.sixmusic.order.model.vo.Address;
 
@@ -32,6 +31,8 @@ public class MemberDao {
 	public int signUpAddrees(SqlSessionTemplate sqlSession, Address a) {
 		return 0;
 	}
+
+
 
 
 }

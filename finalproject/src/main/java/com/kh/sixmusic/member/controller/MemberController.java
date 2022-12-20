@@ -18,7 +18,7 @@ public class MemberController {
 	private MemberService memberService;
 
 	@PostMapping("member/login.me")
-	public String loginMember(Member m, HttpSession session) {
+	public String loginMember(Member m, HttpSession session) {	
 		Member loginUser = memberService.loginMember(m);
 		if (loginUser != null) {
 			session.setAttribute("loginUser", loginUser);

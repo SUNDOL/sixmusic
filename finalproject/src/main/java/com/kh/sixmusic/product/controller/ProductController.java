@@ -20,6 +20,8 @@ public class ProductController {
 	@Autowired
 	private ProductService productService;
 	
+	
+	
 	@ResponseBody
 	@RequestMapping(value = "filter/list/select.pr", produces = "application/json; charset=utf-8")
 	public String filterSearch(Filter f) {

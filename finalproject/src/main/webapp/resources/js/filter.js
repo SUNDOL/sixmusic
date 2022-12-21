@@ -137,5 +137,21 @@ $(function(){
         }
     }
 
+    filterSearch();
+
+    function filterSearch(){
+        $.ajax({
+            url:"filter/list/select.pr",
+            data:{},
+            success:result=>{
+            	console.log(result);
+
+            }, 
+            error:()=>{
+                console.log("error!!");
+            }
+        });
+    }
+
 });
     

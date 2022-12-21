@@ -1,14 +1,12 @@
 package com.kh.sixmusic.product.controller;
 
 import java.util.ArrayList;
-
+import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.kh.sixmusic.common.model.vo.PageInfo;
 import com.kh.sixmusic.data.model.vo.Filter;
 import com.kh.sixmusic.product.model.service.ProductService;
@@ -31,12 +29,16 @@ public class ProductController {
 		int boardLimit = 10;
 		PageInfo pi = new PageInfo(listCount, currentPage, pageLimit, boardLimit);
 		ArrayList<Product> pList = productService.selectProductList(pi, f);
-		ArrayList<ProductAttachment> atList = productService.selectProductAttachmentList(pList);
+		int[] productNo = new int[pList.size()];
+		for (int i = 0; i < productNo.length; i++) {
+			productNo[i] = pList.get(i).getProductNo();
+		}
+		ArrayList<ProductAttachment> atList = productService.selectProductAttachmentList(productNo);
 		Gson gson = new Gson();
-		JsonObject jMap = new JsonObject();
-		jMap.addProperty("pi", gson.toJson(pi));
-		jMap.addProperty("pList", gson.toJson(pList));
-		jMap.addProperty("atList", gson.toJson(atList));
-		return jMap.toString();
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("pi", pi);
+		map.put("p", pList);
+		map.put("at", atList);
+		return gson.toJson(map);
 	}
 }

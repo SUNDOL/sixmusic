@@ -33,12 +33,13 @@ public class ProductServiceImpl implements ProductService{
 		return productDao.selectProductList(sqlSession,pi,f);
 	}
 	@Override
-	public ArrayList<Product> selectProductList(PageInfo pi) {
-		return null;
+	public ArrayList<ProductAttachment> selectProductAttachmentList(int[] productNo) {
+		
+		return productDao.selectProductAttachmentList(sqlSession,productNo);
 	}
 	@Override
-	public ArrayList<ProductAttachment> selectProductAttachmentList(ArrayList<Product> pList) {
-		return productDao.selectProductAttachmentList(sqlSession,pList);
+	public ArrayList<Product> selectProductList(PageInfo pi) {
+		return null;
 	}
 	@Override
 	public ArrayList<Review> Review(int productNo) {

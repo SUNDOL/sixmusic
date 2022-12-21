@@ -14,16 +14,18 @@ import com.kh.sixmusic.product.model.vo.ProductAttachment;
 public class ProductDao {
 
 	public int selectProductCount(SqlSessionTemplate sqlSession, Filter f) {
-		return 0;
+		return sqlSession.selectOne("productMapper.filterCount",f);
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ArrayList<Product> selectProductList(SqlSessionTemplate sqlSession, PageInfo pi, Filter f) {
-		return null;
+		return (ArrayList)sqlSession.selectList("productMapper.selectProductList",f,pi.getRowBounds());
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ArrayList<ProductAttachment> selectProductAttachmentList(SqlSessionTemplate sqlSession,
-			ArrayList<Product> pList) {
-		return null;
+			int[] productNo) {
+		return (ArrayList)sqlSession.selectList("productMapper.selectProductAttachmentList",productNo);
 	}
 
 }

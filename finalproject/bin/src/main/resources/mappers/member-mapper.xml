@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="memberMapper">
+	<resultMap type="member" id="memberMap">
+		<result column="MEMBER_NO" property="memberNo"/>
+		<result column="REF_TYPE_NO" property="typeNo"/>
+		<result column="MEMBER_ID" property="memberId"/>
+		<result column="MEMBER_PWD" property="memberPwd"/>
+		<result column="MEMBER_NAME" property="memberName"/>
+		<result column="MEMBER_NICKNAME" property="memberNickname"/>
+		<result column="REF_GRADE_NO" property="gradeNo"/>
+		<result column="BIRTHDAY" property="birthday"/>
+		<result column="ZIPCODE" property="zipcode"/>
+		<result column="ADDRESS_1" property="address1"/>
+		<result column="ADDRESS_2" property="address2"/>
+		<result column="ADDRESS_3" property="address3"/>
+		<result column="CREATE_DATE" property="createDate"/>
+		<result column="POINT" property="point"/>
+		<result column="PHONE" property="phone"/>
+		<result column="STATUS" property="status"/>
+	</resultMap>
+	
+	<select id="loginMember" resultMap="memberMap">
+		SELECT *
+		FROM MEMBER
+		WHERE MEMBER_ID = #{memberId} AND MEMBER_PWD = #{memberPwd}
+	</select>
+	<select id="nicknameCheck" resultType="int" parameterType="String">
+		SELECT COUNT(*)
+		FROM MEMBER
+		WHERE MEMBER_NICKNAME = #{memberNickname}
+	</select>
+	<insert id="signUpMember" parameterType="member">
+		INSERT INTO MEMBER (MEMBER_NO, MEMBER_ID, REF_TYPE_NO, MEMBER_PWD, MEMBER_NICKNAME, MEMBER_NAME, PHONE, BIRTHDAY, ZIPCODE, ADDRESS_1, ADDRESS_2, ADDRESS_3)
+		VALUES (SEQ_MEMBER.NEXTVAL, #{memberId}, #{typeNo}, #{memberPwd}, #{memberNickname}, #{memberName}, #{phone}, #{birthday}, #{zipcode}, #{address1}, #{address2}, #{address3})	
+	</insert>
+
+</mapper>

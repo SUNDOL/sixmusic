@@ -17,7 +17,80 @@
 	<result column="RATING" property="rating"/>
 	<result column="COUNT" property="count"/>
 </resultMap>
-
+<select id="filterCount" resultType="_int" parameterType="filter">
+	SELECT COUNT(*) 
+	FROM PRODUCT P
+	JOIN MODEL M ON(M.MODEL_NO = P.REF_MODEL_NO)
+	JOIN BRAND B ON(B.BRAND_NO = M.REF_BRAND_NO)
+	WHERE P.STATUS LIKE 'Y'
+    <if test="categoryNo != 0">
+		AND P.REF_CATEGORY_NO LIKE #{categoryNo}
+	</if>
+	<if test="typeNo != 0">
+		AND P.REF_TYPE_NO LIKE #{typeNo}
+	</if>
+	<if test="brandNo != 0">
+		AND B.BRAND_NO LIKE #{brandNo}
+	</if>
+	<if test="modelNo != null">
+		AND M.MODEL_NO IN 
+		<foreach collection="modelNo" item="modelNo" open="(" close=")" separator=",">
+			#{modelNo}
+		</foreach>
+	</if>
+	<if test="priceNo != null">
+		AND	
+		<foreach collection="priceNo" item="priceNo" open="(" close=")" separator=" OR ">
+			PRODUCT_PRICE 
+			BETWEEN (SELECT PRICE_MIN FROM PRICE WHERE PRICE_NO LIKE #{priceNo})
+			AND (SELECT PRICE_MAX  FROM PRICE WHERE PRICE_NO LIKE #{priceNo})
+		</foreach>
+	</if>
+</select>
+<select id="selectProductList" parameterType="filter" resultMap="productResult">
+    SELECT
+		P.PRODUCT_NO PRODUCT_NO,
+		B.BRAND_NAME BRAND_NAME,
+		P.PRODUCT_NAME PRODUCT_NAME,
+		P.PRODUCT_PRICE PRODUCT_PRICE,
+		NVL(AVG(R.RATING),0) RATING,
+		COUNT(R.REVIEW_NO) COUNT
+	FROM PRODUCT P
+	JOIN MODEL M ON(M.MODEL_NO = P.REF_MODEL_NO)
+	JOIN BRAND B ON(B.BRAND_NO = M.REF_BRAND_NO)
+	LEFT JOIN REVIEW R ON(R.REF_PRODUCT_NO = P.PRODUCT_NO)
+	WHERE P.STATUS LIKE 'Y'
+	AND (R.REVIEW_NO IS NULL OR (R.REVIEW_NO IS NOT NULL AND R.STATUS LIKE 'Y'))
+    <if test="categoryNo != 0">
+		AND P.REF_CATEGORY_NO LIKE #{categoryNo}
+	</if>
+	<if test="typeNo != 0">
+		AND P.REF_TYPE_NO LIKE #{typeNo}
+	</if>
+	<if test="brandNo != 0">
+		AND B.BRAND_NO LIKE #{brandNo}
+	</if>
+	<if test="modelNo != null">
+		AND M.MODEL_NO IN 
+		<foreach collection="modelNo" item="modelNo" open="(" close=")" separator=",">
+			#{modelNo}
+		</foreach>
+	</if>
+	<if test="priceNo != null">
+		AND	
+		<foreach collection="priceNo" item="priceNo" open="(" close=")" separator=" OR ">
+			PRODUCT_PRICE 
+			BETWEEN (SELECT PRICE_MIN FROM PRICE WHERE PRICE_NO LIKE #{priceNo})
+			AND (SELECT PRICE_MAX  FROM PRICE WHERE PRICE_NO LIKE #{priceNo})
+		</foreach>
+	</if>
+        GROUP BY 
+			PRODUCT_NO,
+			BRAND_NAME,
+			PRODUCT_NAME,
+			PRODUCT_PRICE
+		ORDER BY P.PRODUCT_NO DESC
+</select>
 <!-- productAttachment -->
 <resultMap type="productAttachment" id="productAttachmentResult">
 	<result column="PRODUCT_ATTACHMENT_NO" property="attachmentNo"/>
@@ -26,4 +99,19 @@
 	<result column="PRODUCT_ATTACHMENT_CHANGE_NAME" property="changeName"/>
 	<result column="PRODUCT_ATTACHMENT_FILE_PATH" property="filePath"/>
 </resultMap>
+
+<select id="selectProductAttachmentList" resultMap="productAttachmentResult">
+	SELECT
+		REF_PRODUCT_NO ,
+		PRODUCT_ATTACHMENT_ORIGIN_NAME ,
+		PRODUCT_ATTACHMENT_CHANGE_NAME ,
+		PRODUCT_ATTACHMENT_FILE_PATH 
+	FROM PRODUCT_ATTACHMENT
+	WHERE PRODUCT_ATTACHMENT_CHANGE_NAME LIKE '%-1%'
+	AND REF_PRODUCT_NO IN
+	<foreach collection="array" item="productNo" open="(" close=")" separator=",">
+		#{productNo}
+	</foreach>
+	ORDER BY PRODUCT_ATTACHMENT_NO DESC
+</select>
 </mapper>

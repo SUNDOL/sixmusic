@@ -15,7 +15,7 @@ public interface ProductService {
 	
 	ArrayList<Product> selectProductList(PageInfo pi, Filter f);
 	ArrayList<Product> selectProductList(PageInfo pi);
-	ArrayList<ProductAttachment> selectProductAttachmentList(ArrayList<Product> pList);
+	ArrayList<ProductAttachment> selectProductAttachmentList(int[] productNo);
 	
 	ArrayList<Review> Review(int productNo);
 	ArrayList<ReviewAttachment> selectReviewAttachmentList(int productNo);

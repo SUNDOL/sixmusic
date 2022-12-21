@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import com.kh.sixmusic.member.model.dao.MemberDao;
 import com.kh.sixmusic.member.model.vo.Member;
-import com.kh.sixmusic.order.model.vo.Address;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -21,23 +20,23 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
+	public int nicknameCheck(String memberNickname) {
+		return memberDao.nicknameCheck(sqlSession, memberNickname);
+	}
+	
+
+	@Override
 	public int checkId(String MemberId) {
 		return memberDao.checkId(sqlSession, MemberId);
 	}
 
 	@Override
-	public int signUpMember(Member m, Address a) {
-		int result1 = memberDao.signUpMember(sqlSession, m);
-		int result2 = memberDao.signUpAddrees(sqlSession, a);
-		int finalResult = result1 * result2;
-		if (finalResult < 1) {
-			sqlSession.rollback();
-		}
-		return finalResult;
+	public int signUpMember(Member m) {
+		return memberDao.signUpMember(sqlSession, m);
 	}
 
 	@Override
-	public int updateMemner(Member m) {
+	public int updateMember(Member m) {
 		return memberDao.updateMemner(sqlSession, m);
 	}
 

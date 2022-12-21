@@ -26,4 +26,5 @@ public class Member {
 	private String address2; // ADDRESS_2 상세주소1
 	private String address3; // ADDRESS_3 상세주소2
 	private String status; // STATUS 상태값(Y/N)
+	
 }

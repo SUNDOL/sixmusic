@@ -61,6 +61,7 @@ public class MemberController {
 		return "common/error"; //임시 데이터 수정 필요 
 	}
 	
+	
 	@PostMapping("member/secession.me")
 	public String secessionMember(Member m, HttpSession session) {
 		int result = memberService.secessionMember(m);

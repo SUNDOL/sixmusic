@@ -18,6 +18,7 @@ public class MemberDao {
 	public int checkId(SqlSessionTemplate sqlSession, String memberId) {
 		return 0;
 	}
+	
 
 	public int signUpMember(SqlSessionTemplate sqlSession, Member m) {
 		return sqlSession.insert("memberMapper.signUpMember", m);

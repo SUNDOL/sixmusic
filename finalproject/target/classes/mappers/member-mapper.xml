@@ -19,6 +19,7 @@
 		<result column="PHONE" property="phone"/>
 		<result column="STATUS" property="status"/>
 	</resultMap>
+	
 	<select id="loginMember" resultMap="memberMap">
 		SELECT *
 		FROM MEMBER

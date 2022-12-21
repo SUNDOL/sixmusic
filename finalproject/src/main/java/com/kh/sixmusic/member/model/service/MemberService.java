@@ -9,5 +9,6 @@ public interface MemberService {
 	int checkId(String MemberId);
 	int updateMember(Member m);
 	int secessionMember(Member m);
+	
 
 }

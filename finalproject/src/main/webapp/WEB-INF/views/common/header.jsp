@@ -18,13 +18,13 @@
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
         crossorigin="anonymous"></script>
     <!-- Owl Carousel: CSS -->
-    <link rel="stylesheet" href="resources/owlcarousel/owl.carousel.min.css">
-    <link rel="stylesheet" href="resources/owlcarousel/owl.theme.default.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/owlcarousel/owl.carousel.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/owlcarousel/owl.theme.default.min.css">
     <title>HEADER</title>
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
     <!-- Universal Stylesheet -->
-    <link rel="stylesheet" href="resources/css/font.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/font.css">
     <style>
         .offcanvas-size-xl {
             --bs-offcanvas-width: min(95vw, 1200px) !important;
@@ -46,7 +46,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <a class="navbar-brand" href="#" style="font-size:2em;"><b><i
+            <a class="navbar-brand" href="/sixmusic" style="font-size:2em;"><b><i
                         class="bi bi-music-note-beamed"></i>SIXMUSIC</b></a>
 
             <button class="navbar-toggler position-relative" type="button" data-bs-toggle="offcanvas"
@@ -222,13 +222,13 @@
                     </form>
                     <hr>
                     <div class="d-grid" style="text-align:center;">
-                        <a href="#"><img src="resources/kakaologinbuttonimg/kakao_login_medium_wide.png" alt="kakaoLogin"></a>
+                        <a href="#"><img src="${pageContext.request.contextPath}/resources/kakaologinbuttonimg/kakao_login_medium_wide.png" alt="kakaoLogin"></a>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <a href="#" style="color:#000; text-decoration:none;">Forgot ID?</a>&nbsp;|&nbsp;
                     <a href="#" style="color:#000; text-decoration:none;">Forgot Password?</a>&nbsp;|&nbsp;
-                    <a href="#" style="color:#000; text-decoration:none;" href="member/signup">Sign Up</a>
+                    <a href="member/signUp.me" style="color:#000; text-decoration:none;">Sign Up</a>
                 </div>
             </div>
         </div>
@@ -374,7 +374,7 @@
 
 </body>
 <!-- Owl Carousel: JavaScript -->
-<script src="resources/owlcarousel/owl.carousel.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/owlcarousel/owl.carousel.min.js"></script>
 <!-- JavaScript for Owl Carousel -->
 <script>
     $(document).ready(function () {
@@ -413,6 +413,14 @@
             }
         });
     });
+    
 </script>
+    <!-- alert script -->
+    <c:if test="${not empty alertMsg}">
+    	<script>
+    		window.alert("${alertMsg}");
+    	</script>
+    	<c:remove var="alertMsg" scope="session"/>
+    </c:if>
 
 </html>

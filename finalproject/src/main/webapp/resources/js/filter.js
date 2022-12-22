@@ -1,4 +1,5 @@
 $(function(){
+
     //카테고리 리스트 출력
     $.ajax({
         url:"catrgory/list/select.da",
@@ -28,7 +29,7 @@ $(function(){
             let str = "";
             list.forEach((el, i) => {
                 str += "<div class='form-check'>";
-                str += "<input class='form-check-input' type='checkbox' name='priceNo' id='price-"+el.priceNo+"' value='"+el.priceNo+"'>";
+                str += "<input class='form-check-input' type='radio' name='priceNo' id='price-"+el.priceNo+"' value='"+el.priceNo+"'>";
                 str += "<label class='form-check-label' for='price-"+el.name+"'>"
                 const won = /\B(?=(\d{3})+(?!\d))/g;
                 const comma = ",";
@@ -45,6 +46,34 @@ $(function(){
                 str += "</div>";
             });
             $("#price-area").html(str);
+            $("input[name=priceNo]").change(function(){
+                filterSearch({
+                    typeNo:$("input[name=typeNo]:checked").val(),
+                    brandNo:$("input[name=brandNo]:checked").val(),
+                    modelNo:$("input[name=modelNo]:checked").val()
+                });
+                //brand
+                $.ajax({
+                    url:"brand/list/select.da",
+                    data:{typeNo:$("input[name=typeNo]:checked").val(),priceNo:$("input[name=priceNo]:checked").val()},
+                    dataType:"json",
+                    success:list=>{
+                        let str = "";
+                        list.forEach(el => {
+                            str+= "<div class='form-check'>";
+                            str+= "<input class='form-check-input' type='radio' id='brand-"+el.brandNo+"' name='brandNo' value='"+el.brandNo+"'>";
+                            str+= "<label class='form-check-label' for='brand-"+el.brandNo+"'>"+el.name+"("+el.quantity+")</label>";
+                            str+= "</div>";              
+                        });
+                        filterReset(2);
+                        $("#brand-area").html(str);
+                        modelFilter();
+                    }, 
+                    error:()=>{
+                        console.log("error!!");
+                    }
+                });
+            });
         }, 
         error:()=>{
             console.log("error!!");
@@ -54,6 +83,8 @@ $(function(){
     //type
     function typeFilter(){
         $("input[name=categoryNo]").change(function(){
+            //카테고리 검색
+            filterSearch({categoryNo:$(this).val()});
             $.ajax({
                 url:"type/list/select.da",
                 data:{categoryNo:$(this).val()},
@@ -80,9 +111,11 @@ $(function(){
     //brand
     function brandFilter(){
         $("input[name=typeNo]").change(function(){
+            //타입 검색
+            filterSearch({typeNo:$(this).val()});
             $.ajax({
                 url:"brand/list/select.da",
-                data:{typeNo:$(this).val()},
+                data:{typeNo:$(this).val(),priceNo:$("input[name=priceNo]:checked").val()},
                 dataType:"json",
                 success:list=>{
                     let str = "";
@@ -105,9 +138,11 @@ $(function(){
     //model
     function modelFilter(){
         $("input[name=brandNo]").change(function(){
+            //타입 브랜드 검색
+            filterSearch({typeNo:$("input[name=typeNo]:checked").val(),brandNo:$(this).val()});
             $.ajax({
                 url:"model/list/select.da",
-                data:{brandNo:$(this).val()},
+                data:{brandNo:$(this).val(),priceNo:$("input[name=priceNo]:checked").val()},
                 dataType:"json",
                 success:list=>{
                     let str = "";
@@ -118,6 +153,15 @@ $(function(){
                         str+= "</div>";              
                     });
                     $("#model-area").html(str);
+                    $("input[name=modelNo]").change(function(){
+                        //타입 브랜드 모델 검색
+                        filterSearch(
+                            {
+                            typeNo:$("input[name=typeNo]:checked").val(),
+                            brandNo:$("input[name=brandNo]:checked").val(),
+                            modelNo:$("input[name=modelNo]:checked").val()
+                            });
+                    })
     
                 }, 
                 error:()=>{
@@ -137,12 +181,20 @@ $(function(){
         }
     }
 
-    filterSearch();
+    filterSearch({});
 
-    function filterSearch(){
+    function filterSearch(f){
+            
+        console.log();
         $.ajax({
             url:"filter/list/select.pr",
-            data:{},
+            data:{
+                categoryNo:f.categoryNo,
+                typeNo:f.typeNo,
+                brandNo:f.brandNo,
+                modelNo:f.modelNo,
+                priceNo:$("input[name=priceNo]:checked").val(),
+            },
             success:result=>{
             	console.log(result);
 

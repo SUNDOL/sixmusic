@@ -17,9 +17,7 @@ import com.kh.sixmusic.product.model.vo.ProductAttachment;
 public class ProductController {
 	@Autowired
 	private ProductService productService;
-	
-	
-	
+
 	@ResponseBody
 	@RequestMapping(value = "filter/list/select.pr", produces = "application/json; charset=utf-8")
 	public String filterSearch(Filter f) {
@@ -29,11 +27,15 @@ public class ProductController {
 		int boardLimit = 10;
 		PageInfo pi = new PageInfo(listCount, currentPage, pageLimit, boardLimit);
 		ArrayList<Product> pList = productService.selectProductList(pi, f);
-		int[] productNo = new int[pList.size()];
-		for (int i = 0; i < productNo.length; i++) {
-			productNo[i] = pList.get(i).getProductNo();
+		ArrayList<ProductAttachment> atList = new ArrayList<>();
+		if (pList.size() > 0) {
+			int[] productNo = new int[pList.size()];
+			for (int i = 0; i < productNo.length; i++) {
+				productNo[i] = pList.get(i).getProductNo();
+			}
+			atList = productService.selectProductAttachmentList(productNo);
 		}
-		ArrayList<ProductAttachment> atList = productService.selectProductAttachmentList(productNo);
+
 		Gson gson = new Gson();
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("pi", pi);

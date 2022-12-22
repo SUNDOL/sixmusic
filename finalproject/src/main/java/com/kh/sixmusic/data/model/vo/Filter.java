@@ -12,5 +12,5 @@ public class Filter {
 	private int typeNo;
 	private int brandNo;
 	private int[] modelNo;
-	private int[] priceNo;
+	private int priceNo;
 }

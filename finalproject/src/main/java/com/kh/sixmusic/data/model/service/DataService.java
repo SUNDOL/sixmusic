@@ -10,15 +10,11 @@ import com.kh.sixmusic.data.model.vo.Price;
 import com.kh.sixmusic.data.model.vo.Type;
 
 public interface DataService {
-
-	ArrayList<Category> selectCategory();
-
-	ArrayList<Price> selectPrice();
-
-	ArrayList<Type> selectType(int categoryNo);
-
+	
 	ArrayList<Brand> selectBrand(Filter f);
 
 	ArrayList<Model> selectModel(Filter f);
+
+	ArrayList<Price> selectPrice(Filter f);
 
 }

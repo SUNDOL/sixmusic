@@ -20,4 +20,6 @@ public class Product {
 	private String status;//	STATUS	상태값(Y/N)
 	private int rating;//	REVIEW 테이블의  RATING의 평균 값
 	private int count;//	REVIEW 의 갯수 값
+	private String filePath;
+	private String changeName;
 }

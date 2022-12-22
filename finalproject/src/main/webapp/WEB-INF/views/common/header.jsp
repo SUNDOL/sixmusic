@@ -67,12 +67,8 @@
                             ELECTRIC GUITARS
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark">
-                            <li><a class="dropdown-item" href="#">Shop All Electric Guitars</a></li>
-                            <li>
-                                <hr class="dropdown-divider bg-light">
-                            </li>
-                            <li><a class="dropdown-item" href="#">Solid-Body</a></li>
-                            <li><a class="dropdown-item" href="#">Hollow & Semi-Hollow Body</a></li>
+                            <li><a class="dropdown-item" href="list.pr?typeNo=1">Solid-Body</a></li>
+                            <li><a class="dropdown-item" href="list.pr?typeNo=2">Hollow & Semi-Hollow Body</a></li>
 
                         </ul>
                     </li>
@@ -82,14 +78,10 @@
                             ACOUSTIC GUITARS
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark">
-                            <li><a class="dropdown-item" href="#">Shop All Acoustic Guitars</a></li>
-                            <li>
-                                <hr class="dropdown-divider bg-light">
-                            </li>
-                            <li><a class="dropdown-item" href="#">6-String</a></li>
-                            <li><a class="dropdown-item" href="#">12-String</a></li>
-                            <li><a class="dropdown-item" href="#">Acoustic-Electric</a></li>
-                            <li><a class="dropdown-item" href="#">Classical & Nylon</a></li>
+                            <li><a class="dropdown-item" href="list.pr?typeNo=3">6-String</a></li>
+                            <li><a class="dropdown-item" href="list.pr?typeNo=4">12-String</a></li>
+                            <li><a class="dropdown-item" href="list.pr?typeNo=5">Acoustic-Electric</a></li>
+                            <li><a class="dropdown-item" href="list.pr?typeNo=6">Classical & Nylon</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
@@ -98,13 +90,9 @@
                             BASSES
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark">
-                            <li><a class="dropdown-item" href="#">Shop All Basses</a></li>
-                            <li>
-                                <hr class="dropdown-divider bg-light">
-                            </li>
-                            <li><a class="dropdown-item" href="#">Electric: 4-String</a></li>
-                            <li><a class="dropdown-item" href="#">Electric: 5+ String</a></li>
-                            <li><a class="dropdown-item" href="#">Acoustic</a></li>
+                            <li><a class="dropdown-item" href="list.pr?typeNo=7">Electric: 4-String</a></li>
+                            <li><a class="dropdown-item" href="list.pr?typeNo=8">Electric: 5+ String</a></li>
+                            <li><a class="dropdown-item" href="list.pr?typeNo=9">Acoustic</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
@@ -253,7 +241,7 @@
                                 <div class="item">
                                     <div class="card shadow-sm" style="cursor:pointer;">
                                         <div style="text-align:center;">
-                                            <img class="img-fluid img-responsive card-img-top" src="pics/1-1.jpg"
+                                            <img class="img-fluid img-responsive card-img-top" src=""
                                                 alt="thumbnail">
                                         </div>
                                         <div class="card-body">
@@ -291,7 +279,7 @@
                                 <div class="item">
                                     <div class="card shadow-sm" style="cursor:pointer;">
                                         <div style="text-align:center;">
-                                            <img class="img-fluid img-responsive card-img-top" src="pics/2-1.webp"
+                                            <img class="img-fluid img-responsive card-img-top" src=""
                                                 alt="thumbnail">
                                         </div>
                                         <div class="card-body">
@@ -373,54 +361,18 @@
     </div>
 
 </body>
+
 <!-- Owl Carousel: JavaScript -->
 <script src="${pageContext.request.contextPath}/resources/owlcarousel/owl.carousel.min.js"></script>
-<!-- JavaScript for Owl Carousel -->
-<script>
-    $(document).ready(function () {
-        $(".owl-carousel").owlCarousel();
-    });
+<!-- JavaScript for header -->
+<script src="${pageContext.request.contextPath}/resources/js/header.js"></script>
+<!-- Alert Script -->
 
-    $('.owl-carousel').each(function () {
-        $('.owl-product').owlCarousel({
-            loop: false,
-            margin: 15,
-            nav: false,
-            responsive: {
-                0: {
-                    items: 3
-                },
-                1000: {
-                    items: 5
-                }
-            }
-        });
-
-        $('.owl-cart').owlCarousel({
-            loop: false,
-            margin: 15,
-            nav: false,
-            responsive: {
-                0: {
-                    items: 1
-                },
-                600: {
-                    items: 3
-                },
-                1200: {
-                    items: 5
-                }
-            }
-        });
-    });
-    
-</script>
-    <!-- alert script -->
-    <c:if test="${not empty alertMsg}">
-    	<script>
-    		window.alert("${alertMsg}");
-    	</script>
-    	<c:remove var="alertMsg" scope="session"/>
-    </c:if>
+<c:if test="${not empty alertMsg}">
+    <script>
+        window.alert("${alertMsg}");
+    </script>
+    <c:remove var="alertMsg" scope="session"/>
+</c:if>
 
 </html>

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.kh.sixmusic.data.model.dao.DataDao;
 import com.kh.sixmusic.data.model.vo.Brand;
 import com.kh.sixmusic.data.model.vo.Category;
+import com.kh.sixmusic.data.model.vo.Filter;
 import com.kh.sixmusic.data.model.vo.Model;
 import com.kh.sixmusic.data.model.vo.Price;
 import com.kh.sixmusic.data.model.vo.Type;
@@ -32,11 +33,11 @@ public class DataServiceImpl implements DataService {
 		return dataDao.selectType(sqlSession, categoryNo);
 	}
 	@Override
-	public ArrayList<Brand> selectBrand(int typeNo) {
-		return dataDao.selectBrand(sqlSession, typeNo);
+	public ArrayList<Brand> selectBrand(Filter f) {
+		return dataDao.selectBrand(sqlSession, f);
 	}
 	@Override
-	public ArrayList<Model> selectModel(int brandNo) {
-		return dataDao.selectModel(sqlSession, brandNo);
+	public ArrayList<Model> selectModel(Filter f) {
+		return dataDao.selectModel(sqlSession, f);
 	}
 }

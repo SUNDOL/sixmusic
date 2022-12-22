@@ -52,7 +52,7 @@
 		<result column="STATUS" property="status"/>
 		<result column="QUANTITY" property="quantity"/>
 	</resultMap>
-	<select id="selectBrand" parameterType="_int" resultMap="brandResult">
+	<select id="selectBrand" parameterType="filter" resultMap="brandResult">
 		SELECT
 			B.BRAND_NO ,
 			B.BRAND_NAME ,
@@ -63,10 +63,13 @@
 		JOIN PRODUCT P ON(P.REF_MODEL_NO = M.MODEL_NO)
 		JOIN TYPE T ON(P.REF_TYPE_NO = T.TYPE_NO)
 		WHERE T.TYPE_NO LIKE #{typeNo}
-			AND B.STATUS LIKE 'Y'
-			AND M.STATUS LIKE 'Y'
-			AND P.STATUS LIKE 'Y'
-			AND T.STATUS LIKE 'Y'
+		AND B.STATUS LIKE 'Y'
+		<if test="priceNo != 0">
+			AND	
+			PRODUCT_PRICE 
+			BETWEEN (SELECT PRICE_MIN FROM PRICE WHERE PRICE_NO LIKE #{priceNo})
+			AND (SELECT PRICE_MAX  FROM PRICE WHERE PRICE_NO LIKE #{priceNo})
+		</if>
 		GROUP BY 
 			BRAND_NO ,
 			BRAND_NAME ,
@@ -81,7 +84,7 @@
 		<result column="QUANTITY" property="quantity"/>
 	</resultMap>
 	
-	<select id="selectModel" parameterType="_int" resultMap="modelResult">
+	<select id="selectModel" parameterType="filter" resultMap="modelResult">
 		SELECT
 	        M.MODEL_NO ,
 	        M.MODEL_NAME ,
@@ -92,8 +95,12 @@
         JOIN BRAND B ON(B.BRAND_NO = M.REF_BRAND_NO)
         WHERE B.BRAND_NO LIKE #{brandNo}
         	AND M.STATUS LIKE 'Y'
-            AND P.STATUS LIKE 'Y'
-            AND B.STATUS LIKE 'Y'
+			<if test="priceNo != 0">
+				AND	
+				PRODUCT_PRICE 
+				BETWEEN (SELECT PRICE_MIN FROM PRICE WHERE PRICE_NO LIKE #{priceNo})
+				AND (SELECT PRICE_MAX  FROM PRICE WHERE PRICE_NO LIKE #{priceNo})
+			</if>
         GROUP BY 
 	        M.MODEL_NO ,
 	        M.MODEL_NAME ,

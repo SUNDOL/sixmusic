@@ -38,13 +38,11 @@
 			#{modelNo}
 		</foreach>
 	</if>
-	<if test="priceNo != null">
+	<if test="priceNo != 0">
 		AND	
-		<foreach collection="priceNo" item="priceNo" open="(" close=")" separator=" OR ">
 			PRODUCT_PRICE 
 			BETWEEN (SELECT PRICE_MIN FROM PRICE WHERE PRICE_NO LIKE #{priceNo})
 			AND (SELECT PRICE_MAX  FROM PRICE WHERE PRICE_NO LIKE #{priceNo})
-		</foreach>
 	</if>
 </select>
 <select id="selectProductList" parameterType="filter" resultMap="productResult">
@@ -76,13 +74,11 @@
 			#{modelNo}
 		</foreach>
 	</if>
-	<if test="priceNo != null">
+	<if test="priceNo != 0">
 		AND	
-		<foreach collection="priceNo" item="priceNo" open="(" close=")" separator=" OR ">
-			PRODUCT_PRICE 
-			BETWEEN (SELECT PRICE_MIN FROM PRICE WHERE PRICE_NO LIKE #{priceNo})
-			AND (SELECT PRICE_MAX  FROM PRICE WHERE PRICE_NO LIKE #{priceNo})
-		</foreach>
+		(PRODUCT_PRICE 
+		BETWEEN (SELECT PRICE_MIN FROM PRICE WHERE PRICE_NO LIKE #{priceNo})
+		AND (SELECT PRICE_MAX  FROM PRICE WHERE PRICE_NO LIKE #{priceNo}))
 	</if>
         GROUP BY 
 			PRODUCT_NO,

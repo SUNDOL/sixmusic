@@ -11,6 +11,7 @@ import com.google.gson.Gson;
 import com.kh.sixmusic.data.model.service.DataService;
 import com.kh.sixmusic.data.model.vo.Brand;
 import com.kh.sixmusic.data.model.vo.Category;
+import com.kh.sixmusic.data.model.vo.Filter;
 import com.kh.sixmusic.data.model.vo.Model;
 import com.kh.sixmusic.data.model.vo.Price;
 import com.kh.sixmusic.data.model.vo.Type;
@@ -42,14 +43,14 @@ public class DataController {
 	}
 	@ResponseBody
 	@RequestMapping("brand/list/select.da")
-	public String selectBrand(int typeNo){
-		ArrayList<Brand> list = dataService.selectBrand(typeNo);
+	public String selectBrand(Filter f){
+		ArrayList<Brand> list = dataService.selectBrand(f);
 		return new Gson().toJson(list);
 	}
 	@ResponseBody
 	@RequestMapping("model/list/select.da")
-	public String selectModel(int brandNo){
-		ArrayList<Model> list = dataService.selectModel(brandNo);
+	public String selectModel(Filter f){
+		ArrayList<Model> list = dataService.selectModel(f);
 		return new Gson().toJson(list);
 	}
 }

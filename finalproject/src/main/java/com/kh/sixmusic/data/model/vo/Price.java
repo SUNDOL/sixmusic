@@ -11,4 +11,5 @@ public class Price {
 	private int priceNo;//	PRICE_NO	가격_번호
 	private int min;//	PRICE_MIN	최소가격
 	private int max;//	PRICE_MAX	최대가격
+	private int quantity;// 제품의 갯수
 }

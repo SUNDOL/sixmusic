@@ -21,23 +21,15 @@ public class DataServiceImpl implements DataService {
 	@Autowired
 	private DataDao dataDao;
 	@Override
-	public ArrayList<Category> selectCategory() {
-		return dataDao.selectCategory(sqlSession);
-	}
-	@Override
-	public ArrayList<Price> selectPrice() {
-		return dataDao.selectPrice(sqlSession);
-	}
-	@Override
-	public ArrayList<Type> selectType(int categoryNo) {
-		return dataDao.selectType(sqlSession, categoryNo);
-	}
-	@Override
 	public ArrayList<Brand> selectBrand(Filter f) {
 		return dataDao.selectBrand(sqlSession, f);
 	}
 	@Override
 	public ArrayList<Model> selectModel(Filter f) {
 		return dataDao.selectModel(sqlSession, f);
+	}
+	@Override
+	public ArrayList<Price> selectPrice(Filter f) {
+		return dataDao.selectPrice(sqlSession,f);
 	}
 }

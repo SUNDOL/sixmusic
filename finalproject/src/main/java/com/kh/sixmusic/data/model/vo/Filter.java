@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class Filter {
-	private int categoryNo;
 	private int typeNo;
 	private int brandNo;
 	private int[] modelNo;
-	private int priceNo;
+	private int[] priceNo;
+	private int sort;
 }

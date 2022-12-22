@@ -10,7 +10,9 @@ import com.kh.sixmusic.product.model.vo.Review;
 import com.kh.sixmusic.product.model.vo.ReviewAttachment;
 
 public interface ProductService {
-	int selectProductCount();
+	int listCount();
+	ArrayList<Product> productList(PageInfo pi, int typeNo);
+	
 	int selectProductCount(Filter f);
 	
 	ArrayList<Product> selectProductList(PageInfo pi, Filter f);
@@ -23,4 +25,5 @@ public interface ProductService {
 	Product selectProduct(int productNo);
 	Review selectReview(int reviewNo);
 	ReviewAttachment selectReviewAttachment(int reviewNo);
+
 }

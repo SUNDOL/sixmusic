@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
 <mapper namespace="productMapper">
-<!-- product -->
+<!-- Product -->
 <resultMap type="product" id="productResult">
 	<result column="PRODUCT_NO" property="productNo"/>
 	<result column="CATEGORY_NAME" property="category"/>
@@ -13,38 +13,78 @@
 	<result column="PRODUCT_CONTENT" property="content"/>
 	<result column="PRODUCT_PRICE" property="price"/>
 	<result column="PRODUCT_QUANTITY" property="quantity"/>
-	<result column="status" property="status"/>
+	<result column="STATUS" property="status"/>
 	<result column="RATING" property="rating"/>
 	<result column="COUNT" property="count"/>
+	<result column="change_name" property="changeName"/>
+	<result column="file_path" property="filePath"/>
 </resultMap>
-<select id="filterCount" resultType="_int" parameterType="filter">
-	SELECT COUNT(*) 
-	FROM PRODUCT P
-	JOIN MODEL M ON(M.MODEL_NO = P.REF_MODEL_NO)
-	JOIN BRAND B ON(B.BRAND_NO = M.REF_BRAND_NO)
-	WHERE P.STATUS LIKE 'Y'
-    <if test="categoryNo != 0">
-		AND P.REF_CATEGORY_NO LIKE #{categoryNo}
-	</if>
-	<if test="typeNo != 0">
-		AND P.REF_TYPE_NO LIKE #{typeNo}
-	</if>
-	<if test="brandNo != 0">
-		AND B.BRAND_NO LIKE #{brandNo}
-	</if>
-	<if test="modelNo != null">
-		AND M.MODEL_NO IN 
-		<foreach collection="modelNo" item="modelNo" open="(" close=")" separator=",">
-			#{modelNo}
-		</foreach>
-	</if>
-	<if test="priceNo != 0">
-		AND	
-			PRODUCT_PRICE 
-			BETWEEN (SELECT PRICE_MIN FROM PRICE WHERE PRICE_NO LIKE #{priceNo})
-			AND (SELECT PRICE_MAX  FROM PRICE WHERE PRICE_NO LIKE #{priceNo})
-	</if>
+<!-- ProductAttachment -->
+<resultMap type="productAttachment" id="productAttachmentResult">
+	<result column="PRODUCT_ATTACHMENT_NO" property="attachmentNo"/>
+	<result column="REF_PRODUCT_NO" property="productNo"/>
+	<result column="PRODUCT_ATTACHMENT_ORIGIN_NAME" property="originName"/>
+	<result column="PRODUCT_ATTACHMENT_CHANGE_NAME" property="changeName"/>
+	<result column="PRODUCT_ATTACHMENT_FILE_PATH" property="filePath"/>
+</resultMap>
+
+<select id="listCount" resultType="_int">
+SELECT COUNT(*)
+FROM PRODUCT
+WHERE STATUS = 'Y'
 </select>
+
+<select id="productList" resultMap="productResult">
+SELECT
+    pat.product_attachment_change_name change_name,
+    pat.product_attachment_file_path   file_path,
+    p.product_no                       product_no,
+    b.brand_name                       brand_name,
+    p.product_name                     product_name,
+    p.product_price                    product_price,
+    nvl(AVG(r.rating), 0)              rating,
+    COUNT(r.review_no)                 review
+FROM
+         product p
+    JOIN product_attachment pat ON ( pat.ref_product_no = p.product_no )
+    JOIN model              m ON ( m.model_no = p.ref_model_no )
+    JOIN brand              b ON ( b.brand_no = m.ref_brand_no )
+    LEFT JOIN review             r ON ( r.ref_product_no = p.product_no )
+WHERE
+    p.status LIKE 'Y'
+    AND pat.product_attachment_change_name LIKE '%_1.%'
+    AND ( r.review_no IS NULL
+          OR ( r.review_no IS NOT NULL
+               AND r.status LIKE 'Y' ) )
+    AND p.ref_type_no LIKE #{typeNo}
+GROUP BY
+    product_attachment_change_name,
+    product_attachment_file_path,
+    product_no,
+    brand_name,
+    product_name,
+    product_price
+ORDER BY
+    p.product_no DESC
+</select>
+
+<select id="selectProductAttachmentList" resultMap="productAttachmentResult">
+	SELECT
+		REF_PRODUCT_NO ,
+		PRODUCT_ATTACHMENT_ORIGIN_NAME ,
+		PRODUCT_ATTACHMENT_CHANGE_NAME ,
+		PRODUCT_ATTACHMENT_FILE_PATH 
+	FROM PRODUCT_ATTACHMENT
+	WHERE PRODUCT_ATTACHMENT_CHANGE_NAME LIKE '%-1%'
+	AND REF_PRODUCT_NO IN
+	<foreach collection="array" item="productNo" open="(" close=")" separator=",">
+		#{productNo}
+	</foreach>
+	ORDER BY PRODUCT_ATTACHMENT_NO DESC
+</select>
+
+
+
 <select id="selectProductList" parameterType="filter" resultMap="productResult">
     SELECT
 		P.PRODUCT_NO PRODUCT_NO,
@@ -58,6 +98,7 @@
 	JOIN BRAND B ON(B.BRAND_NO = M.REF_BRAND_NO)
 	LEFT JOIN REVIEW R ON(R.REF_PRODUCT_NO = P.PRODUCT_NO)
 	WHERE P.STATUS LIKE 'Y'
+	AND 
 	AND (R.REVIEW_NO IS NULL OR (R.REVIEW_NO IS NOT NULL AND R.STATUS LIKE 'Y'))
     <if test="categoryNo != 0">
 		AND P.REF_CATEGORY_NO LIKE #{categoryNo}
@@ -87,27 +128,37 @@
 			PRODUCT_PRICE
 		ORDER BY P.PRODUCT_NO DESC
 </select>
-<!-- productAttachment -->
-<resultMap type="productAttachment" id="productAttachmentResult">
-	<result column="PRODUCT_ATTACHMENT_NO" property="attachmentNo"/>
-	<result column="REF_PRODUCT_NO" property="productNo"/>
-	<result column="PRODUCT_ATTACHMENT_ORIGIN_NAME" property="originName"/>
-	<result column="PRODUCT_ATTACHMENT_CHANGE_NAME" property="changeName"/>
-	<result column="PRODUCT_ATTACHMENT_FILE_PATH" property="filePath"/>
-</resultMap>
 
-<select id="selectProductAttachmentList" resultMap="productAttachmentResult">
-	SELECT
-		REF_PRODUCT_NO ,
-		PRODUCT_ATTACHMENT_ORIGIN_NAME ,
-		PRODUCT_ATTACHMENT_CHANGE_NAME ,
-		PRODUCT_ATTACHMENT_FILE_PATH 
-	FROM PRODUCT_ATTACHMENT
-	WHERE PRODUCT_ATTACHMENT_CHANGE_NAME LIKE '%-1%'
-	AND REF_PRODUCT_NO IN
-	<foreach collection="array" item="productNo" open="(" close=")" separator=",">
-		#{productNo}
-	</foreach>
-	ORDER BY PRODUCT_ATTACHMENT_NO DESC
+
+
+<select id="filterCount" resultType="_int" parameterType="filter">
+	SELECT COUNT(*) 
+	FROM PRODUCT P
+	JOIN MODEL M ON(M.MODEL_NO = P.REF_MODEL_NO)
+	JOIN BRAND B ON(B.BRAND_NO = M.REF_BRAND_NO)
+	WHERE P.STATUS LIKE 'Y'
+    <if test="categoryNo != 0">
+		AND P.REF_CATEGORY_NO LIKE #{categoryNo}
+	</if>
+	<if test="typeNo != 0">
+		AND P.REF_TYPE_NO LIKE #{typeNo}
+	</if>
+	<if test="brandNo != 0">
+		AND B.BRAND_NO LIKE #{brandNo}
+	</if>
+	<if test="modelNo != null">
+		AND M.MODEL_NO IN 
+		<foreach collection="modelNo" item="modelNo" open="(" close=")" separator=",">
+			#{modelNo}
+		</foreach>
+	</if>
+	<if test="priceNo != 0">
+		AND	
+			PRODUCT_PRICE 
+			BETWEEN (SELECT PRICE_MIN FROM PRICE WHERE PRICE_NO LIKE #{priceNo})
+			AND (SELECT PRICE_MAX  FROM PRICE WHERE PRICE_NO LIKE #{priceNo})
+	</if>
 </select>
+
+
 </mapper>

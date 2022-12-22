@@ -235,7 +235,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                 </div>
               </div>
               <div class="col-md-6 ms-auto">
-                <div id="daumRoughmapContainer1670820058910" class="root_daum_roughmap root_daum_roughmap_landing" style="width:100%;"></div>
+                <!-- <div id="daumRoughmapContainer1670820058910" class="root_daum_roughmap root_daum_roughmap_landing" style="width:100%;"></div> -->
               </div>
             </div>
           </div>
@@ -245,12 +245,12 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   </div>
 
 </body>
-<script charset="UTF-8" class="daum_roughmap_loader_script" src="https://ssl.daumcdn.net/dmaps/map_js_init/roughmapLoader.js"></script>
+<!-- <script charset="UTF-8" class="daum_roughmap_loader_script" src="https://ssl.daumcdn.net/dmaps/map_js_init/roughmapLoader.js"></script>
 <script charset="UTF-8">
 	new daum.roughmap.Lander({
 		"timestamp" : "1670820058910",
 		"key" : "2cxyp",
 	}).render();
-</script>
+</script> -->
 
 </html>

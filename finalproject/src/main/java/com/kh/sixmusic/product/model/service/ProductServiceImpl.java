@@ -21,9 +21,15 @@ public class ProductServiceImpl implements ProductService{
 	@Autowired
 	private ProductDao productDao;
 	@Override
-	public int selectProductCount() {
-		return 0;
+	public int listCount() {
+		return productDao.listCount(sqlSession);
 	}
+
+	@Override
+	public ArrayList<Product> productList(PageInfo pi, int typeNo) {
+		return productDao.productList(sqlSession, pi, typeNo);
+	}
+
 	@Override
 	public int selectProductCount(Filter f) {
 		return productDao.selectProductCount(sqlSession,f);

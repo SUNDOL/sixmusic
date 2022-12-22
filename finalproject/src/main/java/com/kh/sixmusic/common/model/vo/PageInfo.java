@@ -27,32 +27,16 @@ public class PageInfo {
 		this.boardLimit = boardLimit;
 
 		maxPage = (int) Math.ceil((double) listCount / boardLimit);
-
 		//첫 페이지 번호 계산 공식
 		if (startPage <= pageLimit) { // 최대 페이지 번호보다 현재 페이지가 적을경우 시작페이지는 1
 			startPage = 1;
 		} else { // (현재 페이지 / 하단에 보여질 페이지 개수) * 하단에 보여질 페이지 개수 + 1
-			/*
-			 * 현재 페이지 : 14
-			 * 하단에 보여질 페이지 개수 : 5
-			 * 
-			 * 14 / 5 = 2...5
-			 * floor(2...5) = 2
-			 * 2 * 5 = 10
-			 * 10 + 1 = 11
-			 * 
-			 * 시작페이지는 11
-			 * 마지막페이지는 15
-			 */ 
-			
 			startPage = (int) Math.floor((double) currentPage / pageLimit) * pageLimit + 1;
 		}
-		
 		endPage = startPage + pageLimit - 1;
 		if (endPage > maxPage) {
 			endPage = maxPage;
 		}
-		
 		rowBounds = new RowBounds((currentPage - 1) * boardLimit, boardLimit);
 	}
 }

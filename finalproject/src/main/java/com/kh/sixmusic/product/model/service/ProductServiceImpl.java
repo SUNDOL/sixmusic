@@ -21,50 +21,12 @@ public class ProductServiceImpl implements ProductService{
 	@Autowired
 	private ProductDao productDao;
 	@Override
-	public int listCount() {
-		return productDao.listCount(sqlSession);
-	}
-
-	@Override
-	public ArrayList<Product> productList(PageInfo pi, int typeNo) {
-		return productDao.productList(sqlSession, pi, typeNo);
-	}
-
-	@Override
-	public int selectProductCount(Filter f) {
-		return productDao.selectProductCount(sqlSession,f);
+	public ArrayList<Product> productList(Filter f, PageInfo pi) {
+		return productDao.productList(sqlSession, f, pi);
 	}
 	@Override
-	public ArrayList<Product> selectProductList(PageInfo pi, Filter f) {
-		return productDao.selectProductList(sqlSession,pi,f);
+	public int listCount(Filter f) {
+		return productDao.listCount(sqlSession, f);
 	}
-	@Override
-	public ArrayList<ProductAttachment> selectProductAttachmentList(int[] productNo) {
-		
-		return productDao.selectProductAttachmentList(sqlSession,productNo);
-	}
-	@Override
-	public ArrayList<Product> selectProductList(PageInfo pi) {
-		return null;
-	}
-	@Override
-	public ArrayList<Review> Review(int productNo) {
-		return null;
-	}
-	@Override
-	public ArrayList<ReviewAttachment> selectReviewAttachmentList(int productNo) {
-		return null;
-	}
-	@Override
-	public Product selectProduct(int productNo) {
-		return null;
-	}
-	@Override
-	public Review selectReview(int reviewNo) {
-		return null;
-	}
-	@Override
-	public ReviewAttachment selectReviewAttachment(int reviewNo) {
-		return null;
-	}
+	
 }

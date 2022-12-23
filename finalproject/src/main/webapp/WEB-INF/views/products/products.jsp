@@ -23,101 +23,51 @@
 
 	<br><br><br><br>
 
-    <div class="container">
-        <br>
+	<div class="container">
+		<br>
 
-        <!-- Filter section -->
-        <div class="row">
-            <div class="col-4 d-grid mx-auto">
-                <button class="btn btn-outline-dark" type="button" data-bs-toggle="offcanvas" href="#offcanvasFilter"
-                    aria-controls="offcanvasFilter">FILTER</button>
-            </div>
-            <div class="col-4">
-                <select class="form-select" name="sortBy" id="sortBy">
-                    <option value="1">Top Sellers</option>
-                    <option value="2">Top Reviews</option>
-                    <option value="3">Top Ratings</option>
-                    <option value="4">Price - High to Low</option>
-                    <option value="5">Price - Low to High</option>
-                    <option value="6">Newest First</option>
-                    <option value="7">Brand Name A-Z</option>
-                </select>
-            </div>
-            <div class="col-4">
-                <select class="form-select" name="boardLimit" id="boardLimit">
-                    <option value="20">Display: 20</option>
-                    <option value="40">Display: 40</option>
-                    <option value="60">Display: 60</option>
-                </select>
-            </div>
-        </div>
+		<!-- Filter section -->
+		<div class="row">
+			<div class="col-4 d-grid mx-auto">
+				<button class="btn btn-outline-dark" type="button"
+					data-bs-toggle="offcanvas" href="#offcanvasFilter"
+					aria-controls="offcanvasFilter">FILTER</button>
+			</div>
+			<div class="col-4">
+				<select class="form-select" name="sort" id="sortBy">
+					<option value="1">Top Sellers</option>
+					<option value="2">Top Reviews</option>
+					<option value="3">Top Ratings</option>
+					<option value="4">Price - High to Low</option>
+					<option value="5">Price - Low to High</option>
+					<option value="6">Newest First</option>
+					<option value="7">Brand Name A-Z</option>
+				</select>
+			</div>
+			<div class="col-4">
+				<select class="form-select" name="boardLimit" id="boardLimit">
+					<option value="20">Display: 20</option>
+					<option value="40">Display: 40</option>
+					<option value="60">Display: 60</option>
+				</select>
+			</div>
+		</div>
 
-        <!-- List section -->
-        <div class="album py-5 bg-light">
-            <div class="container">
-                <c:choose>
-                	<c:when test="${not empty pList}">
-		                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-1">
-		                    <c:forEach var="p" items="${pList}">
-			                    <div class="col">
-			                        <div class="card shadow-sm" style="cursor:pointer;" onclick="openProductModal();">
-			                            <div style="text-align:center;">
-			                                <img class="img-fluid img-responsive card-img-top productListImg" src="${p.filePath}${p.changeName}" alt="thumbnail">
-			                            </div>
-			                            <div class="card-body">
-			                                <h5><b>${p.brand}</b></h5>
-			                                <p class="card-text" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${p.name}</p>
-			                                <small>${p.rating}/5 | ${p.count} Reviews</small>
-			                                <p class="card-text"><b>${p.price} 원</b></p>
-			                            </div>
-			                        </div>
-			                    </div>
-		                    </c:forEach>
-		                </div>
-                	</c:when>
-                	<c:otherwise>
-                		<div class="text-center">
-	                		<h3 class="text-muted">조회한 상품이 없습니다</h3>
-                		</div>
-                	</c:otherwise>
-                </c:choose>
-                
-            </div>
-            <br>
-            <br>
+		<!-- List section -->
+		<div class="album py-5 bg-light">
+			<!--  productList -->
+			<div class="container" id="productList-area"></div>
+			<br> <br>
 
-            <!-- Pagination section -->
-            <c:if test="${not empty pList}">
-	            <div class="d-flex justify-content-center">
-	                <nav aria-label="Page navigation">
-	                    <ul class="pagination">
-	                        <c:if test="${pi.currentPage ne 1}">
-		                        <li class="page-item">
-		                            <a class="page-link" href="list.pr?currentPage=${pi.currentPage - 1}" aria-label="Previous">
-		                                <span aria-hidden="true">&laquo;</span>
-		                            </a>
-		                        </li>
-	                        </c:if>
-	                        <c:forEach var="p" begin="${pi.startPage}" end="${pi.endPage}">
-	                        	<li class="page-item"><a class="page-link" href="list.pr?currentPage=${p}">${p}</a></li>
-	                        </c:forEach>
-	                        <c:if test="${pi.currentPage ne pi.endPage}">
-		                        <li class="page-item">
-		                            <a class="page-link" href="list.pr?currentPage=${pi.currentPage + 1}" aria-label="Next">
-		                                <span aria-hidden="true">&raquo;</span>
-		                            </a>
-		                        </li>
-	                        </c:if>
-	                    </ul>
-	                </nav>
-	            </div>
-            </c:if>
-            
-        </div>
+			<div class="d-flex justify-content-center">
+				<nav aria-label="Page navigation">
+					<ul class="pagination" id="pageInfo-area"></ul>
+				</nav>
+			</div>
+		</div>
+	</div>
 
-    </div>
-
-    <!-- Modal: Product Details -->
+	<!-- Modal: Product Details -->
     <div class="modal fade" id="productDetailsModal" tabindex="-1" aria-labelledby="productDetailsModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-fullscreen">
@@ -285,6 +235,6 @@
 <jsp:include page="../common/footer.jsp"/>
 
 <!-- JavaScript for Products page -->
-<script src="resources/js/products.js"></script>
+<!-- <script src="../../resources/js/products.js"></script> -->
 
 </html>

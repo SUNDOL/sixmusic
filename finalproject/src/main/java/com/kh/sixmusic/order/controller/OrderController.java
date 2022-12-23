@@ -118,7 +118,6 @@ public class OrderController {
 		TotalOrder to = new TotalOrder();
 		to.setPayment(totalPayment);
 		to.setMemberNo(loginUser.getMemberNo());
-		to.setZipcode(zipcode);
 		
 		int result = orderService.insertOrderDate(to,cartNo);
 		

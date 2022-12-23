@@ -81,13 +81,11 @@
 	INSERT INTO TOTAL_ORDER(
 	    ORDER_NO ,
 		REF_MEMBER_NO ,
-		REF_ZIPCODE ,
 		PAYMENT
 		)
 	VALUES(
 		SEQ_ORDER.NEXTVAL,
 		#{memberNo},
-		#{zipcode},
 		#{payment}
 	)
 </insert>

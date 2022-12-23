@@ -5,8 +5,12 @@
 <head>
 <meta charset="UTF-8">
 <title>FILTER</title>
-
 <script src="resources/js/filter.js"></script>
+<script>
+	$(()=>{
+		filter({typeNo:"${typeNo}"});
+	});
+</script>
 </head>
 <body>
 	<!-- Offcanvas: Filter Items -->

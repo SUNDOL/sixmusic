@@ -14,33 +14,15 @@ import com.kh.sixmusic.product.model.vo.ProductAttachment;
 @Repository
 public class ProductDao {
 	
-	public int listCount(SqlSessionTemplate sqlSession) {
-		return sqlSession.selectOne("productMapper.listCount");
+	public int listCount(SqlSessionTemplate sqlSession, Filter f) {
+		return sqlSession.selectOne("productMapper.listCount", f);
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public ArrayList<Product> productList(SqlSessionTemplate sqlSession, PageInfo pi, int typeNo) {
-		int limit = pi.getBoardLimit();
-		int offset = (pi.getCurrentPage() - 1) * limit;
-		RowBounds rowBounds = new RowBounds(offset, limit);
-		ArrayList<Product> list = (ArrayList) sqlSession.selectList("productMapper.productList", typeNo, rowBounds);
-		return list;
+	public ArrayList<Product> productList(SqlSessionTemplate sqlSession, Filter f, PageInfo pi) {
+		return (ArrayList) sqlSession.selectList("productMapper.productList", f, pi.getRowBounds());
 	}
 
-	public int selectProductCount(SqlSessionTemplate sqlSession, Filter f) {
-		return sqlSession.selectOne("productMapper.filterCount",f);
-	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public ArrayList<Product> selectProductList(SqlSessionTemplate sqlSession, PageInfo pi, Filter f) {
-		return (ArrayList)sqlSession.selectList("productMapper.selectProductList",f,pi.getRowBounds());
-	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public ArrayList<ProductAttachment> selectProductAttachmentList(SqlSessionTemplate sqlSession,
-			int[] productNo) {
-		return (ArrayList)sqlSession.selectList("productMapper.selectProductAttachmentList",productNo);
-	}
 
 
 

@@ -20,7 +20,7 @@ public class DataController {
 	private DataService dataService;
 	
 	@ResponseBody
-	@RequestMapping("filter/list/select.da")
+	@RequestMapping(value = "select.da", produces = "application/json; charset=utf-8")
 	public String selectPrice(Filter f){
 		ArrayList<Brand> brand = dataService.selectBrand(f);
 		ArrayList<Model> model = dataService.selectModel(f);

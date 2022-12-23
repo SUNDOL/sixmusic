@@ -1,207 +1,168 @@
-$(function () {
 
-    //카테고리 리스트 출력
-    $.ajax({
-        url: "catrgory/list/select.da",
-        dataType: "json",
-        success: list => {
-            let str = "";
-            list.forEach(el => {
-                str += "<div class='form-check'>";
-                str += "<input class='form-check-input' type='radio' name='categoryNo' id='category-" + el.categoryNo + "' value='" + el.categoryNo + "'>";
-                str += "<label class='form-check-label' for='category-" + el.categoryNo + "'>" + el.name + "</label>";
-                str += "</div>";
-            });
-            $("#category-area").html(str);
-            //type을 출력
-            typeFilter();
-        },
-        error: () => {
-            console.log("error!!");
-        }
-    });
-
-    //가격 리스트 출력
-    $.ajax({
-        url: "price/list/select.da",
-        dataType: "json",
-        success: list => {
-            let str = "";
-            list.forEach((el, i) => {
-                str += "<div class='form-check'>";
-                str += "<input class='form-check-input' type='radio' name='priceNo' id='price-" + el.priceNo + "' value='" + el.priceNo + "'>";
-                str += "<label class='form-check-label' for='price-" + el.name + "'>"
-                const won = /\B(?=(\d{3})+(?!\d))/g;
-                const comma = ",";
-                let min = String(el.min).replace(won, comma);
-                let max = String(el.max).replace(won, comma);
-                if (i == 0) {
-                    str += max + '원 미만';
-                } else if (i == list.length - 1) {
-                    str += min + '원 이상';
-                } else {
-                    str += min + "원 - " + max + '원';
-                }
-                str += "</label>";
-                str += "</div>";
-            });
-            $("#price-area").html(str);
-            $("input[name=priceNo]").change(function () {
-                filterSearch({
-                    typeNo: $("input[name=typeNo]:checked").val(),
-                    brandNo: $("input[name=brandNo]:checked").val(),
-                    modelNo: $("input[name=modelNo]:checked").val()
-                });
-                //brand
-                $.ajax({
-                    url: "brand/list/select.da",
-                    data: { typeNo: $("input[name=typeNo]:checked").val(), priceNo: $("input[name=priceNo]:checked").val() },
-                    dataType: "json",
-                    success: list => {
-                        let str = "";
-                        list.forEach(el => {
-                            str += "<div class='form-check'>";
-                            str += "<input class='form-check-input' type='radio' id='brand-" + el.brandNo + "' name='brandNo' value='" + el.brandNo + "'>";
-                            str += "<label class='form-check-label' for='brand-" + el.brandNo + "'>" + el.name + "(" + el.quantity + ")</label>";
-                            str += "</div>";
-                        });
-                        filterReset(2);
-                        $("#brand-area").html(str);
-                        modelFilter();
-                    },
-                    error: () => {
-                        console.log("error!!");
-                    }
-                });
-            });
-        },
-        error: () => {
-            console.log("error!!");
-        }
-    });
-
-    //type
-    function typeFilter() {
-        $("input[name=categoryNo]").change(function () {
-            //카테고리 검색
-            filterSearch({ categoryNo: $(this).val() });
-            $.ajax({
-                url: "type/list/select.da",
-                data: { categoryNo: $(this).val() },
-                dataType: "json",
-                success: list => {
-                    let str = "";
-                    list.forEach(el => {
-                        str += "<div class='form-check type1'>"
-                        str += "<input class='form-check-input' type='radio' name='typeNo' id='type-" + el.typeNo + "' value='" + el.typeNo + "'>";
-                        str += "<label class='form-check-label' for='type-" + el.typeNo + "'>" + el.name + "</label>";
-                        str += "</div>";
-                    });
-                    filterReset(1);
-                    $("#type-area").html(str);
-                    brandFilter();
-                },
-                error: () => {
-                    console.log("error!!");
-                }
-            });
-        });
-    }
-
-    //brand
-    function brandFilter() {
-        $("input[name=typeNo]").change(function () {
-            //타입 검색
-            filterSearch({ typeNo: $(this).val() });
-            $.ajax({
-                url: "brand/list/select.da",
-                data: { typeNo: $(this).val(), priceNo: $("input[name=priceNo]:checked").val() },
-                dataType: "json",
-                success: list => {
-                    let str = "";
-                    list.forEach(el => {
-                        str += "<div class='form-check'>";
-                        str += "<input class='form-check-input' type='radio' id='brand-" + el.brandNo + "' name='brandNo' value='" + el.brandNo + "'>";
-                        str += "<label class='form-check-label' for='brand-" + el.brandNo + "'>" + el.name + "(" + el.quantity + ")</label>";
-                        str += "</div>";
-                    });
-                    filterReset(2);
-                    $("#brand-area").html(str);
-                    modelFilter();
-                },
-                error: () => {
-                    console.log("error!!");
-                }
-            });
-        });
-    }
-    //model
-    function modelFilter() {
-        $("input[name=brandNo]").change(function () {
-            //타입 브랜드 검색
-            filterSearch({ typeNo: $("input[name=typeNo]:checked").val(), brandNo: $(this).val() });
-            $.ajax({
-                url: "model/list/select.da",
-                data: { brandNo: $(this).val(), priceNo: $("input[name=priceNo]:checked").val() },
-                dataType: "json",
-                success: list => {
-                    let str = "";
-                    list.forEach(el => {
-                        str += "<div class='form-check'>";
-                        str += "<input class='form-check-input' type='checkbox' id='model-" + el.modelNo + "' name='modelNo' value='" + el.modelNo + "'>";
-                        str += "<label class='form-check-label' for='model-" + el.modelNo + "'>" + el.name + "(" + el.quantity + ")</label>";
-                        str += "</div>";
-                    });
-                    $("#model-area").html(str);
-                    $("input[name=modelNo]").change(function () {
-                        //타입 브랜드 모델 검색
-                        filterSearch(
-                            {
-                                typeNo: $("input[name=typeNo]:checked").val(),
-                                brandNo: $("input[name=brandNo]:checked").val(),
-                                modelNo: $("input[name=modelNo]:checked").val()
-                            });
-                    })
-
-                },
-                error: () => {
-                    console.log("error!!");
-                }
-            });
-        });
-    }
-
-    function filterReset(level) {
-
-        switch (level) {
-            case 1:
-                $("#brand-area").empty();
-            case 2:
-                $("#model-area").empty();
-        }
-    }
-
-    function filterSearch(f) {
-
-        console.log();
+    function filter(f){
         $.ajax({
-            url: "filter/list/select.pr",
-            data: {
-                categoryNo: f.categoryNo,
-                typeNo: f.typeNo,
-                brandNo: f.brandNo,
-                modelNo: f.modelNo,
-                priceNo: $("input[name=priceNo]:checked").val(),
+            url:"select.da",
+            data:{
+                typeNo:f.typeNo,
+                brandNo:f.brandNo,
+                modelNo:f.modelNo,
+                priceNo:f.priceNo
             },
-            success: result => {
-                console.log(result);
+            dataType:"json",
+            success:result=>{
+                search(f);
 
-            },
-            error: () => {
+                brand(result.brand);
+                model(result.model);
+                price(result.price);
+                $("input[name=brandNo]").change(()=>{
+                    f.brandNo = $("input[name=brandNo]:checked").val();
+                    filter(f);
+                });
+                $("input[name=modelNo]").change(()=>{
+                    let list = $("input[name=modelNo]:checked").get();
+                    f.modelNo = [];
+                    list.forEach( e => f.modelNo.push( $(e).val() ) );
+                    filter(f);
+                });
+                $("input[name=priceNo]").change(()=>{
+                    let list = $("input[name=priceNo]:checked").get();
+                    f.priceNo = [];
+                    list.forEach( e => f.priceNo.push( $(e).val() ) );
+                    filter(f);
+                });
+                check(f);
+            }, 
+            error:()=>{
                 console.log("error!!");
             }
         });
     }
 
-});
+    function brand(list){
+        let str = "";
+        list.forEach(el => {
+            str += "<div class='form-check'>";
+            str += "<input class='form-check-input' type='radio' id='brand-" + el.brandNo + "' name='brandNo' value='" + el.brandNo + "'>";
+            str += "<label class='form-check-label' for='brand-" + el.brandNo + "'>" + el.name + "(" + el.quantity + ")</label>";
+            str += "</div>";
+        });
+        $("#brand-area").html(str);
+    }
+    function model(list){
+        let str = "";
+        list.forEach(el => {
+            str += "<div class='form-check'>";
+            str += "<input class='form-check-input' type='checkbox' id='model-" + el.modelNo + "' name='modelNo' value='" + el.modelNo + "'>";
+            str += "<label class='form-check-label' for='model-" + el.modelNo + "'>" + el.name + "(" + el.quantity + ")</label>";
+            str += "</div>";
+        });
+        $("#model-area").html(str);
+    }
+    function price(list){
+        let str = "";
+        list.forEach((el) => {
+            str += "<div class='form-check'>";
+            str += "<input class='form-check-input' type='checkbox' name='priceNo' id='price-" + el.priceNo + "' value='" + el.priceNo + "'>";
+            str += "<label class='form-check-label' for='price-" + el.name + "'>"
+            const won = /\B(?=(\d{3})+(?!\d))/g;
+            const comma = ",";
+            let min = String(el.min).replace(won, comma);
+            let max = String(el.max).replace(won, comma);
+            if (el.priceNo == 1) {
+                str += max + '원 미만' + "("+ el.quantity +")";
+            } else {
+                str += min + "원 - " + max + '원' + "("+ el.quantity +")";
+            }
+            str += "</label>";
+            str += "</div>";
+        });
+        $("#price-area").html(str);
+    }
+
+    function check(f){
+        $("input[id=brand-"+f.brandNo+"]").attr("checked",true);
+        f.modelNo?.forEach( e => $("input[id=model-"+e+"]").attr("checked",true) );
+        f.priceNo?.forEach( e => $("input[id=price-"+e+"]").attr("checked",true) );
+    }
+
+    function search(f){
+        $.ajax({
+            url:"select.pr",
+            data:{
+                typeNo:f.typeNo,
+                brandNo:f.brandNo,
+                modelNo:f.modelNo,
+                priceNo:f.priceNo,
+                sort:$("#sortBy:selected").val(),
+                boardLimt:$("#boardLimit:selected").val(),
+                currentPage:f.currentPage
+            },
+            dataType:"json",
+            success:result=>{
+                productList(result.p);
+                pageInfo(f, result.pi);
+            }, 
+            error:()=>{
+                console.log("error!!");
+            }
+        });
+    }
+
+    function productList(list){
+        let str = "";
+        if(list != null && list.length > 0){
+            
+            const won = /\B(?=(\d{3})+(?!\d))/g;
+            const comma = ",";
+            let price = "";
+            str += "<div class='row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-1'>";
+            list.forEach(e=>{
+                price = String(e.price).replace(won, comma)
+                str += "<div class='col'>";
+                str += "<div class='card shadow-sm' style='cursor:pointer;' onclick='openProductModal();'>";
+                str += "<div style='text-align:center;'>";
+                str += "<img class='img-fluid img-responsive card-img-top productListImg' src='"+e.filePath+e.changeName+"' alt='"+e.changeName+"'>";
+                str += "</div>";
+                str += "<div class='card-body'>";
+                str += "<h5><b>"+e.brand+"</b></h5>";
+                str += "<p class='card-text' style='white-space:nowrap;overflow:hidden;text-overflow:ellipsis;'>"+e.name+"</p>";
+                str += "<small>"+e.rating+"/5 | "+e.count+" Reviews</small>";
+                str += "<p class='card-text'><b>"+price+" 원</b></p>";
+                str += "</div>";
+                str += "</div>";
+                str += "</div>";
+
+            });
+            str += "</div>";
+        }else{
+            str += "<div class='text-center'>";
+            str += "<h3 class='text-muted'>조회한 상품이 없습니다</h3>"
+            str += "</div>"
+        }
+        $("#productList-area").html(str);
+    }
+
+    function pageInfo(f, pi){
+
+        f.currentPage = pi.startPage - 1;
+        let str = "<li class='page-item'><a class='page-link' aria-label='Previous' onclick='filter("+JSON.stringify(f)+");'><span aria-hidden='true'>&laquo;</span></a></li>";
+
+        if(pi!=null){
+            for (let i = pi.startPage; i < pi.endPage + 1; i++) {
+                f.currentPage = i;
+                str += "<li class='page-item'><a class='page-link' onclick='filter("+JSON.stringify(f)+");'>"+i+"</a></li>";
+            }
+        }
+        
+        f.currentPage = pi.endPage + 1;
+        str += "<li class='page-item'><a class='page-link' aria-label='Previous' value='1'><span aria-hidden='true'";
+        if(pi.endPage != pi.maxPage){
+            str += "onclick='filter("+JSON.stringify(f)+");'";
+        }
+        str += ">&raquo;</span></a></li>";
+
+        $("#pageInfo-area").html(str);
+        
+    }
 

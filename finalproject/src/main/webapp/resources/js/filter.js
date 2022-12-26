@@ -112,7 +112,6 @@
     function productList(list){
         let str = "";
         if(list != null && list.length > 0){
-            
             const won = /\B(?=(\d{3})+(?!\d))/g;
             const comma = ",";
             let price = "";
@@ -120,7 +119,7 @@
             list.forEach(e=>{
                 price = String(e.price).replace(won, comma)
                 str += "<div class='col'>";
-                str += "<div class='card shadow-sm' style='cursor:pointer;' onclick='openProductModal();'>";
+                str += "<div class='card shadow-sm' style='cursor:pointer;' onclick='openProductModal(" + e.productNo + ");'>";
                 str += "<div style='text-align:center;'>";
                 str += "<img class='img-fluid img-responsive card-img-top productListImg' src='"+e.filePath+e.changeName+"' alt='"+e.changeName+"'>";
                 str += "</div>";

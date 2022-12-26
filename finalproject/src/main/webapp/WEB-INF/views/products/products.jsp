@@ -57,7 +57,7 @@
 		<div class="album py-5 bg-light">
 			<!--  productList -->
 			<div class="container" id="productList-area"></div>
-			<br> <br>
+			<br><br>
 
 			<div class="d-flex justify-content-center">
 				<nav aria-label="Page navigation">

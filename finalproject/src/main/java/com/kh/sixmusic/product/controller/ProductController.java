@@ -22,18 +22,34 @@ import com.kh.sixmusic.product.model.vo.ProductAttachment;
 public class ProductController {
 	@Autowired
 	private ProductService productService;
+
+	// 상품 목록 불러오기
 	@GetMapping("form.pr")
 	public ModelAndView productListForm(int typeNo, ModelAndView mv) {
-		mv.addObject("typeNo",typeNo).setViewName("products/products");
+		mv.addObject("typeNo", typeNo).setViewName("products/products");
 		return mv;
 	}
-	
-	//상품 검색 
+
+	// 상품 상세페이지 + 사진
+	@ResponseBody
+	@RequestMapping(value = "product.pr", produces = "application/json; charset=UTF-8")
+	public String productDetails(int productNo) {
+		Product product = productService.productDetails(productNo);
+		ArrayList<ProductAttachment> productPics = productService.productPics(productNo);
+		ArrayList<ProductAttachment> productColors = productService.productColors(productNo);
+		Gson gson = new Gson();
+		HashMap<String, Object> pMap = new HashMap<>();
+		pMap.put("product", product);
+		pMap.put("productPics", productPics);
+		pMap.put("productColors", productColors);
+		return gson.toJson(pMap);
+	}
+
+	// 상품 검색
 	@ResponseBody
 	@RequestMapping(value = "select.pr", produces = "application/json; charset=utf-8")
-	public String productList(Filter f,@RequestParam(defaultValue = "1") int currentPage 
-			,@RequestParam(defaultValue = "20") int boardLimit) {
-		System.out.println(f);
+	public String productList(Filter f, @RequestParam(defaultValue = "1") int currentPage,
+			@RequestParam(defaultValue = "20") int boardLimit) {
 		int listCount = productService.listCount(f);
 		int pageLimit = 10;
 		PageInfo pi = new PageInfo(listCount, currentPage, pageLimit, boardLimit);
@@ -44,4 +60,5 @@ public class ProductController {
 		map.put("p", list);
 		return gson.toJson(map);
 	}
+
 }

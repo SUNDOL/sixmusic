@@ -123,8 +123,6 @@
 	</choose>
 </select>
 
-
-
 <select id="selectProductAttachmentList" resultMap="productAttachmentResult">
 	SELECT
 		REF_PRODUCT_NO ,
@@ -134,6 +132,62 @@
 	FROM PRODUCT_ATTACHMENT
 	WHERE REF_PRODUCT_NO LIKE #{productNo}
 	ORDER BY PRODUCT_ATTACHMENT_NO
+</select>
+
+<select id="productDetails" parameterType="product" resultMap="productResult">
+SELECT
+    product_no,
+    model_name,
+    brand_name,
+    group_no,
+    product_color,
+    product_name,
+    product_content,
+    product_price,
+    product_quantity,
+    nvl(AVG(r.rating), 0),
+    COUNT(r.review_no)
+FROM
+         product p
+    JOIN model         m ON ( p.ref_model_no = m.model_no )
+    JOIN brand         b ON ( m.ref_brand_no = b.brand_no )
+    JOIN product_group g ON ( p.product_no = g.ref_product_no )
+    LEFT JOIN review r ON ( p.product_no = r.ref_product_no )
+WHERE
+    product_no = #{productNo}
+GROUP BY
+    product_no,
+    model_name,
+    brand_name,
+    group_no,
+    product_color,
+    product_name,
+    product_content,
+    product_price,
+    product_quantity
+</select>
+
+<select id="productPics" resultMap="productAttachmentResult">
+SELECT * FROM PRODUCT_ATTACHMENT WHERE REF_PRODUCT_NO = #{productNo}
+</select>
+
+<select id="productColors" resultMap="productAttachmentResult">
+SELECT
+    *
+FROM
+         product_attachment pat
+    JOIN product       p ON ( pat.ref_product_no = p.product_no )
+    JOIN product_group pg ON ( p.product_no = pg.ref_product_no )
+WHERE
+    pg.group_no LIKE (
+        SELECT
+            group_no
+        FROM
+            product_group
+        WHERE
+            ref_product_no LIKE #{productNo}
+    )
+    AND pat.product_attachment_change_name LIKE '%-1.%'
 </select>
 
 

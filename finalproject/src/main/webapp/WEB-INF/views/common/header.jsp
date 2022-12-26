@@ -67,8 +67,8 @@
                             ELECTRIC GUITARS
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark">
-                            <li><a class="dropdown-item" href="list.pr?typeNo=1">Solid-Body</a></li>
-                            <li><a class="dropdown-item" href="list.pr?typeNo=2">Hollow & Semi-Hollow Body</a></li>
+                            <li><a class="dropdown-item" href="form.pr?typeNo=1">Solid-Body</a></li>
+                            <li><a class="dropdown-item" href="form.pr?typeNo=2">Hollow & Semi-Hollow Body</a></li>
 
                         </ul>
                     </li>
@@ -78,10 +78,10 @@
                             ACOUSTIC GUITARS
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark">
-                            <li><a class="dropdown-item" href="list.pr?typeNo=3">6-String</a></li>
-                            <li><a class="dropdown-item" href="list.pr?typeNo=4">12-String</a></li>
-                            <li><a class="dropdown-item" href="list.pr?typeNo=5">Acoustic-Electric</a></li>
-                            <li><a class="dropdown-item" href="list.pr?typeNo=6">Classical & Nylon</a></li>
+                            <li><a class="dropdown-item" href="form.pr?typeNo=3">6-String</a></li>
+                            <li><a class="dropdown-item" href="form.pr?typeNo=4">12-String</a></li>
+                            <li><a class="dropdown-item" href="form.pr?typeNo=5">Acoustic-Electric</a></li>
+                            <li><a class="dropdown-item" href="form.pr?typeNo=6">Classical & Nylon</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
@@ -90,9 +90,9 @@
                             BASSES
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark">
-                            <li><a class="dropdown-item" href="list.pr?typeNo=7">Electric: 4-String</a></li>
-                            <li><a class="dropdown-item" href="list.pr?typeNo=8">Electric: 5+ String</a></li>
-                            <li><a class="dropdown-item" href="list.pr?typeNo=9">Acoustic</a></li>
+                            <li><a class="dropdown-item" href="form.pr?typeNo=7">Electric: 4-String</a></li>
+                            <li><a class="dropdown-item" href="form.pr?typeNo=8">Electric: 5+ String</a></li>
+                            <li><a class="dropdown-item" href="form.pr?typeNo=9">Acoustic</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
@@ -231,13 +231,11 @@
         <div class="offcanvas-body">
             <div class="container">
                 <div class="row g-1">
-                    <strong class="fs-3"><i class="bi bi-bag"></i> My Cart (0)</strong>
-                    <div class="card-body text-center">
+                    <div class="card-body">
+                    	<strong class="fs-3"><i class="bi bi-bag"></i> My Cart (0)</strong>
                         <br><br>
-                        
                             <!-- <h3 class="text-muted">Your cart is empty</h3> -->
                             <div class="owl-cart owl-carousel owl-theme">
-                                
                                 <div class="item">
                                     <div class="card shadow-sm" style="cursor:pointer;">
                                         <div style="text-align:center;">
@@ -251,7 +249,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                
                             </div>
                         <br>
                         <div class="card-body">
@@ -357,6 +354,143 @@
                     <button class="btn btn-outline-dark" type="button" id="searchFormButton">SEARCH</button>
                 </div>
             </form>
+        </div>
+    </div>
+    
+    <!-- Modal: Product Details -->
+    <div class="modal fade" id="productDetailsModal" tabindex="-1" aria-labelledby="productDetailsModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-fullscreen">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="productDetailsModalLabel"><b>PRODUCT DETAILS</b></h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row row-cols-1 row-cols-lg-2 g-5">
+                            <div class="col">
+                                <div class="row">
+                                    <a id="bigPicture" href="" target="_blank"><img class="img-fluid"
+                                            src="" alt="bigPicture"></a>
+                                </div>
+                                <br><br>
+                                <div class="owl-product owl-carousel owl-theme row">
+                                </div>
+                            </div>
+                            <div class="col card-text">
+                                <div class="row">
+                                    <div class="card-text">
+                                        <h2><b id="product-brand"></b></h2>
+                                        <h3><b id="product-name"></b></h3>
+                                        <h3 id="product-color"></h3>
+                                        <small id="product-no"></small>
+                                        <h5 id="product-review-numbers">0.00/5 | 0 REVIEWS</h5>
+                                    </div>
+                                </div>
+                                <br>
+                                <hr>
+                                <br>
+                                <div class="row">
+                                    <div class="card-text">
+                                        <h5><b>Description</b></h5>
+                                        <div id="product-description" style="white-space:pre-wrap">
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="card-text">
+                                        <h5><b>Colors</b></h5>
+                                        <div class="owl-color owl-carousel owl-theme">
+                                        	<img class='item colorPicture' src="" alt='owl-image' style='cursor:pointer;'>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <hr>
+                                <br>
+                                <div class="row">
+                                    <div class="card-text">
+                                        <h4><b id="product-price"></b></h4>
+                                        <br>
+                                        <div class="btn-group" role="group" aria-label="cart or wishlist">
+                                            <c:if test="${not empty loginUser}">
+	                                            <button class="btn btn-lg btn-outline-danger" onclick="addedToCart();"><i
+	                                                    class="bi bi-bag"></i> Add to Cart</button>
+	                                            
+	                                            <button class="btn btn-lg btn-outline-danger"
+	                                                onclick="addedToWishlist();"><i class="bi bi-heart"></i> Add to
+	                                                Wishlist</button>
+                                            </c:if>
+                                            <c:if test="${empty loginUser}">
+	                                            <button class="btn btn-lg btn-outline-danger" style="cursor:pointer;" onclick="loginRequired();"><i
+	                                                    class="bi bi-bag"></i> Add to Cart</button>
+	                                            
+	                                            <button class="btn btn-lg btn-outline-danger" style="cursor:pointer;" onclick="loginRequired();"><i class="bi bi-heart"></i> Add to
+	                                                Wishlist</button>
+                                            </c:if>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                            </div>
+                        </div>
+                        <hr>
+                        <br>
+                        <div class="row">
+                            <div class="container">
+                                <h3><b>REVIEWS</b> (3)</h3>
+                                <div class="container">
+                                    <table class="table table-sm table-hover" id="reviewTable" style="cursor:pointer;">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>User</th>
+                                                <th>Rating</th>
+                                                <th>Review</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><small>1</small></td>
+                                                <td>edjeon6969</td>
+                                                <td>5 / 5</td>
+                                                <td><a href="#" onclick="openReviewModal();">See Review</a></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	<!-- Modal: Review Modal -->
+    <div class="modal fade" id="reviewModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-2" aria-labelledby="reviewModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg modal-fullscreen-sm-down">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="reviewModalLabel"><b>REVIEW</b></h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row row-cols-1 row-cols-lg-2 g-2">
+                        <div class="col card-text">
+                            <a href="pics/IMG_3268.jpg" target="_blank"><img class="img-fluid mx-auto d-block" src="" alt="reviewImg"></a>
+                        </div>
+                        <div class="col card-text">
+                            <p class="card-text"><b>edjeon6969</b></p>
+                            <p class="card-text"><b>2022-12-14</b></p>
+                            <p class="card-text"><b>USER RATING: 4</b></p>
+                            <p class="card-text"><b>USER REVIEW:</b></p>
+                            <p class="card-text" style="white-space:pre-wrap;">이 곳은 beach인가 bitch인가 birthday를 축하해야 하나 bitchday를 축하해야 하나 그것이 문제로다</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

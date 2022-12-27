@@ -10,4 +10,6 @@ import lombok.NoArgsConstructor;
 public class Wishlist {
 	private int memberNo;//REF_MEMBER_NO	회원_번호
 	private int productNo;//REF_PRODUCT_NO	상품_번호
+	private String filePath;
+	private String changeName;
 }

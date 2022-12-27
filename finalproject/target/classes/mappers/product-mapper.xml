@@ -27,6 +27,25 @@
 	<result column="PRODUCT_ATTACHMENT_CHANGE_NAME" property="changeName"/>
 	<result column="PRODUCT_ATTACHMENT_FILE_PATH" property="filePath"/>
 </resultMap>
+<!-- Review -->
+<resultMap type="review" id="reviewResult">
+	<result column="REVIEW_NO" property="reviewNo"/>
+	<result column="REF_MEMBER_NO" property="writer"/>
+	<result column="MEMBER_NICKNAME" property="memberNickname"/>
+	<result column="REF_PRODUCT_NO" property="productNo"/>
+	<result column="REVIEW_CONTENT" property="content"/>
+	<result column="RATING" property="rating"/>
+	<result column="CREATE_DATE" property="createDate"/>
+	<result column="STATUS" property="status"/>
+</resultMap>
+<!-- ReviewAttachment -->
+<resultMap type="reviewAttachment" id="reviewAttachmentResult">
+	<result column="PRODUCT_ATTACHMENT_NO" property="attachmentNo"/>
+	<result column="REF_REVIEW_NO" property="reviewNo"/>
+	<result column="REVIEW_ATTACHMENT_ORIGIN_NAME" property="originName"/>
+	<result column="REVIEW_ATTACHMENT_CHANGE_NAME" property="changeName"/>
+	<result column="REVIEW_ATTACHMENT_FILE_PATH" property="filePath"/>
+</resultMap>
 
 <select id="listCount" resultType="_int" parameterType="filter">
 	SELECT COUNT(*)
@@ -55,14 +74,15 @@
 
 <select id="productList" parameterType="filter" resultMap="productResult">
 	SELECT
+		COUNT(*),
 		P.PRODUCT_NO,
 		B.BRAND_NAME,
 		P.PRODUCT_NAME,
 		P.PRODUCT_PRICE,
 		PAT.PRODUCT_ATTACHMENT_FILE_PATH FILE_PATH,
 		PAT.PRODUCT_ATTACHMENT_CHANGE_NAME CHANGE_NAME,
-		NVL(AVG(R.RATING),0) RATING,
-		COUNT(R.REVIEW_NO) COUNT
+		NVL(RG.RATING, 0) RATING,
+		NVL(RG.COUNT, 0) COUNT
 	FROM
 	    PRODUCT P
 	    JOIN PRODUCT_ATTACHMENT PAT ON ( P.PRODUCT_NO = PAT.REF_PRODUCT_NO )
@@ -70,6 +90,16 @@
 	    JOIN MODEL M ON ( P.REF_MODEL_NO = M.MODEL_NO )
 	    JOIN BRAND B ON ( M.REF_BRAND_NO = B.BRAND_NO )
 	    LEFT JOIN REVIEW R ON( P.PRODUCT_NO = R.REF_PRODUCT_NO )
+	    JOIN PRODUCT_GROUP PG ON ( P.PRODUCT_NO = PG.REF_PRODUCT_NO )
+	    LEFT JOIN (
+	    	SELECT
+			GROUP_NO AS GROUP_NO,
+			ROUND(AVG(R.RATING), 2) AS RATING,
+			COUNT(R.REVIEW_NO) AS COUNT
+			FROM PRODUCT_GROUP PG
+			JOIN REVIEW R ON( PG.REF_PRODUCT_NO = R.REF_PRODUCT_NO )
+			GROUP BY GROUP_NO
+			) RG ON( PG.GROUP_NO = RG.GROUP_NO )
 	WHERE P.STATUS LIKE 'Y'
 	    AND PAT.PRODUCT_ATTACHMENT_CHANGE_NAME LIKE '%1.%'
 	    AND ( R.REVIEW_NO IS NULL OR R.STATUS LIKE 'Y' )
@@ -90,13 +120,14 @@
 			</foreach>
         </if>
 	GROUP BY
-		P.PRODUCT_NO, 
-		B.BRAND_NAME, 
-		P.PRODUCT_NAME, 
-		P.PRODUCT_PRICE, 
-		PAT.PRODUCT_ATTACHMENT_FILE_PATH, 
-		PAT.PRODUCT_ATTACHMENT_CHANGE_NAME
-		
+		P.PRODUCT_NO,
+		B.BRAND_NAME,
+		P.PRODUCT_NAME,
+		P.PRODUCT_PRICE,
+		PAT.PRODUCT_ATTACHMENT_FILE_PATH,
+		PAT.PRODUCT_ATTACHMENT_CHANGE_NAME,
+		NVL(RG.RATING, 0),
+		NVL(RG.COUNT, 0)
 	ORDER BY 
 	<choose>
 		<when test="sort == 2">
@@ -139,36 +170,39 @@ SELECT
     product_no,
     model_name,
     brand_name,
-    group_no,
+    g.group_no,
     product_color,
     product_name,
     product_content,
     product_price,
     product_quantity,
-    nvl(AVG(r.rating), 0),
-    COUNT(r.review_no)
+    nvl(RG.RATING, 0) as RATING,
+    RG.COUNT
 FROM
          product p
     JOIN model         m ON ( p.ref_model_no = m.model_no )
     JOIN brand         b ON ( m.ref_brand_no = b.brand_no )
     JOIN product_group g ON ( p.product_no = g.ref_product_no )
-    LEFT JOIN review r ON ( p.product_no = r.ref_product_no )
+    LEFT JOIN (
+	    	SELECT
+			GROUP_NO AS GROUP_NO,
+			ROUND(AVG(R.RATING), 2) AS RATING,
+			COUNT(R.REVIEW_NO) AS COUNT
+			FROM PRODUCT_GROUP PG
+			JOIN REVIEW R ON( PG.REF_PRODUCT_NO = R.REF_PRODUCT_NO )
+			GROUP BY GROUP_NO
+			) RG ON( g.GROUP_NO = RG.GROUP_NO )
 WHERE
-    product_no = #{productNo}
-GROUP BY
-    product_no,
-    model_name,
-    brand_name,
-    group_no,
-    product_color,
-    product_name,
-    product_content,
-    product_price,
-    product_quantity
+    product_no = #{productNo} 
 </select>
 
 <select id="productPics" resultMap="productAttachmentResult">
-SELECT * FROM PRODUCT_ATTACHMENT WHERE REF_PRODUCT_NO = #{productNo}
+SELECT
+    *
+FROM
+    product_attachment
+WHERE
+    ref_product_no = #{productNo}
 </select>
 
 <select id="productColors" resultMap="productAttachmentResult">
@@ -190,8 +224,59 @@ WHERE
     AND pat.product_attachment_change_name LIKE '%-1.%'
 </select>
 
+<select id="productReviewList" parameterType="review" resultMap="reviewResult">
+SELECT
+    r.review_no,
+    r.ref_member_no,
+    m.member_nickname,
+    r.rating
+FROM
+         review r
+    JOIN product           p ON ( r.ref_product_no = p.product_no )
+    JOIN product_group     pg ON ( pg.ref_product_no = p.product_no )
+    JOIN member            m ON ( r.ref_member_no = m.member_no )
+WHERE
+    pg.group_no LIKE (
+        SELECT
+            group_no
+        FROM
+            product_group
+        WHERE
+            ref_product_no LIKE #{productNo}
+    )
+    and r.status = 'Y'
+ORDER BY
+    review_no DESC
+</select>
 
+<select id="reviewDetails" resultType="_int" resultMap="reviewResult">
+SELECT
+    r.review_no,
+    m.member_nickname,
+    r.ref_product_no,
+    r.review_content,
+    r.rating,
+    r.create_date
+FROM
+         review r
+    JOIN member m ON ( m.member_no = r.ref_member_no )
+WHERE
+        r.review_no = #{reviewNo}
+    AND r.status = 'Y'
+</select>
 
+<select id="reviewDetailsPic" resultType="_int" resultMap="reviewAttachmentResult">
+SELECT
+    review_attachment_no,
+    ref_review_no,
+    review_attachment_origin_name,
+    review_attachment_change_name,
+    review_attachment_file_path
+FROM
+    review_attachment
+WHERE
+    ref_review_no = #{reviewNo}
+</select>
 
 
 

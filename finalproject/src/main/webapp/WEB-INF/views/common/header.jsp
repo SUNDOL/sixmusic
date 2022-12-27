@@ -51,7 +51,7 @@
 
             <button class="navbar-toggler position-relative" type="button" data-bs-toggle="offcanvas"
                 data-bs-target="#offcanvasCart" aria-controls="offcanvasCart" aria-expanded="false"
-                aria-label="Toggle offcanvasCart">
+                aria-label="Toggle offcanvasCart" onclick="showCart();">
                 <span>
                     <i class="bi bi-bag" style="font-size: 1.5rem;"></i>
                     <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger rounded-circle">
@@ -161,13 +161,13 @@
 	                        </a>
 	                        	<ul class="dropdown-menu dropdown-menu-dark">
 	                            	<li><a class="dropdown-item" href="#">My Page</a></li>
-	                            	<li><a class="dropdown-item" href="member/logout.me">Sign Out</a></li>
+	                            	<li><a class="dropdown-item" href="logout.me">Sign Out</a></li>
 	                        	</ul>
 	                    </li>
                     </c:if>
                     <li>
                         <a class="nav-link" data-bs-toggle="offcanvas" href="#offcanvasCart" role="button"
-                            aria-controls="offcanvasCart">
+                            aria-controls="offcanvasCart" onclick="showCart();">
                             CART
                             <span class="badge text-bg-danger rounded-circle">0</span>
                         </a>
@@ -193,7 +193,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="member/login.me" method="post">
+                    <form action="login.me" method="post">
                         <div class="form-floating mb-3">
                             <input type="email" name="memberId" class="form-control" id="loginId"
                                 placeholder="user@example.com" required>
@@ -216,7 +216,7 @@
                 <div class="modal-footer">
                     <a href="#" style="color:#000; text-decoration:none;">Forgot ID?</a>&nbsp;|&nbsp;
                     <a href="#" style="color:#000; text-decoration:none;">Forgot Password?</a>&nbsp;|&nbsp;
-                    <a href="member/signUp.me" style="color:#000; text-decoration:none;">Sign Up</a>
+                    <a href="signUp.me" style="color:#000; text-decoration:none;">Sign Up</a>
                 </div>
             </div>
         </div>
@@ -229,37 +229,22 @@
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-            <div class="container">
                 <div class="row g-1">
                     <div class="card-body">
-                    	<strong class="fs-3"><i class="bi bi-bag"></i> My Cart (0)</strong>
+                    	<strong class="fs-3"><i class="bi bi-bag"></i> My Cart (<span id="cartLength"></span>)</strong>
                         <br><br>
                             <!-- <h3 class="text-muted">Your cart is empty</h3> -->
-                            <div class="owl-cart owl-carousel owl-theme">
-                                <div class="item">
-                                    <div class="card shadow-sm" style="cursor:pointer;">
-                                        <div style="text-align:center;">
-                                            <img class="img-fluid img-responsive card-img-top" src=""
-                                                alt="thumbnail">
-                                        </div>
-                                        <div class="card-body">
-                                            <p class="card-text"><b>2,500,000 원</b></p>
-                                            <a href="#" class="card-link text-muted">View</a>
-                                            <a href="#" class="card-link text-muted">Remove</a>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="owl-cart owl-carousel owl-theme">                                
                             </div>
                         <br>
                         <div class="card-body">
-                            <div class="card-text fs-5 text-end"><strong>TOTAL: 12,500,000 원</strong></div>
+                            <div class="card-text fs-5 text-end">TOTAL: <strong id="totalPrice"></strong> 원</div>
                             <div class="card-text text-end"><a href="#" class="text-muted">Confirm your
                                     order</a></div>
                         </div>
                         <br>
                     </div>
                 </div>
-            </div>
             <div class="row g-1">
                 <div class="card-body">
                     <a class="nav-link fs-3" href="#wishlistCollapse" data-bs-toggle="collapse" aria-expanded="false"
@@ -269,10 +254,8 @@
                     <br>
                     <div class="collapse" id="wishlistCollapse">
                         <div class="card-body text-center">
-                            
-                            <!-- <h3 class="text-muted">Your cart is empty</h3> -->
-                            <div class="owl-cart owl-carousel owl-theme">
-                                
+                            <!-- <h3 class="text-muted">Your Wishlist is empty</h3> -->
+                            <div class="owl-wishlist owl-carousel owl-theme">
                                 <div class="item">
                                     <div class="card shadow-sm" style="cursor:pointer;">
                                         <div style="text-align:center;">
@@ -285,13 +268,13 @@
                                         </div>
                                     </div>
                                 </div>
-                                
                             </div>
                             <br>
                         </div>
                     </div>
                 </div>
             </div>
+            
             <div class="row g-1">
                 <div class="card-body">
                     <a class="nav-link fs-3" href="#">
@@ -300,6 +283,7 @@
                     <br>
                 </div>
             </div>
+            
             <div class="row g-1">
                 <div class="card-body">
                     <a class="nav-link fs-3" href="#">
@@ -310,18 +294,16 @@
             </div>
             
             <c:choose>
-            
             	<c:when test="${not empty loginUser}">
 		            <div class="row g-1">
 		                <div class="card-body">
-		                    <a class="nav-link fs-3" href="member/logout.me">
+		                    <a class="nav-link fs-3" href="logout.me">
 		                        <strong><i class="bi bi-box-arrow-right"></i> Sign Out</strong>
 		                    </a>
 		                    <br>
 		                </div>
 		            </div>
             	</c:when>
-            	
 				<c:otherwise>
 					<div class="row g-1">
 		                <div class="card-body">
@@ -332,10 +314,8 @@
 		                    <br>
 		                </div>
 		            </div>
-				</c:otherwise>
-			            
+				</c:otherwise>     
             </c:choose>
-            
         </div>
     </div>
 
@@ -364,7 +344,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="productDetailsModalLabel"><b>PRODUCT DETAILS</b></h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="showCart();"></button>
                 </div>
                 <div class="modal-body">
                     <div class="container">
@@ -416,11 +396,10 @@
                                         <br>
                                         <div class="btn-group" role="group" aria-label="cart or wishlist">
                                             <c:if test="${not empty loginUser}">
-	                                            <button class="btn btn-lg btn-outline-danger" onclick="addedToCart();"><i
+	                                            <button id="addToCart" class="btn btn-lg btn-outline-danger"><i
 	                                                    class="bi bi-bag"></i> Add to Cart</button>
 	                                            
-	                                            <button class="btn btn-lg btn-outline-danger"
-	                                                onclick="addedToWishlist();"><i class="bi bi-heart"></i> Add to
+	                                            <button id="addToWishlist" class="btn btn-lg btn-outline-danger"><i class="bi bi-heart"></i> Add to
 	                                                Wishlist</button>
                                             </c:if>
                                             <c:if test="${empty loginUser}">
@@ -440,25 +419,9 @@
                         <br>
                         <div class="row">
                             <div class="container">
-                                <h3><b>REVIEWS</b> (3)</h3>
+                                <h3><b>REVIEWS</b></h3>
                                 <div class="container">
                                     <table class="table table-sm table-hover" id="reviewTable" style="cursor:pointer;">
-                                        <thead>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>User</th>
-                                                <th>Rating</th>
-                                                <th>Review</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td><small>1</small></td>
-                                                <td>edjeon6969</td>
-                                                <td>5 / 5</td>
-                                                <td><a href="#" onclick="openReviewModal();">See Review</a></td>
-                                            </tr>
-                                        </tbody>
                                     </table>
                                 </div>
                             </div>
@@ -479,14 +442,14 @@
                 <div class="modal-body">
                     <div class="row row-cols-1 row-cols-lg-2 g-2">
                         <div class="col card-text">
-                            <a href="pics/IMG_3268.jpg" target="_blank"><img class="img-fluid mx-auto d-block" src="" alt="reviewImg"></a>
+                            <a id="review-pic" href="" target="_blank"><img class="img-fluid mx-auto d-block" src="" alt="reviewImg"></a>
                         </div>
                         <div class="col card-text">
-                            <p class="card-text"><b>edjeon6969</b></p>
-                            <p class="card-text"><b>2022-12-14</b></p>
-                            <p class="card-text"><b>USER RATING: 4</b></p>
+                            <p class="card-text"><b>Writer: </b><small id="review-writer"></small></p>
+                            <p class="card-text"><b>Date: </b><small id="review-date"></small></p>
+                            <p class="card-text"><b>Rating: </b><small id="review-rating"></small></p>
                             <p class="card-text"><b>USER REVIEW:</b></p>
-                            <p class="card-text" style="white-space:pre-wrap;">이 곳은 beach인가 bitch인가 birthday를 축하해야 하나 bitchday를 축하해야 하나 그것이 문제로다</p>
+                            <p class="card-text" id="review-content" style="white-space:pre-wrap;"></p>
                         </div>
                     </div>
                 </div>

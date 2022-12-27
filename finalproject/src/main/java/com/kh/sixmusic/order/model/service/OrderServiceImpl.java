@@ -1,11 +1,11 @@
 package com.kh.sixmusic.order.model.service;
 
 import java.util.ArrayList;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.google.gson.JsonElement;
 import com.kh.sixmusic.order.model.dao.OrderDao;
 import com.kh.sixmusic.order.model.vo.Cart;
 import com.kh.sixmusic.order.model.vo.ProductOrder;
@@ -20,6 +20,21 @@ public class OrderServiceImpl implements OrderService {
 	private SqlSessionTemplate sqlSession;
 	@Autowired
 	private OrderDao orderDao;
+
+	@Override
+	public int checkCart(Cart c) {
+		return orderDao.checkCart(sqlSession, c);
+	}
+	
+	@Override
+	public int addToCart(Cart c) {
+		return orderDao.addToCart(sqlSession, c);
+	}
+	
+	@Override
+	public ArrayList<Cart> showCart(int memberNo) {
+		return orderDao.showCart(sqlSession, memberNo);
+	}
 
 	@Override
 	public int insertOrderDate(TotalOrder to, int[] cartNo) {
@@ -82,11 +97,6 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public int insertCart(Cart c) {
-		return orderDao.insertCart(sqlSession, c);
-	}
-
-	@Override
 	public int deleteCart(int cartNo) {
 		return orderDao.deleteCart(sqlSession, cartNo);
 	}
@@ -100,5 +110,9 @@ public class OrderServiceImpl implements OrderService {
 	public ArrayList<Product> SelectProductOrder(int orderNo) {
 		return null;
 	}
+
+
+
+
 
 }

@@ -19,7 +19,7 @@ public class MemberController {
 	private MemberService memberService;
 
 	// 로그인
-	@PostMapping("member/login.me")
+	@PostMapping("login.me")
 	public String loginMember(Member m, HttpSession session) {	
 		Member loginUser = memberService.loginMember(m);
 		if (loginUser != null) {
@@ -29,7 +29,7 @@ public class MemberController {
 	}
 
 	// 로그아웃
-	@GetMapping("member/logout.me")
+	@GetMapping("logout.me")
 	public ModelAndView logoutMember(ModelAndView mv, HttpSession session) {
 		session.removeAttribute("loginUser");
 		mv.setViewName("redirect:/");
@@ -38,7 +38,7 @@ public class MemberController {
 	}
 	
 	// 회원가입 페이지로 이동
-	@GetMapping("member/signUp.me")
+	@GetMapping("signUp.me")
 	public String signUpMember() {
 		return "member/signUp";                                                                          
 	}

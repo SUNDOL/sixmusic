@@ -90,7 +90,7 @@ function productDetails(productNo) {
                 $("#bigPicture>img").attr('src', this.src);
             });
             $("#addToCart").attr('onclick', 'addToCart(' + productNo + ')');
-            $("#addToWishlist").attr('onclick', 'addToWishlist(' + productNo + ')');
+            $("#addToWishlist").attr('onclick', 'checkWishlist(' + productNo + ')');
         },
         error: function () {
             console.log("통신 실패 ㅜㅜ");
@@ -133,59 +133,6 @@ function loginRequired() {
     window.alert("로그인 후 이용 가능합니다.");
 };
 
-// JavaScript for Cart
-function showCart() {
-    $.ajax({
-        url: "showCart.or",
-        success: function(result) {
-            console.log(result);
-            var won = /\B(?=(\d{3})+(?!\d))/g;
-            var comma = ",";
-            var cartArray = "";
-            let totalPrice = 0;
-            for (var i = 0; i < result.product.length; i++) {
-                var price = (String(result.product[i].price).replace(won, comma));
-                cartArray += "<div class='item'>" 
-                        + "<div class='card shadow-sm' style='cursor:pointer;'>"
-                        + "<div style='text-align:center;'>"
-                        + "<img class='img fluid img-responsive card-img-top' src='" + result.product[i].filePath + result.product[i].changeName + "' alt='thumbnail>"
-                        + "</div>"
-                        + "<div class='card-body text-center'>"
-                        + "<p class='card-text text-center'><b>" + price + " 원</b></p>"
-                        + "<a href='#' class='card-link text-muted' onclick='openProductModal(" + result.product[i].productNo + ");'>View</a>"
-                        + "<a href='#' class='card-link text-muted'>Remove</a>"
-                        + "</div>"
-                        + "</div>"
-                        + "</div>";
-                totalPrice += result.product[i].price;
-            }
-            $("#cartLength").text(result.product.length);
-            $("#totalPrice").text(String(totalPrice).replace(won, comma));
-            $(".owl-cart").html(cartArray);
-            $('.owl-carousel').trigger('destroy.owl.carousel');
-            $('.owl-cart').owlCarousel({
-                loop: false,
-                margin: 15,
-                nav: false,
-                responsive: {
-                    0: {
-                        items: 1
-                    },
-                    600: {
-                        items: 3
-                    },
-                    1000: {
-                        items: 5
-                    }
-                }
-            });
-        },
-        error: function() {
-            console.log("통신 실패 ㅜㅜ");
-        }
-    })
-};
-
 // JavaScript for confirmation: Add to Cart, Add to Wishlist
 function addToCart(productNo) {
     $.ajax({
@@ -215,12 +162,40 @@ function addToCart(productNo) {
         error: function() {
             console.log("통신 실패 ㅜㅜ");
         }
-    })
+    });
+
 };
-
-
 
 function addToWishlist(productNo) {
-    console.log(productNo);
-    window.alert("선택하신 상품이 위시리스트에 담겼습니다.");
-};
+    $.ajax({
+        url:"addToWishlist.or",
+        data:{productNo:productNo},
+        success:result=>{
+            if(result>0){
+                alert("선택하신 상품이 위시리스트에 담겼습니다.");
+            }else{
+                alert("insert error!!");
+            }
+        },
+        error:()=>{
+            alert("addToWishlist error!!");
+        }
+    });
+}
+
+function checkWishlist(productNo) {
+    $.ajax({
+        url:"checkWishlist.or",
+        data:{productNo:productNo},
+        success:result=>{
+            if(result>0){
+                alert("이미 위시리스트에 존재합니다.");
+            }else{
+                addToWishlist(productNo);
+            }
+        },
+        error:()=>{
+            alert("checkWishlist error!!");
+        }
+    });
+}

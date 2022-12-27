@@ -17,15 +17,9 @@
 	<result column="PRODUCT_NO" property="productNo"/>
 	<result column="PRODUCT_PRICE" property="price"/>
 	<result column="PRODUCT_QUANTITY" property="quantity"/>
+	<result column="CHANGE_NAME" property="changeName"/>
+	<result column="FILE_PATH" property="filePath"/>
 </resultMap>
-<!-- productAttachment -->
-<resultMap type="productAttachment" id="productAttachmentResult">
-	<result column="REF_PRODUCT_NO" property="productNo"/>
-	<result column="PRODUCT_ATTACHMENT_CHANGE_NAME" property="changeName"/>
-	<result column="PRODUCT_ATTACHMENT_CHANGE_NAME" property="changeName"/>
-	<result column="PRODUCT_ATTACHMENT_FILE_PATH" property="filePath"/>
-</resultMap>
-
 <!-- 장바구니에 이미 담겨있는지 없는지 확인 -->
 <select id="checkCart" parameterType="cart" resultType="_int">
 SELECT
@@ -55,6 +49,7 @@ INSERT INTO cart (
 <!-- 장바구니에 담긴 목록 Cart에 출력 -->
 <select id="showCart" parameterType="cart" resultMap="cartResult">
 SELECT
+	c.cart_no,
     p.product_no,
     p.product_price,
     pat.product_attachment_file_path,
@@ -70,17 +65,56 @@ ORDER BY
     c.cart_no DESC
 </select>
 
-<!-- 사용자의 장바구니 정보 출력 -->
-<select id="selectCartProduct" parameterType="_int" resultMap="productResult">
+<!-- 장바구니 삭제 -->
+<delete id="removeCart" parameterType="_int">
+	DELETE FROM CART
+	WHERE CART_NO LIKE #{cartNo}
+</delete>
+
+<!-- wishlist -->
+
+<!-- 관시상품 중복확인 -->
+<select id="checkWishlist" parameterType="wishlist" resultType="_int">
+	SELECT COUNT(*)
+	FROM WISHLIST
+	WHERE REF_MEMBER_NO LIKE #{memberNo}
+	AND REF_PRODUCT_NO LIKE #{productNo}
+</select>
+<!-- 관시상품 추가 -->
+<insert id="addToWishlist" parameterType="wishlist" >
+	INSERT INTO WISHLIST(
+		REF_MEMBER_NO, 
+		REF_PRODUCT_NO
+	)
+	VALUES(
+		#{memberNo},
+		#{productNo}
+	)
+</insert>
+
+<!-- 장바구니에 담긴 목록 Wishlist에 출력  -->
+<select id="showWishlist" parameterType="_int" resultMap="productResult">
 	SELECT
-	P.PRODUCT_NO,
-	P.PRODUCT_PRICE
-	FROM PRODUCT P
-	JOIN CART C ON(C.CART_NO = P.PRODUCT_NO)
-	WHERE CT.REF_MEMBER_NO = #{memberNo}
-	ORDER BY C.CART_NO DESC
+		P.PRODUCT_NO,
+		PAT.PRODUCT_ATTACHMENT_CHANGE_NAME CHANGE_NAME,
+		PAT.PRODUCT_ATTACHMENT_FILE_PATH FILE_PATH
+	FROM PRODUCT_ATTACHMENT PAT
+    JOIN PRODUCT P ON(P.PRODUCT_NO = PAT.REF_PRODUCT_NO)
+	JOIN WISHLIST W ON(W.REF_PRODUCT_NO = PAT.REF_PRODUCT_NO)
+	WHERE W.REF_MEMBER_NO LIKE #{memberNo}
+    AND  PAT.PRODUCT_ATTACHMENT_CHANGE_NAME LIKE '%-1.%'
 </select>
 
+<!-- 관시상품 삭제 -->
+<delete id="removeWishlist"  parameterType="wishlist">
+	DELETE FROM WISHLIST
+	WHERE REF_MEMBER_NO LIKE #{memberNo}
+	AND REF_PRODUCT_NO LIKE #{productNo}
+</delete>
+
+
+
+<!-- ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ절취선ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ -->
 <!-- 주문할 상품의 정보 -->
 <select id="seletOrderProduct" resultMap="productResult">
 	SELECT
@@ -96,42 +130,7 @@ ORDER BY
     ORDER BY P.PRODUCT_PRICE DESC
 </select>
 
-<!-- 즐겨찾기에 보여질 상품 사진 -->
-<select id="selectWishlistAttachment" parameterType="_int">
-	SELECT
-		MIN(PA.PRODUCT_ATTACHMENT_NO) ,
-		PA.REF_PRODUCT_NO ,
-		PA.PRODUCT_ATTACHMENT_ORIGIN_NAME ,
-		PA.PRODUCT_ATTACHMENT_CHANGE_NAME ,
-		PA.PRODUCT_ATTACHMENT_FILE_PATH 
-	FROM PRODUCT_ATTACHMENT PA
-	JOIN WISHLIST W ON(W.REF_PRODUCT_NO = PA.REF_PRODUCT_NO)
-	WHERE W.REF_MEMBER_NO LIKE #{memberNo}
-	GROUP BY 
-		PA.REF_PRODUCT_NO ,
-		PA.PRODUCT_ATTACHMENT_ORIGIN_NAME ,
-		PA.PRODUCT_ATTACHMENT_CHANGE_NAME ,
-		PA.PRODUCT_ATTACHMENT_FILE_PATH 
-	ORDER BY W.REF_PRODUCT_NO DESC
-</select>
-<!-- 장바구니에 보여질 상품 사진 -->
-<select id="selectCartAttachment" parameterType="_int" resultMap="productAttachmentResult">
-	SELECT 
-		MIN(PA.PRODUCT_ATTACHMENT_NO),
-		PA.REF_PRODUCT_NO ,
-		PA.PRODUCT_ATTACHMENT_ORIGIN_NAME,
-		PA.PRODUCT_ATTACHMENT_CHANGE_NAME ,
-		PA.PRODUCT_ATTACHMENT_FILE_PATH
-	FROM PRODUCT_ATTACHMENT PA
-	JOIN CART C ON(C.REF_PRODUCT_NO=PA.REF_PRODUCT_NO)
-	WHERE C.REF_MEMBER_NO LIKE #{memberNo}
-	GROUP BY 
-		PA.REF_PRODUCT_NO ,
-		PA.PRODUCT_ATTACHMENT_ORIGIN_NAME,
-		PA.PRODUCT_ATTACHMENT_CHANGE_NAME ,
-		PA.PRODUCT_ATTACHMENT_FILE_PATH
-	ORDER BY C.CART_NO DESC
-</select>
+
 <!-- totalOrder -->
 <!-- 주문정보에 데이터를 입력 -->
 <insert id="insertTotalOrder" parameterType="totalOrder">
@@ -174,30 +173,9 @@ ORDER BY
 		)
 	WHERE ROWNUM = 1
 </select>
-<!-- wishlist -->
-<insert id="insertWishlist" parameterType="wishlist">
-	INSERT INTO WISHLIST(
-		REF_MEMBER_NO, 
-		REF_PRODUCT_NO
-	)
-	VALUES(
-		#{memberNo},
-		#{productNo}
-	)
-</insert>
-<delete id="deleteWishlist"  parameterType="wishlist">
-	DELETE FROM WISHLIST
-	WHERE REF_MEMBER_NO LIKE #{memberNo}
-	AND REF_PRODUCT_NO LIKE #{productNo}
-</delete>
 
 
 
-<!-- 장바구니 삭제 -->
-<delete id="deleteCart" parameterType="_int">
-	DELETE FROM CART
-	WHERE CART_NO LIKE #{cartNo}
-</delete>
 <!-- 주문할 장바구니에 담긴 정보 -->
 <select id="selectOrderCart" resultMap="cartResult">
 	SELECT

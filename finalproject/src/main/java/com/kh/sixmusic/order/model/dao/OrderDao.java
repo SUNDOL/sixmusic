@@ -23,11 +23,35 @@ public class OrderDao {
 		return sqlSession.insert("orderMapper.addToCart", c);
 	}
 	
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ArrayList<Cart> showCart(SqlSessionTemplate sqlSession, int memberNo) {
 		return (ArrayList)sqlSession.selectList("orderMapper.showCart", memberNo);
 	}
+	
+	public int removeCart(SqlSessionTemplate sqlSession, int cartNo) {
+		return sqlSession.delete("orderMapper.removeCart", cartNo);
+	}
 
+	public int checkWishlist(SqlSessionTemplate sqlSession, Wishlist w) {
+		return sqlSession.selectOne("orderMapper.checkWishlist", w);
+	}
+	
+	public int addToWishlist(SqlSessionTemplate sqlSession, Wishlist w) {
+		return sqlSession.insert("orderMapper.addToWishlist", w);
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public ArrayList<Product> showWishlist(SqlSessionTemplate sqlSession, int memberNo) {
+		return (ArrayList)sqlSession.selectList("orderMapper.showWishlist", memberNo);
+	}
+	
+	public int removeWishlist(SqlSessionTemplate sqlSession, Wishlist w) {
+		return sqlSession.delete("orderMapper.removeWishlist", w);
+	}
+	
+
+	//-----------------절취선-------------------
 	public int selectOrderNo(SqlSessionTemplate sqlSession, int memberNo) {
 		return sqlSession.selectOne("orderMapper.selectOrderNo", memberNo);
 	}
@@ -64,29 +88,10 @@ public class OrderDao {
 		sqlSession.delete("orderMapper.deleteProductOrder", memberNo);
 	}
 
-	public ArrayList<Product> selectCartProduct(SqlSessionTemplate sqlSession, int memberNo) {
-		return (ArrayList) sqlSession.selectList("orderMapper.selectCartProduct", memberNo);
-	}
 
-	public ArrayList<ProductAttachment> selectCartAttachment(SqlSessionTemplate sqlSession, int memberNo) {
-		return (ArrayList) sqlSession.selectList("orderMapper.selectCartAttachment", memberNo);
-	}
 
-	public int deleteCart(SqlSessionTemplate sqlSession, int cartNo) {
-		return sqlSession.delete("orderMapper.deleteCart", cartNo);
-	}
 
-	public ArrayList<ProductAttachment> selectWishlistAttachment(SqlSessionTemplate sqlSession, int memberNo) {
-		return (ArrayList) sqlSession.selectList("orderMapper.selectWishlistAttachment", memberNo);
-	}
 
-	public int insertWishlist(SqlSessionTemplate sqlSession, Wishlist w) {
-		return sqlSession.insert("orderMapper.insertWishlist", w);
-	}
-
-	public int deleteWishlist(SqlSessionTemplate sqlSession, Wishlist w) {
-		return sqlSession.delete("orderMapper.deleteWishlist", w);
-	}
 
 
 

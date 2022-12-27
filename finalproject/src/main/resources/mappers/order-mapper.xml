@@ -1,13 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
 <mapper namespace="orderMapper">
-
+<!-- cart -->
+<resultMap type="cart" id="cartResult">
+	<result column="CART_NO" property="cartNo"/>
+	<result column="REF_MEMBER_NO" property="memberNo"/>
+	<result column="PRODUCT_NO" property="productNo"/>
+	<result column="REF_PRODUCT_NO" property="refProductNo"/>
+	<result column="QUANTITY" property="quantity"/>
+	<result column="PRODUCT_PRICE" property="price"/>
+	<result column="PRODUCT_ATTACHMENT_FILE_PATH" property="filePath"/>
+	<result column="PRODUCT_ATTACHMENT_CHANGE_NAME" property="changeName"/>
+</resultMap>
 <!-- product -->
 <resultMap type="product" id="productResult">
 	<result column="PRODUCT_NO" property="productNo"/>
 	<result column="PRODUCT_PRICE" property="price"/>
 	<result column="PRODUCT_QUANTITY" property="quantity"/>
 </resultMap>
+<!-- productAttachment -->
+<resultMap type="productAttachment" id="productAttachmentResult">
+	<result column="REF_PRODUCT_NO" property="productNo"/>
+	<result column="PRODUCT_ATTACHMENT_CHANGE_NAME" property="changeName"/>
+	<result column="PRODUCT_ATTACHMENT_CHANGE_NAME" property="changeName"/>
+	<result column="PRODUCT_ATTACHMENT_FILE_PATH" property="filePath"/>
+</resultMap>
+
+<!-- 장바구니에 이미 담겨있는지 없는지 확인 -->
+<select id="checkCart" parameterType="cart" resultType="_int">
+SELECT
+    COUNT(*)
+FROM
+    cart
+WHERE
+        ref_member_no = #{memberNo}
+    AND ref_product_no = #{productNo}
+</select>
+
+<!-- 장바구니 추가 -->
+<insert id="addToCart" parameterType="cart">
+INSERT INTO cart (
+    cart_no,
+    ref_member_no,
+    ref_product_no,
+    quantity
+) VALUES (
+    seq_cart.NEXTVAL,
+    #{memberNo},
+    #{productNo},
+    #{quantity}
+)
+</insert>
+
+<!-- 장바구니에 담긴 목록 Cart에 출력 -->
+<select id="showCart" parameterType="cart" resultMap="cartResult">
+SELECT
+    p.product_no,
+    p.product_price,
+    pat.product_attachment_file_path,
+    pat.product_attachment_change_name
+FROM
+         product p
+    JOIN product_attachment pat ON ( p.product_no = pat.ref_product_no )
+    JOIN cart               c ON ( p.product_no = c.ref_product_no )
+WHERE
+    c.ref_member_no LIKE #{memberNo}
+    AND pat.product_attachment_change_name LIKE '%-1.%'
+ORDER BY
+    c.cart_no DESC
+</select>
+
 <!-- 사용자의 장바구니 정보 출력 -->
 <select id="selectCartProduct" parameterType="_int" resultMap="productResult">
 	SELECT
@@ -18,6 +80,7 @@
 	WHERE CT.REF_MEMBER_NO = #{memberNo}
 	ORDER BY C.CART_NO DESC
 </select>
+
 <!-- 주문할 상품의 정보 -->
 <select id="seletOrderProduct" resultMap="productResult">
 	SELECT
@@ -32,13 +95,7 @@
 	</foreach>
     ORDER BY P.PRODUCT_PRICE DESC
 </select>
-<!-- productAttachment -->
-<resultMap type="productAttachment" id="productAttachmentResult">
-	<result column="REF_PRODUCT_NO" property="productNo"/>
-	<result column="PRODUCT_ATTACHMENT_CHANGE_NAME" property="changeName"/>
-	<result column="PRODUCT_ATTACHMENT_CHANGE_NAME" property="changeName"/>
-	<result column="PRODUCT_ATTACHMENT_FILE_PATH" property="filePath"/>
-</resultMap>
+
 <!-- 즐겨찾기에 보여질 상품 사진 -->
 <select id="selectWishlistAttachment" parameterType="_int">
 	SELECT
@@ -133,29 +190,9 @@
 	WHERE REF_MEMBER_NO LIKE #{memberNo}
 	AND REF_PRODUCT_NO LIKE #{productNo}
 </delete>
-<!-- cart -->
-<resultMap type="cart" id="cartResult">
-	<result column="CART_NO" property="cartNo"/>
-	<result column="REF_MEMBER_NO" property="memberNo"/>
-	<result column="REF_PRODUCT_NO" property="productNo"/>
-	<result column="QUANTITY" property="quantity"/>
-</resultMap>
 
-<!-- 장바구니 추가 -->
-<insert id="insertCart" parameterType="cart">
-	INSERT INTO CART(
-		CART_NO ,
-		REF_MEMBER_NO ,
-		REF_PRODUCT_NO ,
-		QUANTITY 
-	)
-	VALUES(
-		SEQ_CART.NEXTVAL,
-		#{memberNo},
-		#{productNo},
-		#{quantity}
-	)
-</insert>
+
+
 <!-- 장바구니 삭제 -->
 <delete id="deleteCart" parameterType="_int">
 	DELETE FROM CART

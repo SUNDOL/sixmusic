@@ -9,9 +9,12 @@ import com.kh.sixmusic.product.model.vo.Product;
 import com.kh.sixmusic.product.model.vo.ProductAttachment;
 
 public interface OrderService {
+	int checkCart(Cart c);
+	int addToCart(Cart c);
+	ArrayList<Cart> showCart(int memberNo);
+	
 	ArrayList<Product> selectCartProduct(int memberNo);
 	ArrayList<ProductAttachment> selectCartAttachment(int memberNo);
-	int insertCart(Cart c);
 	int deleteCart(int cartNo);
 	ArrayList<ProductAttachment> selectWishlistAttachment(int memberNo);
 	int insertWishlist(Wishlist w);
@@ -23,4 +26,6 @@ public interface OrderService {
 	
 	ArrayList<TotalOrder> SelectTotalOrder(int memberNo);
 	ArrayList<Product> SelectProductOrder(int orderNo);
+
+	
 }

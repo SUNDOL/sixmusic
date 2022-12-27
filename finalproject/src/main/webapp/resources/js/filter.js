@@ -102,6 +102,8 @@
             success:result=>{
                 productList(result.p);
                 pageInfo(f, result.pi);
+                $("#sortBy").change(()=>search(f));
+                $("#boardLimit").change(()=>search(f));
             }, 
             error:()=>{
                 console.log("error!!");

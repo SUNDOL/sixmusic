@@ -169,7 +169,7 @@
                         <a class="nav-link" data-bs-toggle="offcanvas" href="#offcanvasCart" role="button"
                             aria-controls="offcanvasCart" onclick="showCart();">
                             CART
-                            <span class="badge text-bg-danger rounded-circle">0</span>
+                            <span class="badge text-bg-danger rounded-circle" id="cartLength-min">0</span>
                         </a>
                     </li>
                     <li>
@@ -231,17 +231,20 @@
         <div class="offcanvas-body">
                 <div class="row g-1">
                     <div class="card-body">
-                    	<strong class="fs-3"><i class="bi bi-bag"></i> My Cart (<span id="cartLength"></span>)</strong>
+                    	<strong class="fs-3"><i class="bi bi-bag"></i> My Cart (<span id="cartLength">0</span>)</strong>
                         <br><br>
                             <!-- <h3 class="text-muted">Your cart is empty</h3> -->
                             <div class="owl-cart owl-carousel owl-theme">                                
                             </div>
                         <br>
-                        <div class="card-body">
-                            <div class="card-text fs-5 text-end">TOTAL: <strong id="totalPrice"></strong> 원</div>
-                            <div class="card-text text-end"><a href="#" class="text-muted">Confirm your
-                                    order</a></div>
-                        </div>
+                        <c:if test="${not empty loginUser}">
+                        	<div class="card-body">
+	                            <div class="card-text fs-5 text-end">TOTAL: <strong id="totalPrice"></strong>0 원</div>
+	                            <div class="card-text text-end"><a href="#" class="text-muted">Confirm your order</a></div>
+                        	</div>
+                            <!-- JavaScript for cart -->
+                            <script src="resources/js/cart.js"></script>
+                        </c:if>
                         <br>
                     </div>
                 </div>
@@ -249,26 +252,18 @@
                 <div class="card-body">
                     <a class="nav-link fs-3" href="#wishlistCollapse" data-bs-toggle="collapse" aria-expanded="false"
                         aria-controls="wishlistCollapse">
-                        <strong><i class="bi bi-heart"></i> My Wishlist (0)</strong>
+                        <strong id="showWishlist" ><i class="bi bi-heart"></i> My Wishlist (0)</strong>
+                        <c:if test="${not empty loginUser}">
+                            <script>showWishlist
+                                $("#showWishlist").attr("onclick","showWishlist()");
+                            </script>
+                        </c:if>
                     </a>
                     <br>
                     <div class="collapse" id="wishlistCollapse">
                         <div class="card-body text-center">
                             <!-- <h3 class="text-muted">Your Wishlist is empty</h3> -->
-                            <div class="owl-wishlist owl-carousel owl-theme">
-                                <div class="item">
-                                    <div class="card shadow-sm" style="cursor:pointer;">
-                                        <div style="text-align:center;">
-                                            <img class="img-fluid img-responsive card-img-top" src=""
-                                                alt="thumbnail">
-                                        </div>
-                                        <div class="card-body">
-                                            <a href="#" class="card-link text-muted">View</a>
-                                            <a href="#" class="card-link text-muted">Remove</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <div class="owl-wishlist owl-carousel owl-theme"></div>
                             <br>
                         </div>
                     </div>

@@ -35,7 +35,32 @@ public class OrderServiceImpl implements OrderService {
 	public ArrayList<Cart> showCart(int memberNo) {
 		return orderDao.showCart(sqlSession, memberNo);
 	}
-
+	
+	@Override
+	public int removeCart(int cartNo) {
+		return orderDao.removeCart(sqlSession, cartNo);
+	}
+	
+	@Override
+	public int checkWishlist(Wishlist w) {
+		return orderDao.checkWishlist(sqlSession, w);
+	}
+	
+	@Override
+	public int addToWishlist(Wishlist w) {
+		return orderDao.addToWishlist(sqlSession, w);
+	}
+	
+	@Override
+	public ArrayList<Product> showWishlist(int memberNo) {
+		return orderDao.showWishlist(sqlSession, memberNo);
+	}
+	
+	@Override
+	public int removeWishlist(Wishlist w) {
+		return orderDao.removeWishlist(sqlSession, w);
+	}
+	//-----------------절취선-------------------
 	@Override
 	public int insertOrderDate(TotalOrder to, int[] cartNo) {
 
@@ -71,35 +96,6 @@ public class OrderServiceImpl implements OrderService {
 		orderDao.deleteTotalOrder(sqlSession, memberNo);
 	}
 
-	@Override
-	public ArrayList<ProductAttachment> selectWishlistAttachment(int memberNo) {
-		return orderDao.selectWishlistAttachment(sqlSession, memberNo);
-	}
-
-	@Override
-	public int insertWishlist(Wishlist w) {
-		return orderDao.insertWishlist(sqlSession, w);
-	}
-
-	@Override
-	public int deleteWishlist(Wishlist w) {
-		return orderDao.deleteWishlist(sqlSession, w);
-	}
-
-	@Override
-	public ArrayList<Product> selectCartProduct(int memberNo) {
-		return orderDao.selectCartProduct(sqlSession, memberNo);
-	}
-
-	@Override
-	public ArrayList<ProductAttachment> selectCartAttachment(int memberNo) {
-		return orderDao.selectCartAttachment(sqlSession, memberNo);
-	}
-
-	@Override
-	public int deleteCart(int cartNo) {
-		return orderDao.deleteCart(sqlSession, cartNo);
-	}
 
 	@Override
 	public ArrayList<TotalOrder> SelectTotalOrder(int membetno) {
@@ -110,6 +106,20 @@ public class OrderServiceImpl implements OrderService {
 	public ArrayList<Product> SelectProductOrder(int orderNo) {
 		return null;
 	}
+
+	@Override
+	public ArrayList<Product> selectCartProduct(int memberNo) {
+		return null;
+	}
+
+	@Override
+	public ArrayList<ProductAttachment> selectCartAttachment(int memberNo) {
+		return null;
+	}
+
+
+
+
 
 
 

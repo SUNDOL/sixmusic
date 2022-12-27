@@ -13,7 +13,10 @@
 
 <body>
 	<jsp:include page="common/header.jsp"/>
-	<br><br>
+	<br>
+    <br>
+    <br>
+    
 	<jsp:include page="common/footer.jsp"/>
 </body>
 

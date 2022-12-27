@@ -73,40 +73,57 @@ public class OrderController {
 
 	// 장바구니 삭제
 	@ResponseBody
-	@RequestMapping("cart/delete.or")
-	public int deleteCart(int cartNo) {
-		return orderService.deleteCart(cartNo);
+	@RequestMapping("removeCart.or")
+	public int removeCart(int cartNo) {
+		return orderService.removeCart(cartNo);
 	}
 
-	// 관시상품 출력
+	// 관시상품 중복 확인
 	@ResponseBody
-	@RequestMapping("wishlist/select.or")
-	public String selectWishlist(HttpSession session) {
+	@RequestMapping("checkWishlist.or")
+	public int checkWishlist(int productNo, HttpSession session) {
 		Member loginUser = (Member) session.getAttribute("loginUser");
-		return new Gson().toJson(orderService.selectWishlistAttachment(loginUser.getMemberNo()));
+		Wishlist w = new Wishlist();
+		w.setMemberNo(loginUser.getMemberNo());
+		w.setProductNo(productNo);
+		return orderService.checkWishlist(w);
 	}
-
+	
 	// 관시상품 추가
 	@ResponseBody
-	@RequestMapping("wishlist/insert.or")
-	public int insertWishlist(int productNo, HttpSession session) {
+	@RequestMapping("addToWishlist.or")
+	public int addToWishlist(int productNo, HttpSession session) {
 		Member loginUser = (Member) session.getAttribute("loginUser");
 		Wishlist w = new Wishlist();
 		w.setMemberNo(loginUser.getMemberNo());
 		w.setProductNo(productNo);
-		return orderService.insertWishlist(w);
+		return orderService.addToWishlist(w);
 	}
-
+	
+	// 관시상품 출력
+	@ResponseBody
+	@RequestMapping(value =  "showWishlist.or" , produces = "application/json; charset=UTF-8")
+	public String showWishlist(HttpSession session) {
+		Member loginUser = (Member) session.getAttribute("loginUser");
+		return new Gson().toJson(orderService.showWishlist(loginUser.getMemberNo()));
+	}
+	
 	// 관심상품 삭제
 	@ResponseBody
-	@RequestMapping("wishlist/delete.or")
-	public int deleteWishlist(int productNo, HttpSession session) {
+	@RequestMapping("removeWishlist.or")
+	public int removeWishlist(int productNo, HttpSession session) {
 		Member loginUser = (Member) session.getAttribute("loginUser");
 		Wishlist w = new Wishlist();
 		w.setMemberNo(loginUser.getMemberNo());
 		w.setProductNo(productNo);
-		return orderService.deleteWishlist(w);
+		return orderService.removeWishlist(w);
 	}
+	
+
+
+
+
+	//-----------------절취선-------------------
 
 	// 카카오 페이 결제 메소드
 	@ResponseBody

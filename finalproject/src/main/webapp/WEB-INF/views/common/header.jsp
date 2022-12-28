@@ -51,12 +51,14 @@
 
             <button class="navbar-toggler position-relative" type="button" data-bs-toggle="offcanvas"
                 data-bs-target="#offcanvasCart" aria-controls="offcanvasCart" aria-expanded="false"
-                aria-label="Toggle offcanvasCart" onclick="showCart();">
+                aria-label="Toggle offcanvasCart">
                 <span>
                     <i class="bi bi-bag" style="font-size: 1.5rem;"></i>
-                    <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger rounded-circle">
+                    <c:if test="${not empty loginUser}">
+                    <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger rounded-circle" id="cartAlert" style="display:none;">
                         <span class="visually-hidden">New alerts</span>
                     </span>
+                    </c:if>
                 </span>
             </button>
             <div class="collapse navbar-collapse" id="navbarToggler1">
@@ -167,9 +169,11 @@
                     </c:if>
                     <li>
                         <a class="nav-link" data-bs-toggle="offcanvas" href="#offcanvasCart" role="button"
-                            aria-controls="offcanvasCart" onclick="showCart();">
+                            aria-controls="offcanvasCart">
                             CART
-                            <span class="badge text-bg-danger rounded-circle" id="cartLength-min">0</span>
+                            <c:if test="${not empty loginUser}">
+                            <span class="badge text-bg-danger rounded-circle" id="cartLength-min" style="display:none;">0</span>
+                            </c:if>                            
                         </a>
                     </li>
                     <li>
@@ -229,45 +233,54 @@
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-                <div class="row g-1">
-                    <div class="card-body">
-                    	<strong class="fs-3"><i class="bi bi-bag"></i> My Cart (<span id="cartLength">0</span>)</strong>
-                        <br><br>
-                            <!-- <h3 class="text-muted">Your cart is empty</h3> -->
-                            <div class="owl-cart owl-carousel owl-theme">                                
-                            </div>
-                        <br>
-                        <c:if test="${not empty loginUser}">
-                        	<div class="card-body">
-	                            <div class="card-text fs-5 text-end">TOTAL: <strong id="totalPrice"></strong>0 원</div>
-	                            <div class="card-text text-end"><a href="#" class="text-muted">Confirm your order</a></div>
-                        	</div>
-                            <!-- JavaScript for cart -->
-                            <script src="resources/js/cart.js"></script>
-                        </c:if>
-                        <br>
-                    </div>
-                </div>
+            <div class="row g-1">
+                <div class="card-body">
+                    <a class="nav-link fs-3" href="#cartCollapse" data-bs-toggle="collapse" aria-expanded="false"
+                        aria-controls="cartCollapse">
+                        <strong><i class="bi bi-bag"></i> My Cart (<span id="cartLength">0</span>)</strong>
+		            </a>
+		            <br>
+			        	<div class="collapse" id="cartCollapse">
+				            <c:if test="${empty loginUser}">
+				            	<h3 class="text-muted">로그인 후 이용 가능합니다</h3>
+				            	<br> 	
+				            </c:if>
+				            <c:if test="${not empty loginUser}">
+					            <div class="card-body text-center">
+					           	<div class="owl-cart owl-carousel owl-theme">
+					           	</div>
+					           	<div class="card-body" id="confirmation">
+	                            	<br>
+	                            	<div class="card-text fs-5 text-end">TOTAL: <strong id="totalPrice"></strong> 원</div>
+	                            	<div class="card-text text-end"><a href="#" class="text-muted">Confirm your order</a></div>
+                        		</div>
+				            	<br>
+				            	</div>
+				           	</c:if>
+			           	</div>
+		         </div>
+            </div>
             <div class="row g-1">
                 <div class="card-body">
                     <a class="nav-link fs-3" href="#wishlistCollapse" data-bs-toggle="collapse" aria-expanded="false"
                         aria-controls="wishlistCollapse">
-                        <strong id="showWishlist" ><i class="bi bi-heart"></i> My Wishlist (0)</strong>
-                        <c:if test="${not empty loginUser}">
-                            <script>showWishlist
-                                $("#showWishlist").attr("onclick","showWishlist()");
-                            </script>
-                        </c:if>
-                    </a>
-                    <br>
-                    <div class="collapse" id="wishlistCollapse">
-                        <div class="card-body text-center">
-                            <!-- <h3 class="text-muted">Your Wishlist is empty</h3> -->
-                            <div class="owl-wishlist owl-carousel owl-theme"></div>
-                            <br>
-                        </div>
-                    </div>
-                </div>
+                        <strong><i class="bi bi-heart"></i> My Wishlist (<span id="wishlistLength">0</span>)</strong>
+		            </a>
+		            <br>
+			        	<div class="collapse" id="wishlistCollapse">
+				            <c:if test="${empty loginUser}">
+				            	<h3 class="text-muted">로그인 후 이용 가능합니다</h3>
+				            	<br>
+				            </c:if>
+				            <c:if test="${not empty loginUser}">
+					            <div class="card-body text-center">
+					           	<div class="owl-wishlist owl-carousel owl-theme">
+					           	</div>
+				            <br>
+				            </div>
+				           	</c:if>
+			           	</div>
+		         </div>
             </div>
             
             <div class="row g-1">
@@ -339,7 +352,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="productDetailsModalLabel"><b>PRODUCT DETAILS</b></h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="showCart();"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="container">
@@ -458,8 +471,14 @@
 <script src="${pageContext.request.contextPath}/resources/owlcarousel/owl.carousel.min.js"></script>
 <!-- JavaScript for header -->
 <script src="${pageContext.request.contextPath}/resources/js/header.js"></script>
+<!-- JavaScript for cart -->
+<script src="${pageContext.request.contextPath}/resources/js/cart.js"></script>
+<c:if test="${not empty loginUser}">
+	<script>
+		refreshCartWishlist();
+	</script>
+</c:if>
 <!-- Alert Script -->
-
 <c:if test="${not empty alertMsg}">
     <script>
         window.alert("${alertMsg}");

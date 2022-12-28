@@ -11,7 +11,6 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,6 @@ import com.google.gson.Gson;
 import com.kh.sixmusic.member.model.vo.Member;
 import com.kh.sixmusic.order.model.service.OrderService;
 import com.kh.sixmusic.order.model.vo.Cart;
-import com.kh.sixmusic.order.model.vo.TotalOrder;
 import com.kh.sixmusic.order.model.vo.Wishlist;
 import com.kh.sixmusic.product.model.vo.Product;
 
@@ -139,8 +137,8 @@ public class OrderController {
 
 	// 카카오페이 결제 메소드
 	@ResponseBody
-	@RequestMapping("kakaopay/pay.or")
-	public String kakaoPay(HttpServletRequest request, HttpSession session) throws IOException {
+	@RequestMapping("pay.or")
+	public String kakaoPay(HttpSession session) throws IOException {
 		Member loginUser = (Member) session.getAttribute("loginUser");
 
 		Product p = orderService.selectOrderCart(loginUser.getMemberNo());
@@ -153,33 +151,33 @@ public class OrderController {
 		urlConn.addRequestProperty("Authorization", "KakaoAK " + adminKey);
 		urlConn.addRequestProperty("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 		urlConn.setDoOutput(true);
-
+		
 		// 상품명칭 ex) 5건
-		String item_name = p.getName() + "외 " + (p.getQuantity() - 1) + "건";
+		String item_name = "SIXMUSIC 악기 " + p.getQuantity() + "건";
 		// 수량 ex) 5
 		String quantity = String.valueOf(p.getQuantity());
 		// 총 금액 ex) 5000
 		String total_amount = String.valueOf(p.getPrice());
 		// 서버 주소
-		String locatin = "http://localhost:8887" + request.getContextPath() + "/";
+		String local = "http://localhost:8887/sixmusic/";
 
 		// 카카오페이로 넘길 값
 		StringBuffer parm = new StringBuffer();
 		parm.append("cid=TC0ONETIME");
 		parm.append("&partner_order_id=partner_order_id");
+		parm.append("&partner_user_id=partner_user_id");
 		parm.append("&item_name=" + URLEncoder.encode(item_name, "UTF-8"));
 		parm.append("&quantity=" + quantity);
 		parm.append("&total_amount=" + total_amount);
 		parm.append("&tax_free_amount=0");
-		parm.append("&approval_url=" + locatin.concat(approval_url));
-		parm.append("&fail_url=" + locatin.concat(fail_url));
-		parm.append("&cancel_url=" + locatin.concat(cancel_url));
+		parm.append("&approval_url=" + local.concat(approval_url).toString());
+		parm.append("&fail_url=" + local.concat(fail_url).toString());
+		parm.append("&cancel_url=" + local.concat(cancel_url).toString());
 		DataOutputStream output = new DataOutputStream(urlConn.getOutputStream());
 		output.writeBytes(parm.toString());
 		output.close();
-
+		System.out.println(parm.toString());
 		int result = urlConn.getResponseCode();
-
 		InputStream input;
 		if (result == 200) {
 			input = urlConn.getInputStream();

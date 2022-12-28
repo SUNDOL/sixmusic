@@ -234,7 +234,4 @@
 </body>
 <jsp:include page="../common/footer.jsp"/>
 
-<!-- JavaScript for Products page -->
-<!-- <script src="../../resources/js/products.js"></script> -->
-
 </html>

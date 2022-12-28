@@ -6,7 +6,6 @@
 	<result column="CART_NO" property="cartNo"/>
 	<result column="REF_MEMBER_NO" property="memberNo"/>
 	<result column="PRODUCT_NO" property="productNo"/>
-	<result column="REF_PRODUCT_NO" property="refProductNo"/>
 	<result column="QUANTITY" property="quantity"/>
 	<result column="PRODUCT_PRICE" property="price"/>
 	<result column="PRODUCT_ATTACHMENT_FILE_PATH" property="filePath"/>
@@ -15,11 +14,17 @@
 <!-- product -->
 <resultMap type="product" id="productResult">
 	<result column="PRODUCT_NO" property="productNo"/>
+	<result column="BRAND_NAME" property="brand"/>
+	<result column="PRODUCT_NAME" property="name"/>
+	<result column="PRODUCT_COLOR" property="color"/>
 	<result column="PRODUCT_PRICE" property="price"/>
 	<result column="PRODUCT_QUANTITY" property="quantity"/>
 	<result column="CHANGE_NAME" property="changeName"/>
 	<result column="FILE_PATH" property="filePath"/>
 </resultMap>
+
+<!-- cart -->
+
 <!-- 장바구니에 이미 담겨있는지 없는지 확인 -->
 <select id="checkCart" parameterType="cart" resultType="_int">
 SELECT
@@ -73,14 +78,15 @@ ORDER BY
 
 <!-- wishlist -->
 
-<!-- 관시상품 중복확인 -->
+<!-- 관심상품 중복확인 -->
 <select id="checkWishlist" parameterType="wishlist" resultType="_int">
 	SELECT COUNT(*)
 	FROM WISHLIST
 	WHERE REF_MEMBER_NO LIKE #{memberNo}
 	AND REF_PRODUCT_NO LIKE #{productNo}
 </select>
-<!-- 관시상품 추가 -->
+
+<!-- 관심상품 추가 -->
 <insert id="addToWishlist" parameterType="wishlist" >
 	INSERT INTO WISHLIST(
 		REF_MEMBER_NO, 
@@ -92,7 +98,7 @@ ORDER BY
 	)
 </insert>
 
-<!-- 장바구니에 담긴 목록 Wishlist에 출력  -->
+<!-- Wishlist 목록 출력  -->
 <select id="showWishlist" parameterType="_int" resultMap="productResult">
 	SELECT
 		P.PRODUCT_NO,
@@ -105,13 +111,36 @@ ORDER BY
     AND  PAT.PRODUCT_ATTACHMENT_CHANGE_NAME LIKE '%-1.%'
 </select>
 
-<!-- 관시상품 삭제 -->
+<!-- 관심상품 삭제 -->
 <delete id="removeWishlist"  parameterType="wishlist">
 	DELETE FROM WISHLIST
 	WHERE REF_MEMBER_NO LIKE #{memberNo}
 	AND REF_PRODUCT_NO LIKE #{productNo}
 </delete>
 
+<!-- confirmation -->
+<select id="showConfirmationInfo" parameterType="_int" resultMap="productResult">
+SELECT
+    c.cart_no PRODUCT_NO,
+    b.brand_name,
+    m.model_name,
+    p.product_name,
+    p.product_color,
+    p.product_price,
+    pat.product_attachment_file_path FILE_PATH,
+    pat.product_attachment_change_name CHANGE_NAME
+FROM
+         product p
+    JOIN product_attachment pat ON ( p.product_no = pat.ref_product_no )
+    JOIN cart               c ON ( p.product_no = c.ref_product_no )
+    JOIN model              m ON ( m.model_no = p.ref_model_no )
+    JOIN brand              b ON ( m.ref_brand_no = b.brand_no )
+WHERE
+    c.ref_member_no LIKE #{memberNo}
+    AND pat.product_attachment_change_name LIKE '%-1.%'
+ORDER BY
+    c.cart_no DESC
+</select>
 
 <!-- 구매 시 -->
 <select id="selectOrderCart" parameterType="_int">
@@ -170,7 +199,7 @@ ORDER BY
 
 <update id="cancelOrder" parameterType="totalOrder">
 	UPDATE TOTAL_ORDER
-	SET STATUS = 'N'
+	SET STATUS = 'C'
 	WHERE ORDER_NO LIKE #{orderNo}
 	AND REF_MEMBER_NO LIKE #{memberNo}
 	AND STATUS LIKE 'Y'

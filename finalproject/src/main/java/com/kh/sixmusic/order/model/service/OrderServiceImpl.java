@@ -25,37 +25,37 @@ public class OrderServiceImpl implements OrderService {
 	public int checkCart(Cart c) {
 		return orderDao.checkCart(sqlSession, c);
 	}
-	
+
 	@Override
 	public int addToCart(Cart c) {
 		return orderDao.addToCart(sqlSession, c);
 	}
-	
+
 	@Override
 	public ArrayList<Cart> showCart(int memberNo) {
 		return orderDao.showCart(sqlSession, memberNo);
 	}
-	
+
 	@Override
 	public int removeCart(int cartNo) {
 		return orderDao.removeCart(sqlSession, cartNo);
 	}
-	
+
 	@Override
 	public int checkWishlist(Wishlist w) {
 		return orderDao.checkWishlist(sqlSession, w);
 	}
-	
+
 	@Override
 	public int addToWishlist(Wishlist w) {
 		return orderDao.addToWishlist(sqlSession, w);
 	}
-	
+
 	@Override
 	public ArrayList<Product> showWishlist(int memberNo) {
 		return orderDao.showWishlist(sqlSession, memberNo);
 	}
-	
+
 	@Override
 	public int removeWishlist(Wishlist w) {
 		return orderDao.removeWishlist(sqlSession, w);
@@ -63,13 +63,13 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public int uploadOrderData(int memberNo) {
-		int result = orderDao.insertTotalOrder(sqlSession,memberNo);
-		result += orderDao.insertPoudctOrder(sqlSession,memberNo);
-		result += orderDao.updateProductQuantity(sqlSession,memberNo);
-		result += orderDao.deleteCart(sqlSession,memberNo);
+		int result = orderDao.insertTotalOrder(sqlSession, memberNo);
+		result += orderDao.insertPoudctOrder(sqlSession, memberNo);
+		result += orderDao.updateProductQuantity(sqlSession, memberNo);
+		result += orderDao.deleteCart(sqlSession, memberNo);
 		if (result > 3) {
 			sqlSession.commit();
-		}else {
+		} else {
 			sqlSession.rollback();
 		}
 		return result;
@@ -77,7 +77,12 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public Product selectOrderCart(int memberNo) {
-		return orderDao.selectOrderCart(sqlSession,memberNo);
+		return orderDao.selectOrderCart(sqlSession, memberNo);
+	}
+
+	@Override
+	public ArrayList<Product> showConfirmationInfo(int memberNo) {
+		return orderDao.showConfirmationInfo(sqlSession, memberNo);
 	}
 
 }

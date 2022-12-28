@@ -252,7 +252,7 @@
 					           	<div class="card-body" id="confirmation">
 	                            	<br>
 	                            	<div class="card-text fs-5 text-end">TOTAL: <strong id="totalPrice"></strong> 원</div>
-	                            	<div class="card-text text-end"><a href="#" class="text-muted">Confirm your order</a></div>
+	                            	<div class="card-text text-end"><a href="confirmation.or" class="text-muted">Confirm your order</a></div>
                         		</div>
 				            	<br>
 				            	</div>

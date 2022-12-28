@@ -44,7 +44,7 @@ public class OrderController {
 		c.setProductNo(productNo);
 		return orderService.checkCart(c);
 	}
-	
+
 	// 장바구니 추가
 	@ResponseBody
 	@RequestMapping("addToCart.or")
@@ -70,7 +70,6 @@ public class OrderController {
 		return gson.toJson(jMap);
 	}
 
-
 	// 장바구니 삭제
 	@ResponseBody
 	@RequestMapping("removeCart.or")
@@ -78,7 +77,7 @@ public class OrderController {
 		return orderService.removeCart(cartNo);
 	}
 
-	// 관시상품 중복 확인
+	// 관심상품 중복 확인
 	@ResponseBody
 	@RequestMapping("checkWishlist.or")
 	public int checkWishlist(int productNo, HttpSession session) {
@@ -88,8 +87,8 @@ public class OrderController {
 		w.setProductNo(productNo);
 		return orderService.checkWishlist(w);
 	}
-	
-	// 관시상품 추가
+
+	// 관심상품 추가
 	@ResponseBody
 	@RequestMapping("addToWishlist.or")
 	public int addToWishlist(int productNo, HttpSession session) {
@@ -99,15 +98,15 @@ public class OrderController {
 		w.setProductNo(productNo);
 		return orderService.addToWishlist(w);
 	}
-	
-	// 관시상품 출력
+
+	// 관심상품 출력
 	@ResponseBody
-	@RequestMapping(value =  "showWishlist.or" , produces = "application/json; charset=UTF-8")
+	@RequestMapping(value = "showWishlist.or", produces = "application/json; charset=UTF-8")
 	public String showWishlist(HttpSession session) {
 		Member loginUser = (Member) session.getAttribute("loginUser");
 		return new Gson().toJson(orderService.showWishlist(loginUser.getMemberNo()));
 	}
-	
+
 	// 관심상품 삭제
 	@ResponseBody
 	@RequestMapping("removeWishlist.or")
@@ -119,15 +118,32 @@ public class OrderController {
 		return orderService.removeWishlist(w);
 	}
 
-	// 카카오 페이 결제 메소드
+	// 결제 (confirmation) 페이지로 이동
+	@GetMapping("confirmation.or")
+	public String confirmationPage() {
+		return "products/confirmation";
+	}
+
+	// 결제 (confirmation) 페이지에 보여줄 데이터 가져오기
+	@ResponseBody
+	@RequestMapping(value = "showConfirmationInfo.or", produces = "application/json; charset=UTF-8")
+	public String showConfirmationInfo(HttpSession session) {
+		Member loginUser = (Member) session.getAttribute("loginUser");
+		int memberNo = loginUser.getMemberNo();
+		ArrayList<Product> product = orderService.showConfirmationInfo(memberNo);
+		Gson gson = new Gson();
+		HashMap<String, Object> conMap = new HashMap<>();
+		conMap.put("product", product);
+		return gson.toJson(conMap);
+	}
+
+	// 카카오페이 결제 메소드
 	@ResponseBody
 	@RequestMapping("kakaopay/pay.or")
 	public String kakaoPay(HttpServletRequest request, HttpSession session) throws IOException {
 		Member loginUser = (Member) session.getAttribute("loginUser");
-		
-		Product p = orderService.selectOrderCart(loginUser.getMemberNo());
-		
 
+		Product p = orderService.selectOrderCart(loginUser.getMemberNo());
 
 		// 결제정보를 작성
 		URL url = new URL("https://kapi.kakao.com/v1/payment/ready");
@@ -137,7 +153,7 @@ public class OrderController {
 		urlConn.addRequestProperty("Authorization", "KakaoAK " + adminKey);
 		urlConn.addRequestProperty("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 		urlConn.setDoOutput(true);
-		
+
 		// 상품명칭 ex) 5건
 		String item_name = p.getName() + "외 " + (p.getQuantity() - 1) + "건";
 		// 수량 ex) 5
@@ -145,7 +161,7 @@ public class OrderController {
 		// 총 금액 ex) 5000
 		String total_amount = String.valueOf(p.getPrice());
 		// 서버 주소
-		String locatin = "http://localhost:8887"+request.getContextPath()+"/";
+		String locatin = "http://localhost:8887" + request.getContextPath() + "/";
 
 		// 카카오페이로 넘길 값
 		StringBuffer parm = new StringBuffer();

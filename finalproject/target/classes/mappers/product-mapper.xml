@@ -278,10 +278,4 @@ WHERE
     ref_review_no = #{reviewNo}
 </select>
 
-
-
-
-
-
-
 </mapper>

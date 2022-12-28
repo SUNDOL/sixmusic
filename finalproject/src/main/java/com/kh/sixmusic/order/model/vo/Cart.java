@@ -13,6 +13,6 @@ public class Cart {
 	private int productNo; // REF_PRODUCT_NO 상품_번호
 	private int quantity; // QUANTITY 상품_수량
 	private int price; // 상품 가격
-	private String filePath; // 첨부파일 (사진) 경로
-	private String changeName; // 첨부파일 (사진) 파일명
+	private String filePath; // 첨부파일 (사진)경로
+	private String changeName; // 첨부파일 (사진)파일명
 }

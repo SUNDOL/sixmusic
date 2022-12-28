@@ -20,6 +20,7 @@ public interface OrderService {
 	ArrayList<Product> showWishlist(int memberNo);
 	int removeWishlist(Wishlist w);
 	
+	ArrayList<Product> showConfirmationInfo(int memberNo);
 	
 	int uploadOrderData(int memberNo);
 	Product selectOrderCart(int memberNo);

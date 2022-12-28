@@ -113,116 +113,90 @@ ORDER BY
 </delete>
 
 
-
-<!-- ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ절취선ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ -->
-<!-- 주문할 상품의 정보 -->
-<select id="seletOrderProduct" resultMap="productResult">
-	SELECT
-		P.PRODUCT_NAME ,
-		P.PRODUCT_PRICE ,
-		C.QUANTITY AS PRODUCT_QUANTITY 
-	FROM PRODUCT
-    JOIN CART C ON(P.PRODUCT_NO=C.REF_PRODUCT_NO)
-	WHERE CART_NO IN
-	<foreach collection="array" item="cartNo" open="(" close=")" separator=",">
-	 	#{cartNo}
-	</foreach>
-    ORDER BY P.PRODUCT_PRICE DESC
+<!-- 구매 시 -->
+<select id="selectOrderCart" parameterType="_int">
+	SELECT 
+		SUM(P.PRODUCT_PRICE * C.QUANTITY) PRODUCT_PRICE,
+		SUM(C.QUANTITY) QUANTITY,
+		MAX(P.PRODUCT_NAME) PRODUCT_NAME
+	FROM CART C
+	JOIN PRODUCT P ON(C.REF_PRODUCT_NO = P.PRODUCT_NO)
+	WHERE C.REF_MEMBER_NO LIKE #{memberNo}
+	GROUP BY C.REF_MEMBER_NO;
 </select>
 
-
-<!-- totalOrder -->
-<!-- 주문정보에 데이터를 입력 -->
-<insert id="insertTotalOrder" parameterType="totalOrder">
-	INSERT INTO TOTAL_ORDER(
-	    ORDER_NO ,
-		REF_MEMBER_NO ,
-		PAYMENT
-		)
-	VALUES(
-		SEQ_ORDER.NEXTVAL,
-		#{memberNo},
-		#{payment}
-	)
+<!-- 구매 성공시 -->
+<insert id="insertTotalOrder" parameterType="_int">
+	INSERT INTO TOTAL_ORDER(ORDER_NO, PAYMENT, REF_MEMBER_NO)
+	SELECT SEQ_ORDER.NEXTVAL ORDER_NO,A.*
+	FROM
+	    (
+	    SELECT 
+	    SUM(P.PRODUCT_PRICE) PAYMENT,
+	    C.REF_MEMBER_NO REF_MEMBER_NO
+	    FROM CART C
+	    JOIN PRODUCT P ON(C.REF_PRODUCT_NO = P.PRODUCT_NO)
+	    GROUP BY C.REF_MEMBER_NO
+	    )A
+	WHERE A.REF_MEMBER_NO LIKE #{memberNo}
 </insert>
-<update id="updateTotalOrder" parameterType="_int">
-	UPDATE TOTAL_ORDER
-	SET STATUS = 'Y'
-	WHERE STATUS LIKE 'N'
-	AND REF_MEMBER_NO LIKE #{memberNo}
-	AND ORDER_DATE LIKE (
-		SELECT MAX(ORDER_DATE) 
-		FROM TOTAL_ORDER 
-		WHERE REF_MEMBER_NO LIKE #{memberNo}
-	)
-</update>
-<delete id="deleteTotalOrder" parameterType="_int">
-	DELETE FORM  TOTAL_ORDER
-	WHERE STATUS LIKE 'N'
-	AND REF_MEMBER_NO LIKE #{memberNo}
-</delete>
-<!-- 결제할 주문정보에 주문번호 -->
-<select id="selectOrderNo" parameterType="_int" resultType="_int">
-	SELECT ORDER_NO
-	FROM (
-		SELECT ORDER_NO
-		FROM TOTAL_ORDER
-		WHERE STATUS LIKE 'N'
-		AND REF_MEMBER_NO LIKE #{memberNo}
-		ORDER BY ORDER_DATE DESC
-		)
-	WHERE ROWNUM = 1
-</select>
 
-
-
-<!-- 주문할 장바구니에 담긴 정보 -->
-<select id="selectOrderCart" resultMap="cartResult">
+<insert id="insertPoudctOrder" parameterType="_int">
+	INSERT INTO PRODUCT_ORDER(REF_ORDER_NO, REF_PRODUCT_NO, QUANTITY)
 	SELECT
-		CART_NO ,
-		REF_MEMBER_NO ,
+		SEQ_ORDER.CURRVAL REF_ORDER_NO,
 		REF_PRODUCT_NO ,
 		QUANTITY 
 	FROM CART
-	WHERE CART_NO IN
-	<foreach collection="array" item="cartNo" open="(" close=")" separator=",">
-	 	#{cartNo}
-	</foreach>
-</select>
-<delete id="deleteOrderCart" parameterType="_int">
+	WHERE REF_MEMBER_NO LIKE #{memberNo}
+</insert>
+
+<update id="updateProductQuantity" parameterType="_int">
+	UPDATE PRODUCT
+	SET PRODUCT_QUANTITY = PRODUCT_QUANTITY - 1
+	WHERE PRODUCT_NO IN
+		(
+		SELECT REF_PRODUCT_NO 
+		FROM CART 
+		WHERE REF_MEMBER_NO LIKE #{memberNo}
+		)
+</update>
+
+<delete id="deleteCart" parameterType="_int">
 	DELETE FROM CART
 	WHERE REF_MEMBER_NO LIKE #{memberNo}
 </delete>
-<!-- productOrder -->
-<resultMap type="productOrder" id="productOrderResult">
-	<result column="REF_ORDER_NO" property="orderNo"/>
-	<result column="REF_PRODUCT_NO" property="productNo"/>
-	<result column="QUANTITY" property="quantity"/>
-</resultMap>
+<!-- 구매 취소시 -->
 
-<!-- 주문내역정보 입력 -->
-<select id="insertProductOrder" parameterType="ArrayList" resultMap="productOrderResult">
-	INSERT INTO PRODUCT_ORDER(
-		REF_ORDER_NO ,
-		REF_PRODUCT_NO ,
-		QUANTITY
-	)
-	VALUES
-	<foreach item="po" index="index" collection="list">
-	(
-		 #{po.orderNo}
-		 ,#{po.productNo}
-		 ,#{po.quantity}
-	)
-	</foreach>
-</select>
+<update id="cancelOrder" parameterType="totalOrder">
+	UPDATE TOTAL_ORDER
+	SET STATUS = 'N'
+	WHERE ORDER_NO LIKE #{orderNo}
+	AND REF_MEMBER_NO LIKE #{memberNo}
+	AND STATUS LIKE 'Y'
+</update>
+
 <delete id="deleteProductOrder" parameterType="_int">
-	DELETE FROM PRODUCT_ORDER
-	WHERE  REF_ORDER_NO IN(
-		SELECT ORDER_NO
-		FROM TOTAL_ORDER 
-		WHERE STATUS LIKE 'N'
-		AND REF_MEMBER_NO LIKE #{memberNo}
+	DELETE FROM PRODUCT_ORDER PO
+	WHERE PO.REF_ORDER_NO IN 
+	(
+		SELECT O.ORDER_NO
+		FROM TOTAL_ORDER O
+		WHERE O.STATUS LIKE 'N'
+		AND O.REF_MEMBER_NO LIKE #{memberNo}
+	)
+	OR PO.REF_ORDER_NO NOT IN
+	(
+		SELECT O.ORDER_NO FROM TOTAL_ORDER O
 	)
 </delete>
+
+<delete id="deleteTotalOrder" parameterType="_int">
+	DELETE FROM TOTAL_ORDER O
+	WHERE O.STATUS LIKE 'N'
+	AND O.REF_MEMBER_NO LIKE #{memberNo}
+</delete>
+
+
+
 </mapper>

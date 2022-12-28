@@ -60,69 +60,24 @@ public class OrderServiceImpl implements OrderService {
 	public int removeWishlist(Wishlist w) {
 		return orderDao.removeWishlist(sqlSession, w);
 	}
-	//-----------------절취선-------------------
+
 	@Override
-	public int insertOrderDate(TotalOrder to, int[] cartNo) {
-
-		int result = orderDao.insertTotalOrder(sqlSession, to);
-		if (result > 0) {
-			// 주문내역 리스트 데이터 입력
-			int orderNo = orderDao.selectOrderNo(sqlSession, to.getMemberNo());
-			ArrayList<Cart> cList = orderDao.selectOrderCart(sqlSession, cartNo);
-			ArrayList<ProductOrder> poList = new ArrayList<ProductOrder>();
-			for (Cart c : cList) {
-				poList.add(new ProductOrder(orderNo, c.getProductNo(), c.getQuantity()));
-			}
-			orderDao.insertProductOrder(sqlSession, poList);
-
+	public int uploadOrderData(int memberNo) {
+		int result = orderDao.insertTotalOrder(sqlSession,memberNo);
+		result += orderDao.insertPoudctOrder(sqlSession,memberNo);
+		result += orderDao.updateProductQuantity(sqlSession,memberNo);
+		result += orderDao.deleteCart(sqlSession,memberNo);
+		if (result > 3) {
+			sqlSession.commit();
+		}else {
+			sqlSession.rollback();
 		}
 		return result;
 	}
 
 	@Override
-	public ArrayList<Product> seletOrderProduct(int[] cartNo) {
-		return orderDao.seletOrderProduct(sqlSession, cartNo);
+	public Product selectOrderCart(int memberNo) {
+		return orderDao.selectOrderCart(sqlSession,memberNo);
 	}
-
-	@Override
-	public void updateOrderData(int memberNo) {
-		orderDao.updateTotalOrder(sqlSession, memberNo);
-		orderDao.deleteOrderCart(sqlSession, memberNo);
-	}
-
-	@Override
-	public void deleteOrderData(int memberNo) {
-		orderDao.deleteProductOrder(sqlSession, memberNo);
-		orderDao.deleteTotalOrder(sqlSession, memberNo);
-	}
-
-
-	@Override
-	public ArrayList<TotalOrder> SelectTotalOrder(int membetno) {
-		return null;
-	}
-
-	@Override
-	public ArrayList<Product> SelectProductOrder(int orderNo) {
-		return null;
-	}
-
-	@Override
-	public ArrayList<Product> selectCartProduct(int memberNo) {
-		return null;
-	}
-
-	@Override
-	public ArrayList<ProductAttachment> selectCartAttachment(int memberNo) {
-		return null;
-	}
-
-
-
-
-
-
-
-
 
 }

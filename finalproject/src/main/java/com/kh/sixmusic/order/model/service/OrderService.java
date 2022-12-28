@@ -19,17 +19,10 @@ public interface OrderService {
 	int addToWishlist(Wishlist w);
 	ArrayList<Product> showWishlist(int memberNo);
 	int removeWishlist(Wishlist w);
-
-	//-----------------절취선-------------------
-	ArrayList<Product> selectCartProduct(int memberNo);
-	ArrayList<ProductAttachment> selectCartAttachment(int memberNo);
-	ArrayList<Product> seletOrderProduct(int[] cartNo);
-	int insertOrderDate(TotalOrder to, int[] cartNo);
-	void updateOrderData(int memberNo);
-	void deleteOrderData(int memberNo);
 	
-	ArrayList<TotalOrder> SelectTotalOrder(int memberNo);
-	ArrayList<Product> SelectProductOrder(int orderNo);
+	
+	int uploadOrderData(int memberNo);
+	Product selectOrderCart(int memberNo);
 
 	
 }

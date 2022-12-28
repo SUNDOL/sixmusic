@@ -11,6 +11,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,6 @@ import com.kh.sixmusic.order.model.vo.Cart;
 import com.kh.sixmusic.order.model.vo.TotalOrder;
 import com.kh.sixmusic.order.model.vo.Wishlist;
 import com.kh.sixmusic.product.model.vo.Product;
-import com.kh.sixmusic.product.model.vo.ProductAttachment;
 
 @Controller
 public class OrderController {
@@ -118,41 +118,16 @@ public class OrderController {
 		w.setProductNo(productNo);
 		return orderService.removeWishlist(w);
 	}
-	
-
-
-
-
-	//-----------------절취선-------------------
 
 	// 카카오 페이 결제 메소드
 	@ResponseBody
 	@RequestMapping("kakaopay/pay.or")
-	public String kakaoPay(int[] cartNo, int zipcode, HttpSession session) throws IOException {
+	public String kakaoPay(HttpServletRequest request, HttpSession session) throws IOException {
 		Member loginUser = (Member) session.getAttribute("loginUser");
+		
+		Product p = orderService.selectOrderCart(loginUser.getMemberNo());
+		
 
-		// 결제할 제품의 정보를 받기
-		ArrayList<Product> pList = orderService.seletOrderProduct(cartNo);
-
-		// 총지불액
-		int totalPayment = 0;
-		// 총수량
-		int totalQuantity = 0;
-		for (Product p : pList) {
-			totalPayment += p.getPrice() * p.getQuantity();
-			totalQuantity += p.getQuantity();
-		}
-
-		// 주문 테이블에 데이터 작성
-		TotalOrder to = new TotalOrder();
-		to.setPayment(totalPayment);
-		to.setMemberNo(loginUser.getMemberNo());
-
-		int result = orderService.insertOrderDate(to, cartNo);
-
-		if (result > 0) {
-			return null;
-		}
 
 		// 결제정보를 작성
 		URL url = new URL("https://kapi.kakao.com/v1/payment/ready");
@@ -162,26 +137,32 @@ public class OrderController {
 		urlConn.addRequestProperty("Authorization", "KakaoAK " + adminKey);
 		urlConn.addRequestProperty("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 		urlConn.setDoOutput(true);
-
+		
 		// 상품명칭 ex) 5건
-		String item_name = totalQuantity + "건";
+		String item_name = p.getName() + "외 " + (p.getQuantity() - 1) + "건";
 		// 수량 ex) 5
-		String quantity = String.valueOf(totalQuantity);
+		String quantity = String.valueOf(p.getQuantity());
 		// 총 금액 ex) 5000
-		String total_amount = String.valueOf(to.getPayment());
+		String total_amount = String.valueOf(p.getPrice());
 		// 서버 주소
-		String locatin = "http://localhost:8887/sixmusic/";
+		String locatin = "http://localhost:8887"+request.getContextPath()+"/";
 
 		// 카카오페이로 넘길 값
-		String parm = "cid=TC0ONETIME" + "&partner_order_id=partner_order_id" + "&partner_user_id=partner_user_id"
-				+ "&item_name=" + URLEncoder.encode(item_name, "UTF-8") + "&quantity=" + quantity + "&total_amount="
-				+ total_amount + "&tax_free_amount=0" + "&approval_url=" + locatin.concat(approval_url) + "&fail_url="
-				+ locatin.concat(fail_url) + "&cancel_url=" + locatin.concat(cancel_url);
+		StringBuffer parm = new StringBuffer();
+		parm.append("cid=TC0ONETIME");
+		parm.append("&partner_order_id=partner_order_id");
+		parm.append("&item_name=" + URLEncoder.encode(item_name, "UTF-8"));
+		parm.append("&quantity=" + quantity);
+		parm.append("&total_amount=" + total_amount);
+		parm.append("&tax_free_amount=0");
+		parm.append("&approval_url=" + locatin.concat(approval_url));
+		parm.append("&fail_url=" + locatin.concat(fail_url));
+		parm.append("&cancel_url=" + locatin.concat(cancel_url));
 		DataOutputStream output = new DataOutputStream(urlConn.getOutputStream());
-		output.writeBytes(parm);
+		output.writeBytes(parm.toString());
 		output.close();
 
-		result = urlConn.getResponseCode();
+		int result = urlConn.getResponseCode();
 
 		InputStream input;
 		if (result == 200) {
@@ -195,36 +176,32 @@ public class OrderController {
 	}
 
 	// 성공시 Mapping
-	private String approval_url = "kakaopay/success.or";
+	private String approval_url = "success.or";
 	// 실패시 Mapping
-	private String fail_url = "kakaopay/falure.or";
+	private String fail_url = "falure.or";
 	// 취소시 Mapping
-	private String cancel_url = "kakaopay/cancel.or";
+	private String cancel_url = "cancel.or";
 	// 카카오페이지 이동 페이지
-	private String result_url = "common/payResult";
+	private String result_url = "order/payResult";
 
-	@GetMapping("kakaopay/success.or")
+	@GetMapping("success.or")
 	public ModelAndView paySuccess(ModelAndView mv, HttpSession session) {
 		Member loginUser = (Member) session.getAttribute("loginUser");
-		orderService.updateOrderData(loginUser.getMemberNo());
+		orderService.uploadOrderData(loginUser.getMemberNo());
 		mv.addObject("result", "success");
 		mv.setViewName(result_url);
 		return mv;
 	}
 
-	@GetMapping("order/kakaopay/falure.or")
-	public ModelAndView payFalure(ModelAndView mv, HttpSession session) {
-		Member loginUser = (Member) session.getAttribute("loginUser");
-		orderService.deleteOrderData(loginUser.getMemberNo());
+	@GetMapping("falure.or")
+	public ModelAndView payFalure(ModelAndView mv) {
 		mv.addObject("result", "error");
 		mv.setViewName(result_url);
 		return mv;
 	}
 
-	@GetMapping("kakaopay/cancel.or")
-	public ModelAndView payCancel(ModelAndView mv, HttpSession session) {
-		Member loginUser = (Member) session.getAttribute("loginUser");
-		orderService.deleteOrderData(loginUser.getMemberNo());
+	@GetMapping("cancel.or")
+	public ModelAndView payCancel(ModelAndView mv) {
 		mv.addObject("result", "cancel");
 		mv.setViewName(result_url);
 		return mv;

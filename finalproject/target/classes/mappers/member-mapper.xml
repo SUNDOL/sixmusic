@@ -35,4 +35,89 @@
 		VALUES (SEQ_MEMBER.NEXTVAL, #{memberId}, #{typeNo}, #{memberPwd}, #{memberNickname}, #{memberName}, #{phone}, #{birthday}, #{zipcode}, #{address1}, #{address2}, #{address3})	
 	</insert>
 
+
+
+	<resultMap type="totalOrder" id="totalOrderResult">
+		<result column="ORDER_NO" property="orderNo"/>
+		<result column="REF_MEMBER_NO" property="memberNo"/>
+		<result column="ORDER_DATE" property="orderDate"/>
+		<result column="PAYMENT" property="payment"/>
+		<result column="STATUS" property="status"/>
+	</resultMap>
+	<!-- product -->
+	<resultMap type="product" id="productResult">
+		<result column="PRODUCT_NO" property="productNo"/>
+		<result column="PRODUCT_NAME" property="name"/>
+		<result column="PRODUCT_PRICE" property="price"/>
+		<result column="PRODUCT_COLOR" property="color"/>
+		<result column="QUANTITY" property="quantity"/>
+		<result column="MODEL_NAME" property="price"/>
+		<result column="BRAND_NAME" property="price"/>
+		<result column="CHANGE_NAME" property="changeName"/>
+		<result column="FILE_PATH" property="filePath"/>
+		<result column="COUNT" property="count"/>
+	</resultMap>
+	
+	<!-- 주문 조회 -->
+	<select id="selectTotalOrder" parameterType="_int" resultMap="totalOrderResult">
+		SELECT PAYMENT, ORDER_DATE FROM TOTAL_ORDER
+		WHERE STATUS LIKE 'Y'
+		AND REF_MEMBER_NO LIKE #{memberNo}
+		AND STATUS LIKE
+		ORDER BY ORDER_NO DESC
+	</select>
+	
+	<!-- 주문 내역 조회 -->
+	<select id="selectProductOrder" parameterType="_int" resultMap="productResult">
+		SELECT 
+            NVL2(PG.REF_PRODUCT_NO,1,0) COUNT,
+			P.PRODUCT_NO,
+			P.PRODUCT_NAME,
+			P.PRODUCT_PRICE,
+			P.PRODUCT_COLOR,
+            PO.QUANTITY,
+			M.MODEL_NAME,
+			B.BRAND_NAME,
+			PAT.PRODUCT_ATTACHMENT_FILE_PATH FILE_PATH,
+			PAT.PRODUCT_ATTACHMENT_CHANGE_NAME CHANGE_NAME
+		FROM PRODUCT P
+		JOIN PRODUCT_ATTACHMENT PAT ON(PAT.REF_PRODUCT_NO = P.PRODUCT_NO)
+		JOIN PRODUCT_ORDER PO ON(PO.REF_PRODUCT_NO = P.PRODUCT_NO)
+		JOIN TOTAL_ORDER O ON(O.ORDER_NO = PO.REF_ORDER_NO)
+		JOIN MODEL M ON(M.MODEL_NO = P.REF_MODEL_NO)
+		JOIN BRAND B ON(B.BRAND_NO = M.REF_BRAND_NO)
+        LEFT JOIN (SELECT REF_PRODUCT_NO
+            FROM PRODUCT_GROUP
+            WHERE GROUP_NO IN(
+                SELECT GROUP_NO
+                FROM PRODUCT_GROUP
+                WHERE REF_PRODUCT_NO IN(
+                    SELECT REF_PRODUCT_NO                      
+                    FROM REVIEW 
+                    WHERE STATUS LIKE 'Y'
+                    AND REF_MEMBER_NO LIKE #{memberNo}
+                )
+            )
+        )PG ON(PG.REF_PRODUCT_NO = P.PRODUCT_NO)
+		WHERE O.REF_MEMBER_NO LIKE #{memberNo}
+		AND O.STATUS LIKE 'Y'
+        AND PAT.PRODUCT_ATTACHMENT_CHANGE_NAME LIKE '%-1.%'
+		ORDER BY O.ORDER_NO DESC, P.PRODUCT_PRICE DESC;
+	</select>
+	<!-- 리뷰 생성 -->
+	<insert id="addToReview" parameterType="Review">
+		INSERT INTO REVIEW(
+			REVIEW_NO ,
+			REF_MEMBER_NO ,
+			REF_PRODUCT_NO ,
+			REVIEW_CONTENT ,
+			RATING
+		)
+		VALUES(
+		SEQ_REVIEW.NEXTVAL,
+		#{memberNickname}, 
+		#{productNo}, 
+		#{content},
+		#{rating})
+	</insert>
 </mapper>

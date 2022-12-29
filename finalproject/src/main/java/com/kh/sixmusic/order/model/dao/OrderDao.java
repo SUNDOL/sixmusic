@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.kh.sixmusic.member.model.vo.Member;
 import com.kh.sixmusic.order.model.vo.Cart;
 import com.kh.sixmusic.order.model.vo.ProductOrder;
 import com.kh.sixmusic.order.model.vo.TotalOrder;
@@ -69,9 +70,18 @@ public class OrderDao {
 	public int deleteCart(SqlSessionTemplate sqlSession, int memberNo) {
 		return sqlSession.delete("orderMapper.deleteCart", memberNo);
 	}
-
+	public int minusPoint(SqlSessionTemplate sqlSession, Member m) {
+		return sqlSession.update("orderMapper.minusPoint", m);
+	}
+	public int plusPoint(SqlSessionTemplate sqlSession, Member m) {
+		return sqlSession.update("orderMapper.plusPoint", m);
+	}
+	
 	public Product selectOrderCart(SqlSessionTemplate sqlSession, int memberNo) {
 		return sqlSession.selectOne("orderMapper.selectOrderCart", memberNo);
 	}
+
+
+
 
 }

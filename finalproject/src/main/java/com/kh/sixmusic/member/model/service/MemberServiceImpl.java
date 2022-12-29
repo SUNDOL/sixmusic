@@ -1,11 +1,15 @@
 package com.kh.sixmusic.member.model.service;
 
+import java.util.ArrayList;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.sixmusic.member.model.dao.MemberDao;
 import com.kh.sixmusic.member.model.vo.Member;
+import com.kh.sixmusic.order.model.vo.ProductOrder;
+import com.kh.sixmusic.order.model.vo.TotalOrder;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -26,8 +30,8 @@ public class MemberServiceImpl implements MemberService {
 	
 
 	@Override
-	public int checkId(String MemberId) {
-		return memberDao.checkId(sqlSession, MemberId);
+	public int idCheck(String MemberId) {
+		return memberDao.idCheck(sqlSession, MemberId);
 	}
 
 	@Override
@@ -36,13 +40,23 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public int updateMember(Member m) {
-		return memberDao.updateMemner(sqlSession, m);
+	public ArrayList<TotalOrder> viewTotalOrder(int memberNo) {
+		return memberDao.viewTotalOrder(sqlSession, memberNo);
 	}
 
 	@Override
-	public int secessionMember(Member m) {
-		return memberDao.secessionMember(sqlSession, m);
+	public ArrayList<ProductOrder> viewProductOrder(int memberNo) {
+		return memberDao.viewProductOrder(sqlSession, memberNo);
+	}
+
+	@Override
+	public int updateAccount(Member m) {
+		return memberDao.updateAccount(sqlSession, m);
+	}
+
+	@Override
+	public int updateMemberPwd(Member m) {
+		return memberDao.updateMemberPwd(sqlSession, m);
 	}
 
 }

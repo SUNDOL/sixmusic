@@ -21,6 +21,7 @@
 	<result column="PRODUCT_QUANTITY" property="quantity"/>
 	<result column="CHANGE_NAME" property="changeName"/>
 	<result column="FILE_PATH" property="filePath"/>
+	<result column="QUANTITY" property="quantity"/>
 </resultMap>
 
 <!-- cart -->
@@ -143,7 +144,7 @@ ORDER BY
 </select>
 
 <!-- 구매 시 -->
-<select id="selectOrderCart" parameterType="_int">
+<select id="selectOrderCart" parameterType="_int" resultMap="productResult">
 	SELECT 
 		SUM(P.PRODUCT_PRICE * C.QUANTITY) PRODUCT_PRICE,
 		SUM(C.QUANTITY) QUANTITY,
@@ -151,10 +152,10 @@ ORDER BY
 	FROM CART C
 	JOIN PRODUCT P ON(C.REF_PRODUCT_NO = P.PRODUCT_NO)
 	WHERE C.REF_MEMBER_NO LIKE #{memberNo}
-	GROUP BY C.REF_MEMBER_NO;
+	GROUP BY C.REF_MEMBER_NO
 </select>
-
 <!-- 구매 성공시 -->
+
 <insert id="insertTotalOrder" parameterType="_int">
 	INSERT INTO TOTAL_ORDER(ORDER_NO, PAYMENT, REF_MEMBER_NO)
 	SELECT SEQ_ORDER.NEXTVAL ORDER_NO,A.*
@@ -195,6 +196,27 @@ ORDER BY
 	DELETE FROM CART
 	WHERE REF_MEMBER_NO LIKE #{memberNo}
 </delete>
+
+<update id="minusPoint" parameterType="member">
+	UPDATE MEMBER
+	SET POINT = POINT-#{point}
+	WHERE MEMBER_NO LIKE #{memberNo}
+</update>
+
+<update id="plusPoint" parameterType="member">
+	UPDATE MEMBER
+	SET POINT = #{point}+(
+		SELECT POINT
+		FROM (
+			SELECT CEIL(PAYMENT/1000) AS POINT
+			FROM TOTAL_ORDER
+			WHERE REF_MEMBER_NO LIKE #{memberNo}
+			ORDER BY ORDER_NO DESC
+		)
+		WHERE ROWNUM LIKE 1
+	)
+	WHERE MEMBER_NO LIKE #{memberNo}
+</update>
 <!-- 구매 취소시 -->
 
 <update id="cancelOrder" parameterType="totalOrder">

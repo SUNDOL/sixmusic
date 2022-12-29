@@ -16,7 +16,7 @@ function kakaoLogin() {
                     const kakao_account = res.kakao_account;
                     console.log(kakao_account.email); //사용자 정보
                     let email = kakao_account.email;
-                    location.href='kakao/login.me?id='+email+'&type=2';
+                    location.href='kakaoLogin.me?id='+email+'&type=2';
                 }
             });
             location.href='/sixmusicTest1' //리다이렉트 되는 코드

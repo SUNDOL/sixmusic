@@ -2,11 +2,10 @@ package com.kh.sixmusic.order.model.service;
 
 import java.util.ArrayList;
 
+import com.kh.sixmusic.member.model.vo.Member;
 import com.kh.sixmusic.order.model.vo.Cart;
-import com.kh.sixmusic.order.model.vo.TotalOrder;
 import com.kh.sixmusic.order.model.vo.Wishlist;
 import com.kh.sixmusic.product.model.vo.Product;
-import com.kh.sixmusic.product.model.vo.ProductAttachment;
 
 public interface OrderService {
 	int checkCart(Cart c);
@@ -22,7 +21,7 @@ public interface OrderService {
 	
 	ArrayList<Product> showConfirmationInfo(int memberNo);
 	
-	int uploadOrderData(int memberNo);
+	int uploadOrderData(Member m);
 	Product selectOrderCart(int memberNo);
 
 	

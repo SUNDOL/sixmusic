@@ -30,6 +30,12 @@
 		FROM MEMBER
 		WHERE MEMBER_NICKNAME = #{memberNickname}
 	</select>
+	
+	<select id="idCheck" parameterType="string">
+		SELECT COUNT(*) 
+		FROM MEMBER 
+		WHERE MEMBER_ID LIKE #{memberId}
+	</select>
 	<insert id="signUpMember" parameterType="member">
 		INSERT INTO MEMBER (MEMBER_NO, MEMBER_ID, REF_TYPE_NO, MEMBER_PWD, MEMBER_NICKNAME, MEMBER_NAME, PHONE, BIRTHDAY, ZIPCODE, ADDRESS_1, ADDRESS_2, ADDRESS_3)
 		VALUES (SEQ_MEMBER.NEXTVAL, #{memberId}, #{typeNo}, #{memberPwd}, #{memberNickname}, #{memberName}, #{phone}, #{birthday}, #{zipcode}, #{address1}, #{address2}, #{address3})	
@@ -59,7 +65,7 @@
 	</resultMap>
 	
 	<!-- 주문 조회 -->
-	<select id="selectTotalOrder" parameterType="_int" resultMap="totalOrderResult">
+	<select id="viewTotalOrder" parameterType="_int" resultMap="totalOrderResult">
 		SELECT PAYMENT, ORDER_DATE FROM TOTAL_ORDER
 		WHERE STATUS LIKE 'Y'
 		AND REF_MEMBER_NO LIKE #{memberNo}
@@ -68,7 +74,7 @@
 	</select>
 	
 	<!-- 주문 내역 조회 -->
-	<select id="selectProductOrder" parameterType="_int" resultMap="productResult">
+	<select id="viewProductOrder" parameterType="_int" resultMap="productResult">
 		SELECT 
             NVL2(PG.REF_PRODUCT_NO,1,0) COUNT,
 			P.PRODUCT_NO,
@@ -120,4 +126,53 @@
 		#{content},
 		#{rating})
 	</insert>
+	<!-- 리뷰 사진 생성  -->
+	<insert id="addToReviewImage" parameterType="ReviewAttachment">
+		INSERT INTO REVIEW_ATTACHMENT(
+			REVIEW_ATTACHMENT_NO,
+		    REF_REVIEW_NO ,
+		    REVIEW_ATTACHMENT_ORIGIN_NAME ,
+		    REVIEW_ATTACHMENT_CHANGE_NAME ,
+		    REVIEW_ATTACHMENT_FILE_PATH
+		)
+		VALUES(
+			SEQ_REVIEW_ATTACHMENT.NEXTVAL,
+			SEQ_REVIEW.CURRVAL,
+			#{originName},
+			#{changeName},
+			#{filePath}
+		)
+	</insert>
+	<!-- 회원정보 변경 -->
+	<update id="updateAccount" parameterType="member">
+		UPDATE MEMBER
+		SET 
+		<if test="memberName != null">
+			MEMBER_NAME = #{memberName}
+		</if>
+		<trim prefixOverrides=",">
+			<if test="memberNickname != null">
+				,MEMBER_NICKNAME = #{memberNickname}
+			</if>
+			<if test="birthday != null">
+				,BIRTHDAY = #{birthday}
+			</if>
+			<if test="zipcode != null">
+				,ZIPCODE = #{zipcode}
+				,ADDRESS_1 = #{address1}
+				,ADDRESS_2 = #{address2}
+				,ADDRESS_3 = #{address3}
+			</if>
+			<if test="phone != null">
+				,PHONE = #{phone}
+			</if>
+		</trim>
+		WHERE MEMBER_NO LIKE #{memberNo}
+	</update>
+	<!-- 회원 비밀번호 저장 -->
+	<update id="updateMemberPwd" parameterType="member">
+		UPDATE MEMBER
+		SET MEMBER_PWD = #{memberPwd}
+		WHERE MEMBER_NO LIKE #{memberNo}
+	</update>
 </mapper>

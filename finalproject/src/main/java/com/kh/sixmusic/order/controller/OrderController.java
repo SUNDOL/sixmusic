@@ -175,7 +175,6 @@ public class OrderController {
 		DataOutputStream output = new DataOutputStream(urlConn.getOutputStream());
 		output.writeBytes(parm.toString());
 		output.close();
-		System.out.println(parm.toString());
 		int result = urlConn.getResponseCode();
 		InputStream input;
 		if (result == 200) {

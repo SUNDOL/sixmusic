@@ -162,7 +162,7 @@
 	                        ${loginUser.memberNickname}님
 	                        </a>
 	                        	<ul class="dropdown-menu dropdown-menu-dark">
-	                            	<li><a class="dropdown-item" href="#">My Page</a></li>
+	                            	<li><a class="dropdown-item" href="#">My Account</a></li>
 	                            	<li><a class="dropdown-item" href="logout.me">Sign Out</a></li>
 	                        	</ul>
 	                    </li>

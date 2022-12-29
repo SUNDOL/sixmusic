@@ -56,20 +56,20 @@ public class MemberController {
 
 	// 닉네임 중복체크
 	@ResponseBody
-	@RequestMapping(value = "member/nicknameCheck.me", produces = "application/json; charset=UTF-8")
+	@RequestMapping(value = "nicknameCheck.me", produces = "application/json; charset=UTF-8")
 	public int nicknameCheck(String memberNickname) {
 		return memberService.nicknameCheck(memberNickname);
 	}
 
 	// 아이디 중복 확인
 	@ResponseBody
-	@RequestMapping(value = "member/idCheck.me", produces = "application/json; charset=UTF-8")
+	@RequestMapping(value = "idCheck.me", produces = "application/json; charset=UTF-8")
 	public int idCheck(String memberId) {
 		return memberService.idCheck(memberId);
 	}
 
 	// 회원가입
-	@PostMapping("member/submitSignUp.me")
+	@PostMapping("submitSignUp.me")
 	public String signUpMember(Member m, HttpSession session) {
 		int result = memberService.signUpMember(m);
 		if (result > 0) {

@@ -16,6 +16,7 @@
 	<result column="STATUS" property="status"/>
 	<result column="RATING" property="rating"/>
 	<result column="COUNT" property="count"/>
+	<result column="POINT" property="point"/>
 	<result column="CHANGE_NAME" property="changeName"/>
 	<result column="FILE_PATH" property="filePath"/>
 </resultMap>

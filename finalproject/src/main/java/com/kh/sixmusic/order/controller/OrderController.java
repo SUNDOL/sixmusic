@@ -132,15 +132,14 @@ public class OrderController {
 		conMap.put("product", product);
 		return gson.toJson(conMap);
 	}
-
+	private int point;
 	// 카카오페이 결제 메소드
 	@ResponseBody
 	@RequestMapping("pay.or")
 	public String kakaoPay(HttpSession session,@RequestParam(defaultValue = "0") int point) throws IOException {
 		Member loginUser = (Member) session.getAttribute("loginUser");
-		
 		Product p = orderService.selectOrderCart(loginUser.getMemberNo());
-
+		this.point=point;
 		// 결제정보를 작성
 		URL url = new URL("https://kapi.kakao.com/v1/payment/ready");
 		HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
@@ -197,7 +196,7 @@ public class OrderController {
 	private String result_url = "common/";
 
 	@GetMapping("success.or")
-	public ModelAndView paySuccess(ModelAndView mv, HttpSession session, int point) {
+	public ModelAndView paySuccess(ModelAndView mv, HttpSession session) {
 		Member loginUser = (Member) session.getAttribute("loginUser");
 		loginUser.setPoint(point);
 		orderService.uploadOrderData(loginUser);

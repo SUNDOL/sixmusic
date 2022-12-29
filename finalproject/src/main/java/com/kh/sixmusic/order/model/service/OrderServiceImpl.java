@@ -6,6 +6,8 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kh.sixmusic.member.model.dao.MemberDao;
+import com.kh.sixmusic.member.model.vo.Member;
 import com.kh.sixmusic.order.model.dao.OrderDao;
 import com.kh.sixmusic.order.model.vo.Cart;
 import com.kh.sixmusic.order.model.vo.ProductOrder;
@@ -61,17 +63,20 @@ public class OrderServiceImpl implements OrderService {
 		return orderDao.removeWishlist(sqlSession, w);
 	}
 
+	@Autowired
+	private MemberDao memberDao;
 	@Override
-	public int uploadOrderData(int memberNo) {
-		int result = orderDao.insertTotalOrder(sqlSession, memberNo);
-		result += orderDao.insertPoudctOrder(sqlSession, memberNo);
-		result += orderDao.updateProductQuantity(sqlSession, memberNo);
-		result += orderDao.deleteCart(sqlSession, memberNo);
-		if (result > 3) {
-			sqlSession.commit();
-		} else {
-			sqlSession.rollback();
+	public int uploadOrderData(Member m) {
+		int result = orderDao.insertTotalOrder(sqlSession, m.getMemberNo());
+		result += orderDao.insertPoudctOrder(sqlSession, m.getMemberNo());
+		result += orderDao.updateProductQuantity(sqlSession, m.getMemberNo());
+		result += orderDao.deleteCart(sqlSession, m.getMemberNo());
+		if (m.getPoint() > 0) {
+			result += orderDao.minusPoint(sqlSession, m);
 		}
+		result += orderDao.plusPoint(sqlSession, m);
+		m = memberDao.loginMember(sqlSession, m);
+				
 		return result;
 	}
 

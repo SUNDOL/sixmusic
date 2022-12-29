@@ -143,6 +143,13 @@
 			#{filePath}
 		)
 	</insert>
+	<!-- 리뷰 삭제 -->
+	<update id="removeReview" parameterType="review">
+		UPDATE REVIEW
+		SET STATUS = 'N'
+		WHERE REF_MEMBER_NO LIKE #{memberNo}
+		AND REVIEW_NO LIKE #{reviewNo}
+	</update>
 	<!-- 회원정보 변경 -->
 	<update id="updateAccount" parameterType="member">
 		UPDATE MEMBER

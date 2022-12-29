@@ -91,8 +91,8 @@ function price(list) {
 
 function check(f) {
     $("input[id=brand-" + f.brandNo + "]").attr("checked", true);
-    f.modelNo?.forEach(e => $("input[id=model-" + e + "]").attr("checked", true));
-    f.priceNo?.forEach(e => $("input[id=price-" + e + "]").attr("checked", true));
+    if (f.modelNo) f.modelNo.forEach(e => $("input[id=model-" + e + "]").attr("checked", true));
+    if (f.priceNo) f.priceNo.forEach(e => $("input[id=price-" + e + "]").attr("checked", true));
 }
 
 function search(f) {

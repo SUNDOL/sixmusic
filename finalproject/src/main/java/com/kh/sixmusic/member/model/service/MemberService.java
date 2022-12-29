@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import com.kh.sixmusic.member.model.vo.Member;
 import com.kh.sixmusic.order.model.vo.ProductOrder;
 import com.kh.sixmusic.order.model.vo.TotalOrder;
+import com.kh.sixmusic.product.model.vo.Review;
+import com.kh.sixmusic.product.model.vo.ReviewAttachment;
 
 public interface MemberService {
 	Member loginMember(Member m);
@@ -17,6 +19,9 @@ public interface MemberService {
 	
 	int updateAccount(Member m);
 	int updateMemberPwd(Member m);
+	int addToReview(Review r, ReviewAttachment rat);
+	int removeReview(Review r);
+	
 	
 
 }

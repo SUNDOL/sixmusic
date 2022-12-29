@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 import com.kh.sixmusic.member.model.vo.Member;
 import com.kh.sixmusic.order.model.vo.ProductOrder;
 import com.kh.sixmusic.order.model.vo.TotalOrder;
+import com.kh.sixmusic.product.model.vo.Review;
+import com.kh.sixmusic.product.model.vo.ReviewAttachment;
 
 @Repository
 public class MemberDao {
@@ -42,6 +44,18 @@ public class MemberDao {
 
 	public int updateMemberPwd(SqlSessionTemplate sqlSession, Member m) {
 		return sqlSession.update("memberMapper.updateMemberPwd", m);
+	}
+
+	public int addToReview(SqlSessionTemplate sqlSession, Review r) {
+		return sqlSession.insert("memberMapper.addToReview", r);
+	}
+
+	public int addToReviewImage(SqlSessionTemplate sqlSession, ReviewAttachment rat) {
+		return sqlSession.insert("memberMapper.addToReviewImage", rat);
+	}
+
+	public int removeReview(SqlSessionTemplate sqlSession, Review r) {
+		return sqlSession.update("memberMapper.updateMemberPwd", r);
 	}
 
 

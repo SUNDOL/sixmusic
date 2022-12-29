@@ -1,5 +1,6 @@
 package com.kh.sixmusic.member.model.service;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -10,6 +11,8 @@ import com.kh.sixmusic.member.model.dao.MemberDao;
 import com.kh.sixmusic.member.model.vo.Member;
 import com.kh.sixmusic.order.model.vo.ProductOrder;
 import com.kh.sixmusic.order.model.vo.TotalOrder;
+import com.kh.sixmusic.product.model.vo.Review;
+import com.kh.sixmusic.product.model.vo.ReviewAttachment;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -57,6 +60,18 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public int updateMemberPwd(Member m) {
 		return memberDao.updateMemberPwd(sqlSession, m);
+	}
+
+	@Override
+	public int addToReview(Review r, ReviewAttachment rat) {
+		int result = memberDao.addToReview(sqlSession,r);
+		result += memberDao.addToReviewImage(sqlSession,rat);
+		return result;
+	}
+
+	@Override
+	public int removeReview(Review r) {
+		return memberDao.removeReview(sqlSession,r);
 	}
 
 }

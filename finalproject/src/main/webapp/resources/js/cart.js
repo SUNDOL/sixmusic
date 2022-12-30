@@ -161,7 +161,7 @@ function showWishlist() {
         success: function (result) {
             var wishArray = "";
             if (result.length == 0) {
-                wishArrah += "<h3 class='text-muted'>Your wishlist is empty</h3>";
+                wishArray += "<h3 class='text-muted'>Your wishlist is empty</h3>";
             }
             if (result.length != 0) {
 

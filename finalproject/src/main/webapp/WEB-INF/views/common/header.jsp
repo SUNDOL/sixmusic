@@ -97,27 +97,6 @@
                             <li><a class="dropdown-item" href="form.pr?typeNo=9">Acoustic</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            BRANDS
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-dark">
-                            <li><a class="dropdown-item" href="#">Fender</a></li>
-                            <li><a class="dropdown-item" href="#">Gibson</a></li>
-                            <li><a class="dropdown-item" href="#">Gretsch</a></li>
-                            <li><a class="dropdown-item" href="#">Rickenbacker</a></li>
-                            <li><a class="dropdown-item" href="#">Martin</a></li>
-                            <li><a class="dropdown-item" href="#">Taylor</a></li>
-                            <li><a class="dropdown-item" href="#">MusicMan</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">NEW ARRIVALS</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">TOP SELLERS</a>
-                    </li>
                 </ul>
 
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -162,7 +141,7 @@
 	                        ${loginUser.memberNickname}님
 	                        </a>
 	                        	<ul class="dropdown-menu dropdown-menu-dark">
-	                            	<li><a class="dropdown-item" href="#">My Account</a></li>
+	                            	<li><a class="dropdown-item" href="myAccount.me">My Account</a></li>
 	                            	<li><a class="dropdown-item" href="logout.me">Sign Out</a></li>
 	                        	</ul>
 	                    </li>
@@ -294,7 +273,7 @@
             
             <div class="row g-1">
                 <div class="card-body">
-                    <a class="nav-link fs-3" href="#">
+                    <a class="nav-link fs-3" href="myAccount.me">
                         <strong><i class="bi bi-gear-wide-connected"></i> My Account</strong>
                     </a>
                     <br>
@@ -352,7 +331,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="productDetailsModalLabel"><b>PRODUCT DETAILS</b></h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="refreshCartWishlist();"></button>
                 </div>
                 <div class="modal-body">
                     <div class="container">

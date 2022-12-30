@@ -63,19 +63,13 @@ public class OrderServiceImpl implements OrderService {
 		return orderDao.removeWishlist(sqlSession, w);
 	}
 
-	@Autowired
-	private MemberDao memberDao;
 	@Override
 	public int uploadOrderData(Member m) {
 		int result = orderDao.insertTotalOrder(sqlSession, m.getMemberNo());
 		result += orderDao.insertPoudctOrder(sqlSession, m.getMemberNo());
 		result += orderDao.updateProductQuantity(sqlSession, m.getMemberNo());
 		result += orderDao.deleteCart(sqlSession, m.getMemberNo());
-		if (m.getPoint() > 0) {
-			result += orderDao.minusPoint(sqlSession, m);
-		}
-		result += orderDao.plusPoint(sqlSession, m);
-		m = memberDao.loginMember(sqlSession, m);
+		result += orderDao.updatePoint(sqlSession, m);
 		orderDao.changeGrade(sqlSession, m.getMemberNo());
 		return result;
 	}

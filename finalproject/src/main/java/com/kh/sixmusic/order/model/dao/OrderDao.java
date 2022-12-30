@@ -70,11 +70,9 @@ public class OrderDao {
 	public int deleteCart(SqlSessionTemplate sqlSession, int memberNo) {
 		return sqlSession.delete("orderMapper.deleteCart", memberNo);
 	}
-	public int minusPoint(SqlSessionTemplate sqlSession, Member m) {
-		return sqlSession.update("orderMapper.minusPoint", m);
-	}
-	public int plusPoint(SqlSessionTemplate sqlSession, Member m) {
-		return sqlSession.update("orderMapper.plusPoint", m);
+
+	public int updatePoint(SqlSessionTemplate sqlSession, Member m) {
+		 return sqlSession.update("orderMapper.updatePoint", m);
 	}
 	
 	public Product selectOrderCart(SqlSessionTemplate sqlSession, int memberNo) {
@@ -85,7 +83,6 @@ public class OrderDao {
 	public void changeGrade(SqlSessionTemplate sqlSession, int memberNo) {
 		sqlSession.update("orderMapper.changeGrade", memberNo);
 	}
-
-
-
 }
+
+

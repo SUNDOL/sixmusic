@@ -29,7 +29,7 @@ function showConfirmationInfo() {
                     totalPrice += aa.product[i].price;
                 };
             };
-            $("#confirm-points").html(String(customerPoints).replace(won, comma));
+            //$("#confirm-points").html(String(customerPoints).replace(won, comma));
             $("#confirm-showTotalPrice").html(String(totalPrice).replace(won, comma));
             $("#confirm-info").html(confirmArray);
             $("#confirm-point").val(pointsUsed);

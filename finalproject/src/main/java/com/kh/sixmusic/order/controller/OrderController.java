@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import com.google.gson.Gson;
+import com.kh.sixmusic.member.model.service.MemberService;
 import com.kh.sixmusic.member.model.vo.Member;
 import com.kh.sixmusic.order.model.service.OrderService;
 import com.kh.sixmusic.order.model.vo.Cart;
@@ -194,13 +195,15 @@ public class OrderController {
 	private String cancel_url = "cancel.or";
 	// 카카오페이지 이동 페이지
 	private String result_url = "common/";
-
+	@Autowired
+	private MemberService memberService;
 	@GetMapping("success.or")
 	public ModelAndView paySuccess(ModelAndView mv, HttpSession session) {
 		Member loginUser = (Member) session.getAttribute("loginUser");
 		loginUser.setPoint(point);
 		orderService.uploadOrderData(loginUser);
-		session.setAttribute("loginUser", loginUser);
+		
+		session.setAttribute("loginUser", memberService.loginMember(loginUser));
 		mv.addObject("result", "success");
 		mv.setViewName(result_url+"succeess");
 		return mv;

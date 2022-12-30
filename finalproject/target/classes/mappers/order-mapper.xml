@@ -197,15 +197,9 @@ ORDER BY
 	WHERE REF_MEMBER_NO LIKE #{memberNo}
 </delete>
 
-<update id="minusPoint" parameterType="member">
+<update id="updatePoint" parameterType="member">
 	UPDATE MEMBER
-	SET POINT = POINT-#{point}
-	WHERE MEMBER_NO LIKE #{memberNo}
-</update>
-
-<update id="plusPoint" parameterType="member">
-	UPDATE MEMBER
-	SET POINT = POINT + (
+	SET POINT = POINT - #{point} + (
 		SELECT POINT
 		FROM (
 			SELECT CEIL(PAYMENT/1000) AS POINT

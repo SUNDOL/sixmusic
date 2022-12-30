@@ -1,5 +1,4 @@
 function kakaoPay(){
-    console.log($("#confirm-point").val());
     $.ajax({
         url:'pay.or',
         dataType:'json',
@@ -9,6 +8,7 @@ function kakaoPay(){
         success:function(data){
         	if(data!=null){
             	const url = data['next_redirect_pc_url'];
+            	window.close();
             	window.open(url);
         	}else{
         		location.href = 'error.co';

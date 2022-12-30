@@ -93,37 +93,51 @@ public class MemberController {
 		return mv;
 	}
 
+	// My Account 페이지 이동
+	@GetMapping("myAccount.me")
+	public String myAccount() {
+		return "member/myAccount";
+	}
+
 	// 회원 정보 수정
 	@PostMapping(value = "updateAccount.me")
-	public ModelAndView updateAccount(ModelAndView mv,HttpSession session,Member m) {
+	public ModelAndView updateAccount(ModelAndView mv, HttpSession session, Member m) {
 		int result = memberService.updateAccount(m);
 		if (result > 0) {
-			Member loginUser = (Member)session.getAttribute("loginUser");
+			Member loginUser = (Member) session.getAttribute("loginUser");
 			loginUser = memberService.loginMember(loginUser);
 			session.setAttribute("loginUser", loginUser);
-			session.setAttribute("alertMsg","");
-		}else {
-			mv.addObject("errorMsg","");
+			session.setAttribute("alertMsg", "회원정보가 성공적으로 변경되었습니다.");
+			mv.setViewName("member/myAccount");
+		} else {
+			mv.addObject("errorMsg", "에러 ㅜㅜ");
 			mv.setViewName("common/error");
 		}
 		return mv;
 	}
 
-	// 회원 비밀 번호 수정
+	// 회원 비밀번호 수정
 	@PostMapping(value = "updateMemberPwd.me")
-	public ModelAndView updateMemberPwd(ModelAndView mv,HttpSession session,Member m) {
-		Member loginUser = (Member)session.getAttribute("loginUser");
+	public ModelAndView updateMemberPwd(ModelAndView mv, HttpSession session, Member m) {
+		Member loginUser = (Member) session.getAttribute("loginUser");
 		loginUser.setMemberPwd(m.getMemberPwd());
-		int result =  memberService.updateMemberPwd(m);
+		int result = memberService.updateMemberPwd(m);
 		if (result > 0) {
 			loginUser = memberService.loginMember(loginUser);
 			session.setAttribute("loginUser", loginUser);
-			session.setAttribute("alertMsg","");
-		}else {
-			mv.addObject("errorMsg","");
+			session.setAttribute("alertMsg", "비밀번호가 성공적으로 변경되었습니다.");
+			mv.setViewName("member/myAccount");
+		} else {
+			mv.addObject("errorMsg", "에러 ㅜㅜ");
 			mv.setViewName("common/error");
 		}
 		return mv;
+	}
+	
+	// My Order History 페이지 이동
+	@GetMapping
+	public String myOrderHistory() {
+		return "member/myOrderHistory";
 	}
 
 	// 주문 내역 조회
@@ -139,48 +153,48 @@ public class MemberController {
 		return new Gson().toJson(map);
 	}
 
-	//리뷰 작성
+	// 리뷰 작성
 	@PostMapping("addToReview.me")
-	public ModelAndView addToReview(ModelAndView mv, HttpSession session,MultipartFile image, Review r) {
-		
+	public ModelAndView addToReview(ModelAndView mv, HttpSession session, MultipartFile image, Review r) {
+
 		ReviewAttachment rat = new ReviewAttachment();
 		String filePath = "resources/image/productReview";
-		String realPath = session.getServletContext().getRealPath("/"+filePath);
+		String realPath = session.getServletContext().getRealPath("/" + filePath);
 		int result = 0;
-		
+
 		if (!image.getOriginalFilename().equals("")) {// 파일 업로드가 되었다면
 			String originName = image.getOriginalFilename();
 
-			//변경 이미지 명 : review-회원 정보-제품 정보.확장자명
-			String ext =  originName.substring(originName.lastIndexOf("."));
-			String changeName = "review"+r.getWriter()+"-"+r.getProductNo()+ext;
-			
+			// 변경 이미지 명 : review-회원 정보-제품 정보.확장자명
+			String ext = originName.substring(originName.lastIndexOf("."));
+			String changeName = "review" + r.getWriter() + "-" + r.getProductNo() + ext;
+
 			try {
-				image.transferTo(new File(realPath+changeName));
+				image.transferTo(new File(realPath + changeName));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
+
 			rat.setOriginName(image.getOriginalFilename());
 			rat.setChangeName(changeName);
 			rat.setFilePath(filePath);
-			
-			result = memberService.addToReview(r,rat);
-			if(!(result > 0)) {
-				new File(realPath+changeName).delete();
+
+			result = memberService.addToReview(r, rat);
+			if (!(result > 0)) {
+				new File(realPath + changeName).delete();
 			}
-			
+
 		}
-		
-		if(result > 0) {
+
+		if (result > 0) {
 			mv.setViewName("");
-		}else {
-			mv.addObject("errorMsg","");
+		} else {
+			mv.addObject("errorMsg", "");
 			mv.setViewName("common/error");
 		}
 		return mv;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "removeReview.me")
 	public int removeReview(Review r) {

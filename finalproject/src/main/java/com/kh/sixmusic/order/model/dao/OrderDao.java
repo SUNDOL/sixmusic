@@ -83,7 +83,7 @@ public class OrderDao {
 
 
 	public void changeGrade(SqlSessionTemplate sqlSession, int memberNo) {
-		sqlSession.update("memberMapper.changeGrade", memberNo);
+		sqlSession.update("orderMapper.changeGrade", memberNo);
 	}
 
 

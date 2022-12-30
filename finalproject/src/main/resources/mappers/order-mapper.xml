@@ -205,7 +205,7 @@ ORDER BY
 
 <update id="plusPoint" parameterType="member">
 	UPDATE MEMBER
-	SET POINT = #{point}+(
+	SET POINT = POINT + (
 		SELECT POINT
 		FROM (
 			SELECT CEIL(PAYMENT/1000) AS POINT

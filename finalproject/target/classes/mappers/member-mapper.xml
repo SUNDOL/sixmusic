@@ -21,16 +21,33 @@
 	</resultMap>
 	
 	<select id="loginMember" resultMap="memberMap">
-		SELECT *
-		FROM MEMBER
-		WHERE MEMBER_ID = #{memberId} AND MEMBER_PWD = #{memberPwd}
+	SELECT
+	    member_no,
+	    ref_type_no,
+	    member_id,
+	    member_pwd,
+	    member_name,
+	    member_nickname,
+	    ref_grade_no,
+	    to_char(birthday, 'yyyymmdd') as birthday,
+	    zipcode,
+	    address_1,
+	    address_2,
+	    address_3,
+	    point,
+	    phone
+	FROM
+	    member
+	WHERE
+	        member_id = #{memberId}
+	    AND member_pwd = #{memberPwd}
+	    AND status = 'Y'
 	</select>
 	<select id="nicknameCheck" resultType="int" parameterType="String">
 		SELECT COUNT(*)
 		FROM MEMBER
 		WHERE MEMBER_NICKNAME = #{memberNickname}
 	</select>
-	
 	<select id="idCheck" parameterType="string">
 		SELECT COUNT(*) 
 		FROM MEMBER 
@@ -40,8 +57,6 @@
 		INSERT INTO MEMBER (MEMBER_NO, MEMBER_ID, REF_TYPE_NO, MEMBER_PWD, MEMBER_NICKNAME, MEMBER_NAME, PHONE, BIRTHDAY, ZIPCODE, ADDRESS_1, ADDRESS_2, ADDRESS_3)
 		VALUES (SEQ_MEMBER.NEXTVAL, #{memberId}, #{typeNo}, #{memberPwd}, #{memberNickname}, #{memberName}, #{phone}, #{birthday}, #{zipcode}, #{address1}, #{address2}, #{address3})	
 	</insert>
-
-
 
 	<resultMap type="totalOrder" id="totalOrderResult">
 		<result column="ORDER_NO" property="orderNo"/>
@@ -154,10 +169,10 @@
 	<update id="updateAccount" parameterType="member">
 		UPDATE MEMBER
 		SET 
-		<if test="memberName != null">
-			MEMBER_NAME = #{memberName}
-		</if>
 		<trim prefixOverrides=",">
+			<if test="memberName != null">
+				MEMBER_NAME = #{memberName}
+			</if>
 			<if test="memberNickname != null">
 				,MEMBER_NICKNAME = #{memberNickname}
 			</if>
@@ -176,7 +191,7 @@
 		</trim>
 		WHERE MEMBER_NO LIKE #{memberNo}
 	</update>
-	<!-- 회원 비밀번호 저장 -->
+	<!-- 회원 비밀번호 수정 -->
 	<update id="updateMemberPwd" parameterType="member">
 		UPDATE MEMBER
 		SET MEMBER_PWD = #{memberPwd}

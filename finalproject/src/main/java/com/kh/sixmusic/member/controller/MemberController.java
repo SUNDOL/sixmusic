@@ -155,7 +155,11 @@ public class MemberController {
 			String ext =  originName.substring(originName.lastIndexOf("."));
 			String changeName = "review"+r.getWriter()+"-"+r.getProductNo()+ext;
 			
-			new File(realPath+changeName);
+			try {
+				image.transferTo(new File(realPath+changeName));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			
 			rat.setOriginName(image.getOriginalFilename());
 			rat.setChangeName(changeName);

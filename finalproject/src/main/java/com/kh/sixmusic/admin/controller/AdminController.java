@@ -30,7 +30,7 @@ public class AdminController {
 		
 		
 		
-		//글등록을 시키는 메소드 
+		//제품 등록 
 		@PostMapping("addToProduct.ad")
 		public ModelAndView insertBoard(Product p,
 										List<MultipartFile> imageList,
@@ -86,10 +86,18 @@ public class AdminController {
 			
 			return mv;
 		}
+		
+		//이미지 삭제
 		public void deleteImge(ArrayList<ProductAttachment> patList) {
 			for (ProductAttachment pat : patList) {
 				new File("/"+pat.getFilePath()+pat.getChangeName()).delete();
 			}
+		}
+		
+		@ResponseBody
+		@RequestMapping(value = "removeProduct.ad" , produces = "application/json; charset=UTF-8")
+		public int removeProduct(int productNo) {
+			return adminService.removeProduct(productNo);
 		}
 		
 }

@@ -11,4 +11,8 @@ public interface AdminService {
 
 	int addToProductImage(ArrayList<ProductAttachment> patList);
 
+	int removeProduct(int productNo);
+
+
+
 }

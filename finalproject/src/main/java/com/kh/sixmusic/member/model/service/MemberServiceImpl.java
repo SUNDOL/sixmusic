@@ -29,7 +29,6 @@ public class MemberServiceImpl implements MemberService {
 	public int nicknameCheck(String memberNickname) {
 		return memberDao.nicknameCheck(sqlSession, memberNickname);
 	}
-	
 
 	@Override
 	public int idCheck(String MemberId) {
@@ -62,15 +61,20 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
+	public int deleteMember(int memberNo) {
+		return memberDao.deleteMember(sqlSession, memberNo);
+	}
+
+	@Override
 	public int addToReview(Review r, ReviewAttachment rat) {
-		int result = memberDao.addToReview(sqlSession,r);
-		result += memberDao.addToReviewImage(sqlSession,rat);
+		int result = memberDao.addToReview(sqlSession, r);
+		result += memberDao.addToReviewImage(sqlSession, rat);
 		return result;
 	}
 
 	@Override
 	public int removeReview(Review r) {
-		return memberDao.removeReview(sqlSession,r);
+		return memberDao.removeReview(sqlSession, r);
 	}
 
 }

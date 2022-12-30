@@ -291,7 +291,7 @@
                     <h1 class="modal-title fs-5 fw-bold" id="leaveSixmusicLabel">Leave SIXMUSIC</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="#">
+                <form action="deleteMember.me" method="post">
                     <div class="modal-body">
                         <div class="row">
                             <p class="fw-bold">
@@ -309,12 +309,13 @@
                                 </label>
                             </div>
                             <div class="col-8">
+                            	<input type="hidden" name="memberNo" value="${loginUser.memberNo}">
                                 <input type="password" name="confirmPwd" id="confirmPwd" class="form-control" required>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-outline-dark" disabled>Leave SIXMUSIC</button>
+                        <button type="submit" id="submitLeaveSixmusic" class="btn btn-outline-dark" disabled>Leave SIXMUSIC</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">아니오 탈퇴하면 엄마한테 혼나요</button>
                     </div>
                 </form>

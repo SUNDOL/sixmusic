@@ -197,4 +197,9 @@
 		SET MEMBER_PWD = #{memberPwd}
 		WHERE MEMBER_NO LIKE #{memberNo}
 	</update>
+	<update id="deleteMember" parameterType="member">
+		UPDATE MEMBER
+		SET STATUS = 'N'
+		WHERE MEMBER_NO LIKE #{memberNo}
+	</update>
 </mapper>

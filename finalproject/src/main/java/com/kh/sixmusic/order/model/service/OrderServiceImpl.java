@@ -76,7 +76,7 @@ public class OrderServiceImpl implements OrderService {
 		}
 		result += orderDao.plusPoint(sqlSession, m);
 		m = memberDao.loginMember(sqlSession, m);
-				
+		orderDao.changeGrade(sqlSession, m.getMemberNo());
 		return result;
 	}
 

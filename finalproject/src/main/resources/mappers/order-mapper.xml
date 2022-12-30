@@ -217,6 +217,18 @@ ORDER BY
 	)
 	WHERE MEMBER_NO LIKE #{memberNo}
 </update>
+
+<update id="changeGrade" parameterType="_int">
+	UPDATE MEMBER
+	SET REF_GRADE_NO = 2
+	WHERE (
+		SELECT SUM(PAYMENT)
+		FROM TOTAL_ORDER
+		WHERE REF_MEMBER_NO LIKE #{memberNo}
+		AND STATUS LIKE 'Y'
+	) >= 10000000
+	AND MEMBER_NO LIKE #{memberNo}
+</update>
 <!-- 구매 취소시 -->
 
 <update id="cancelOrder" parameterType="totalOrder">

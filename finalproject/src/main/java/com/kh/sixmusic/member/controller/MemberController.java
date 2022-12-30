@@ -94,17 +94,36 @@ public class MemberController {
 	}
 
 	// 회원 정보 수정
-	@ResponseBody
-	@RequestMapping(value = "updateAccount.me")
-	public int updateAccount(Member m) {
-		return memberService.updateAccount(m);
+	@PostMapping(value = "updateAccount.me")
+	public ModelAndView updateAccount(ModelAndView mv,HttpSession session,Member m) {
+		int result = memberService.updateAccount(m);
+		if (result > 0) {
+			Member loginUser = (Member)session.getAttribute("loginUser");
+			loginUser = memberService.loginMember(loginUser);
+			session.setAttribute("loginUser", loginUser);
+			session.setAttribute("alertMsg","");
+		}else {
+			mv.addObject("errorMsg","");
+			mv.setViewName("common/error");
+		}
+		return mv;
 	}
 
 	// 회원 비밀 번호 수정
-	@ResponseBody
-	@RequestMapping(value = "updateMemberPwd.me")
-	public int updateMemberPwd(Member m) {
-		return memberService.updateMemberPwd(m);
+	@PostMapping(value = "updateMemberPwd.me")
+	public ModelAndView updateMemberPwd(ModelAndView mv,HttpSession session,Member m) {
+		Member loginUser = (Member)session.getAttribute("loginUser");
+		loginUser.setMemberPwd(m.getMemberPwd());
+		int result =  memberService.updateMemberPwd(m);
+		if (result > 0) {
+			loginUser = memberService.loginMember(loginUser);
+			session.setAttribute("loginUser", loginUser);
+			session.setAttribute("alertMsg","");
+		}else {
+			mv.addObject("errorMsg","");
+			mv.setViewName("common/error");
+		}
+		return mv;
 	}
 
 	// 주문 내역 조회
@@ -136,7 +155,11 @@ public class MemberController {
 			String ext =  originName.substring(originName.lastIndexOf("."));
 			String changeName = "review"+r.getWriter()+"-"+r.getProductNo()+ext;
 			
-			new File(realPath+changeName);
+			try {
+				image.transferTo(new File(realPath+changeName));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			
 			rat.setOriginName(image.getOriginalFilename());
 			rat.setChangeName(changeName);
@@ -152,6 +175,7 @@ public class MemberController {
 		if(result > 0) {
 			mv.setViewName("");
 		}else {
+			mv.addObject("errorMsg","");
 			mv.setViewName("common/error");
 		}
 		return mv;

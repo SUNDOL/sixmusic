@@ -45,6 +45,10 @@
 		    #{quantity}
 		)
 	</insert>
+	
+	<select id="selectSeqProduct" resultType="_int">
+		SELECT SEQ_PRODUCT.CURRVAL FROM DUAL
+	</select>
 	<insert id="addToProductImage" parameterType="list">
 		INSERT INTO PRODUCT_ATTACHMENT(
 			PRODUCT_ATTACHMENT_NO ,

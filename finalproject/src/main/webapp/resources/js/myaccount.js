@@ -156,20 +156,28 @@ function addressAPI2() {
     }).open();
 };
 
-$("#confirmPwd").keyup(function() {
+$("#confirmPwd").keyup(function () {
+    var memberPwd = $("#confirmPwd").val();
     $.ajax({
-        url: "",
+        url: "deleteMemberPwdCheck.me",
         data: {
-            memberPwd: $("#confirmPwd").val()
+            memberPwd: memberPwd
         },
-        success: function(result) {
+        success: function (result) {
             if (result == 1) {
                 var msg = "비밀번호 확인 완료";
                 $("#confirmPwdMsg").css('color', 'green');
                 $("#confirmPwdMsg").text(msg);
+                $("#submitLeaveSixmusic").attr("disabled", false);
             };
+            if (result != 1) {
+                var msg = "비밀번호 입력";
+                $("#confirmPwdMsg").css('color', 'black');
+                $("#confirmPwdMsg").text(msg);
+                $("#submitLeaveSixmusic").attr("disabled", true);
+            }
         },
-        error: function() {
+        error: function () {
             console.log("통신 실패 ㅜㅜ");
         }
     });

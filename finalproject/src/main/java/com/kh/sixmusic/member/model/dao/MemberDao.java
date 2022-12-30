@@ -16,26 +16,27 @@ public class MemberDao {
 	public Member loginMember(SqlSessionTemplate sqlSession, Member m) {
 		return sqlSession.selectOne("memberMapper.loginMember", m);
 	}
-	
+
 	public int nicknameCheck(SqlSessionTemplate sqlSession, String memberNickname) {
 		return sqlSession.selectOne("memberMapper.nicknameCheck", memberNickname);
 	}
 
-	public int idCheck(SqlSessionTemplate sqlSession, String memberId){
+	public int idCheck(SqlSessionTemplate sqlSession, String memberId) {
 		return sqlSession.selectOne("memberMapper.idCheck", memberId);
 	}
-	
-	public int signUpMember(SqlSessionTemplate sqlSession, Member m){
+
+	public int signUpMember(SqlSessionTemplate sqlSession, Member m) {
 		return sqlSession.insert("memberMapper.signUpMember", m);
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ArrayList<TotalOrder> viewTotalOrder(SqlSessionTemplate sqlSession, int memberNo) {
-		return (ArrayList)sqlSession.selectList("memberMapper.viewTotalOrder", memberNo);
+		return (ArrayList) sqlSession.selectList("memberMapper.viewTotalOrder", memberNo);
 	}
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ArrayList<ProductOrder> viewProductOrder(SqlSessionTemplate sqlSession, int memberNo) {
-		return (ArrayList)sqlSession.selectList("memberMapper.viewProductOrder", memberNo);
+		return (ArrayList) sqlSession.selectList("memberMapper.viewProductOrder", memberNo);
 	}
 
 	public int updateAccount(SqlSessionTemplate sqlSession, Member m) {
@@ -44,6 +45,10 @@ public class MemberDao {
 
 	public int updateMemberPwd(SqlSessionTemplate sqlSession, Member m) {
 		return sqlSession.update("memberMapper.updateMemberPwd", m);
+	}
+
+	public int deleteMember(SqlSessionTemplate sqlSession, int memberNo) {
+		return sqlSession.update("memberMapper.deleteMember", memberNo);
 	}
 
 	public int addToReview(SqlSessionTemplate sqlSession, Review r) {
@@ -57,8 +62,5 @@ public class MemberDao {
 	public int removeReview(SqlSessionTemplate sqlSession, Review r) {
 		return sqlSession.update("memberMapper.updateMemberPwd", r);
 	}
-
-
-
 
 }

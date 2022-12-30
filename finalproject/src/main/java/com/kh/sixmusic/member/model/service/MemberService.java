@@ -17,8 +17,10 @@ public interface MemberService {
 	ArrayList<TotalOrder> viewTotalOrder(int memberNo);
 	ArrayList<ProductOrder> viewProductOrder(int memberNo);
 	
-	int updateAccount(Member m);
 	int updateMemberPwd(Member m);
+	int updateAccount(Member m);
+	int deleteMember(int memberNo);
+	
 	int addToReview(Review r, ReviewAttachment rat);
 	int removeReview(Review r);
 	

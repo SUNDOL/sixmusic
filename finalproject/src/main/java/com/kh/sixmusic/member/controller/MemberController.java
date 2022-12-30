@@ -134,6 +134,36 @@ public class MemberController {
 		return mv;
 	}
 	
+	// 회원 탈퇴 - 비밀번호 확인
+	@ResponseBody
+	@RequestMapping(value = "deleteMemberPwdCheck.me", produces = "application/json; charset=UTF-8")
+	public int deleteMemberPwdCheck(String memberPwd, HttpSession session) {
+		int result = 0;
+		Member loginUser = (Member) session.getAttribute("loginUser");
+		String aa = loginUser.getMemberPwd();
+		if (memberPwd.equals(aa)) {
+			result = 1;
+		} else {
+			result = 0;
+		}
+		return result;
+	}
+	
+	// 회원 탈퇴
+	@PostMapping(value = "deleteMember.me")
+	public ModelAndView deleteMember(ModelAndView mv, HttpSession session, int memberNo) {
+		int result = memberService.deleteMember(memberNo);
+		if (result > 0) {
+			session.setAttribute("alertMsg", "탈퇴가 완료되었습니다. SIXMUSIC을 이용해주셔서 감사합니다. 시발롬아.");
+			session.removeAttribute("loginUser");
+			mv.setViewName("redirect:/");
+		} else {
+			mv.addObject("errorMsg", "에러 ㅜㅜ");
+			mv.setViewName("common/error");
+		}
+		return mv;
+	}
+	
 	// My Order History 페이지 이동
 	@GetMapping
 	public String myOrderHistory() {

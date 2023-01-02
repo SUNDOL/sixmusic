@@ -191,8 +191,6 @@ public class OrderController {
 	private String fail_url = "falure.or";
 	// 취소시 Mapping
 	private String cancel_url = "cancel.or";
-	// 카카오페이지 이동 페이지
-	private String result_url = "common/";
 	@Autowired
 	private MemberService memberService;
 	@GetMapping("success.or")
@@ -202,22 +200,24 @@ public class OrderController {
 		orderService.uploadOrderData(loginUser);
 		
 		session.setAttribute("loginUser", memberService.loginMember(loginUser));
-		mv.addObject("result", "success");
-		mv.setViewName(result_url+"succeess");
+		session.setAttribute("alertMsg", "결제가 완료되었습니다.");
+		mv.setViewName("member/myOrderHistory");
 		return mv;
 	}
 
 	@GetMapping("falure.or")
-	public ModelAndView payFalure(ModelAndView mv) {
+	public ModelAndView payFalure(ModelAndView mv, HttpSession session) {
 		mv.addObject("result", "error");
-		mv.setViewName(result_url+"fail");
+		session.setAttribute("alertMsg", "결제가 실패했습니다.");
+		mv.setViewName("products/confirmation");
 		return mv;
 	}
 
 	@GetMapping("cancel.or")
-	public ModelAndView payCancel(ModelAndView mv) {
+	public ModelAndView payCancel(ModelAndView mv, HttpSession session) {
 		mv.addObject("result", "cancel");
-		mv.setViewName(result_url);
+		session.setAttribute("alertMsg", "결제가 취소되었습니다.");
+		mv.setViewName("products/confirmation");
 		return mv;
 	}
 }

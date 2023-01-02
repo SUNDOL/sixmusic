@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import com.kh.sixmusic.common.model.vo.PageInfo;
 import com.kh.sixmusic.member.model.dao.MemberDao;
 import com.kh.sixmusic.member.model.vo.Member;
-import com.kh.sixmusic.order.model.vo.ProductOrder;
 import com.kh.sixmusic.order.model.vo.TotalOrder;
 import com.kh.sixmusic.product.model.vo.Product;
 import com.kh.sixmusic.product.model.vo.Review;

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.kh.sixmusic.member.model.vo.Member;
 import com.kh.sixmusic.product.model.vo.Product;
 import com.kh.sixmusic.product.model.vo.ProductAttachment;
 
@@ -25,6 +26,18 @@ public class AdminDao {
 
 	public int removeProduct(SqlSessionTemplate sqlSession, int productNo) {
 		return sqlSession.update("adminMapper.removeProduct",productNo);
+	}
+
+	public int removeMember(SqlSessionTemplate sqlSession, int memberNo) {
+		return sqlSession.update("adminMapper.removeMember",memberNo);
+	}
+
+	public int grandPoint(SqlSessionTemplate sqlSession, Member m) {
+		return sqlSession.update("adminMapper.grandPoint",m);
+	}
+
+	public int modifyMemberGrade(SqlSessionTemplate sqlSession, Member m) {
+		return sqlSession.update("adminMapper.modifyMemberGrade",m);
 	}
 
 

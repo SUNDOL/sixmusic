@@ -54,7 +54,7 @@
 			PRODUCT_ATTACHMENT_CHANGE_NAME ,
 			PRODUCT_ATTACHMENT_FILE_PATH)
 		VALUES 
-		<foreach collection="list" item="productAttachment" open="(" close=")" index="index" separator=",">
+		<foreach collection="productAttachment" item="pat" open="(" close=")" index="index" separator=",">
 		    SEQ_PRODUCT_ATTACHMENT.NEXTVAL,
 			SEQ_PRODUCT.CURRVAL,
 			#{originName},
@@ -96,11 +96,20 @@
 		<foreach collection="list" item="productAttachment">
 			UPDATE PRODUCT_ATTACHMENT
 			SET PRODUCT_ATTACHMENT_ORIGIN_NAME = #{originName}
-			, PRODUCT_ATTACHMENT_FILE_PATH = #{filePath}
-			WHERE REF_PRODUCT_NO LIKE #{productNo}
+			, PRODUCT_ATTACHMENT_CHANGE_NAME = #{changeName}
+			<if test="filePath != null">
+				, PRODUCT_ATTACHMENT_FILE_PATH = #{filePath}
+			</if>
 			AND PRODUCT_ATTACHMENT_NO LIKE #{attachmentNo}
 		</foreach>
 	</update>
+	<delete id="removerPoductImage">
+		DELETE FROM PRODUCT_ATTACHMENT
+		AND PRODUCT_ATTACHMENT_NO IN
+		<foreach collection="list" item="attachmentNo" open="(" close=")" index="index" separator=",">
+			#{attachmentNo}
+		</foreach>
+	</delete>
 	<!-- 현재 입력한 제품 번호 -->
 	<select id="selectSeqProduct" resultType="_int">
 		SELECT SEQ_PRODUCT.CURRVAL FROM DUAL
@@ -113,4 +122,21 @@
 		WHERE PRODUCT_NO LIKE #{productNo}
 	</update>
 	
+	<update id="removeMember" parameterType="_int">
+		UPDATE MEMBER
+		SET STATUS = 'N'
+		WHERE MEMBER_NO LIKE #{memberNo}
+	</update>
+	
+	<update id="grandPoint" parameterType="member">
+		UPDATE MEMBER
+		SET POINT = POINT + #{point}
+		WHERE MEMBER_NO LIKE #{memberNo}
+	</update>
+	
+	<update id="modifyMemberGrade" parameterType="member">
+		UPDATE MEMBER
+		SET REF_GRADE_NO = #{gradeNo}
+		WHERE MEMBER_NO LIKE #{memberNo}
+	</update>
 </mapper>

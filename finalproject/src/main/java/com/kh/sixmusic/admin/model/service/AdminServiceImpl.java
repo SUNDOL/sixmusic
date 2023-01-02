@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.sixmusic.admin.model.dao.AdminDao;
+import com.kh.sixmusic.member.model.vo.Member;
 import com.kh.sixmusic.product.model.vo.Product;
 import com.kh.sixmusic.product.model.vo.ProductAttachment;
 
@@ -34,6 +35,21 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public int removeProduct(int productNo) {
 		return AdminDao.removeProduct(sqlSession, productNo);
+	}
+
+	@Override
+	public int removeMember(int memberNo) {
+		return AdminDao.removeMember(sqlSession, memberNo);
+	}
+
+	@Override
+	public int grandPoint(Member m) {
+		return AdminDao.grandPoint(sqlSession, m);
+	}
+
+	@Override
+	public int modifyMemberGrade(Member m) {
+		return AdminDao.modifyMemberGrade(sqlSession, m);
 	}
 
 }

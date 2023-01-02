@@ -21,6 +21,8 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "mybatis-3-config.dtd" >
 		<typeAlias type="com.kh.sixmusic.data.model.vo.Category" alias="category"/>
 		<typeAlias type="com.kh.sixmusic.data.model.vo.Filter" alias="filter"/>
 		<typeAlias type="com.kh.sixmusic.data.model.vo.Price" alias="price"/>
+		<typeAlias type="com.kh.sixmusic.question.model.vo.Question" alias="question"/>
+		<typeAlias type="com.kh.sixmusic.question.model.vo.QuestionCategory" alias="questionCategory"/>
 	</typeAliases>
 	<mappers>
 		<mapper resource="/mappers/member-mapper.xml"/>
@@ -28,5 +30,6 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "mybatis-3-config.dtd" >
 		<mapper resource="/mappers/order-mapper.xml"/>
 		<mapper resource="/mappers/product-mapper.xml"/>
 		<mapper resource="/mappers/admin-mapper.xml"/>
+		<mapper resource="/mappers/question-mapper.xml"/>
 	</mappers>
 </configuration>

@@ -142,6 +142,7 @@
 	                        </a>
 	                        	<ul class="dropdown-menu dropdown-menu-dark">
 	                            	<li><a class="dropdown-item" href="myAccount.me">My Account</a></li>
+	                            	<li><a class="dropdown-item" href="orderHistory.me">My Order History</a></li>
 	                            	<li><a class="dropdown-item" href="logout.me">Sign Out</a></li>
 	                        	</ul>
 	                    </li>
@@ -212,6 +213,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
+        
             <div class="row g-1">
                 <div class="card-body">
                     <a class="nav-link fs-3" href="#cartCollapse" data-bs-toggle="collapse" aria-expanded="false"
@@ -239,6 +241,7 @@
 			           	</div>
 		         </div>
             </div>
+            
             <div class="row g-1">
                 <div class="card-body">
                     <a class="nav-link fs-3" href="#wishlistCollapse" data-bs-toggle="collapse" aria-expanded="false"
@@ -262,15 +265,30 @@
 		         </div>
             </div>
             
+            <c:if test="${not empty loginUser}">
             <div class="row g-1">
                 <div class="card-body">
-                    <a class="nav-link fs-3" href="#">
+                    <a class="nav-link fs-3" href="orderHistory.me">
                         <strong><i class="bi bi-archive"></i> My Order History</strong>
                     </a>
                     <br>
                 </div>
             </div>
+            </c:if>
+            <c:if test="${empty loginUser}">
+            <div class="row g-1">
+                <div class="card-body">
+                    <a class="nav-link fs-3" href="#" onclick="loginRequired();">
+                        <strong><i class="bi bi-archive"></i> My Order History</strong>
+                    </a>
+                    <br>
+                </div>
+            </div>
+            </c:if>
             
+            
+            
+            <c:if test="${not empty loginUser}">
             <div class="row g-1">
                 <div class="card-body">
                     <a class="nav-link fs-3" href="myAccount.me">
@@ -279,6 +297,17 @@
                     <br>
                 </div>
             </div>
+            </c:if>
+            <c:if test="${empty loginUser}">
+            <div class="row g-1">
+                <div class="card-body">
+                    <a class="nav-link fs-3" href="#" onclick="loginRequired();">
+                        <strong><i class="bi bi-gear-wide-connected"></i> My Account</strong>
+                    </a>
+                    <br>
+                </div>
+            </div>
+            </c:if>
             
             <c:choose>
             	<c:when test="${not empty loginUser}">
@@ -418,6 +447,7 @@
             </div>
         </div>
     </div>
+    
 	<!-- Modal: Review Modal -->
     <div class="modal fade" id="reviewModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-2" aria-labelledby="reviewModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg modal-fullscreen-sm-down">

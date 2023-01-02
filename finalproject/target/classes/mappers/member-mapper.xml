@@ -72,19 +72,19 @@
 		<result column="PRODUCT_PRICE" property="price"/>
 		<result column="PRODUCT_COLOR" property="color"/>
 		<result column="QUANTITY" property="quantity"/>
-		<result column="MODEL_NAME" property="price"/>
-		<result column="BRAND_NAME" property="price"/>
+		<result column="MODEL_NAME" property="model"/>
+		<result column="BRAND_NAME" property="brand"/>
 		<result column="CHANGE_NAME" property="changeName"/>
 		<result column="FILE_PATH" property="filePath"/>
 		<result column="COUNT" property="count"/>
+		<result column="REF_ORDER_NO" property="refOrderNo"/>
 	</resultMap>
 	
 	<!-- 주문 조회 -->
 	<select id="viewTotalOrder" parameterType="_int" resultMap="totalOrderResult">
-		SELECT PAYMENT, ORDER_DATE FROM TOTAL_ORDER
+		SELECT ORDER_NO, PAYMENT, ORDER_DATE FROM TOTAL_ORDER
 		WHERE STATUS LIKE 'Y'
 		AND REF_MEMBER_NO LIKE #{memberNo}
-		AND STATUS LIKE
 		ORDER BY ORDER_NO DESC
 	</select>
 	
@@ -96,6 +96,7 @@
 			P.PRODUCT_NAME,
 			P.PRODUCT_PRICE,
 			P.PRODUCT_COLOR,
+			PO.REF_ORDER_NO,
             PO.QUANTITY,
 			M.MODEL_NAME,
 			B.BRAND_NAME,
@@ -123,7 +124,7 @@
 		WHERE O.REF_MEMBER_NO LIKE #{memberNo}
 		AND O.STATUS LIKE 'Y'
         AND PAT.PRODUCT_ATTACHMENT_CHANGE_NAME LIKE '%-1.%'
-		ORDER BY O.ORDER_NO DESC, P.PRODUCT_PRICE DESC;
+		ORDER BY O.ORDER_NO DESC, P.PRODUCT_PRICE DESC
 	</select>
 	<!-- 리뷰 생성 -->
 	<insert id="addToReview" parameterType="Review">

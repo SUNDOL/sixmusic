@@ -158,8 +158,6 @@ public class OrderController {
 		String total_amount = String.valueOf(p.getPrice() - point);
 		// 서버 주소
 		String local = "http://localhost:8887/sixmusic/";
-		//포인트
-		approval_url += point;
 		// 카카오페이로 넘길 값
 		StringBuffer parm = new StringBuffer();
 		parm.append("cid=TC0ONETIME");
@@ -188,7 +186,7 @@ public class OrderController {
 	}
 
 	// 성공시 Mapping
-	private String approval_url = "success.or?point=";
+	private String approval_url = "success.or";
 	// 실패시 Mapping
 	private String fail_url = "falure.or";
 	// 취소시 Mapping

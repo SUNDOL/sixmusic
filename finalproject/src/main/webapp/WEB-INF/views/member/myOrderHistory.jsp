@@ -17,15 +17,15 @@
 <br><br><br><br>
     <div class="container">
         <h1 class="fw-bolder"><span>${loginUser.memberNickname}</span>님의 ORDER HISTORY</h1>
+        <input type="hidden" id="hidden-memberNo" value="${loginUser.memberNo}">
         <br>
         <h3 class="fw-bold">Your Recent Orders</h3>
-        <table class="table table-hover">
+        <table class="table table-hover" style="cursor:pointer;">
             <thead>
                 <tr>
                     <th class="col-md-1">Product</th>
                     <th colspan="2"></th>
                     <th>Date</th>
-                    <th>View</th>
                     <th>Review</th>
                 </tr>
             </thead>
@@ -34,22 +34,91 @@
         </table>
         <br>
         <h3 class="fw-bold">Your Orders</h3>
-        <table class="table table-hover">
+        <table class="table table-hover" style="cursor:pointer;">
             <thead>
                 <tr>
                     <th class="col-md-1">Product</th>
                     <th colspan="2"></th>
                     <th>Date</th>
-                    <th>View</th>
                     <th>Review</th>
                 </tr>
             </thead>
             <tbody id="orderHistoryBody">
             </tbody>
-            <tfoot id="orderHistoryFoot">
-            </tfoot>
         </table>
+        <nav aria-label="Page navigation" class="justify-content-center" style="cursor:pointer;">
+  			<ul class="pagination justify-content-center" id="orderHistoryFoot"></ul>
+  		</nav>
     </div>
+    <!-- Modal for Review/write -->
+    <div class="modal fade" id="writeReview" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="writeReviewLabel" aria-hidden="true">
+  		<div class="modal-dialog modal-lg modal-dialog-centered">
+    		<div class="modal-content">
+      			<div class="modal-header">
+        			<h1 class="modal-title fs-5" id="writeReview"><strong>Write Your Review</strong></h1>
+        			<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      			</div>
+      			<form action="addToReview.me" method="post" enctype="multipart/form-data">
+      			<div class="modal-body">
+	      				<input type="hidden" name="memberNo" value="${loginUser.memberNo}">
+    	  				<input type="hidden" name="memberNickname" value="${loginUser.memberNickname}">
+    	  				<input type="hidden" id="reviewProductNo" name="productNo" value="">
+    	  				<label for="rating" class="form-label">RATING (<span id=showYourRating>0</span>)</label>
+						<input type="range" name="rating" class="form-range" min="0" max="5" id="yourRating" value="0">
+      				<div class="input-group">
+      					<textarea class="form-control" name="content" rows="3" style="resize:none;" placeholder="리뷰 입력"></textarea>
+      				</div>
+      				<br>
+      				<div class="input-group">
+  						<input type="file" class="form-control" id="upfile" name="image">
+      				</div>        			
+      			</div>
+      			<div class="modal-footer">
+        			<button type="submit" class="btn btn-dark">Submit</button>
+        			<button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Close</button>
+      			</div>
+      			</form>
+    		</div>
+  		</div>
+	</div>
+	<!-- Modal for Review/modify -->
+	<div class="modal fade" id="modifyReview" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modifyReviewLabel" aria-hidden="true">
+  		<div class="modal-dialog modal-lg modal-dialog-centered">
+    		<div class="modal-content">
+      			<div class="modal-header">
+        			<h1 class="modal-title fs-5" id="modifyReview"><strong>Modify Your Review</strong></h1>
+        			<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      			</div>
+      			<form>
+      			<div class="modal-body">
+        			<input type="hidden" name="memberNo" value="${loginUser.memberNo}">
+    	  			<input type="hidden" name="memberNickname" value="${loginUser.memberNickname}">
+    	  			<input type="hidden" id="reviewProductNo2" name="productNo" value="">
+        			<label for="rating" class="form-label">RATING (<span id=showYourRating2>0</span>)</label>
+					<input type="range" name="rating" class="form-range" min="0" max="5" id="yourRating2" value="0">
+					<div class="input-group">
+      					<textarea class="form-control" id="yourReview2" name="content" rows="3" style="resize:none;" placeholder="리뷰 입력"></textarea>
+      				</div>
+      				<br>
+      				<div class="input-group">
+      					<span class="input-group-text">현재 업로드된 파일</span>
+      					<input type="text" class="form-control" id="checkFile" name="image" value="" readonly>
+      				</div>
+      				<br>
+      				<div class="input-group">
+  						<input type="file" class="form-control" id="upfile2" name="image">
+      				</div>
+      			</div>
+      			<div class="modal-footer">
+        			<button type="button" class="btn btn-dark">Submit</button>
+        			<button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Close</button>
+      			</div>
+      			</form>
+    		</div>
+  		</div>
+	</div>
+    
+    
 </body>
 <jsp:include page="../common/footer.jsp"/>
 <script src="resources/js/myorderhistory.js"></script>

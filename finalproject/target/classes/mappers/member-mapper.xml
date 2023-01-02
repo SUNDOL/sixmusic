@@ -19,6 +19,23 @@
 		<result column="PHONE" property="phone"/>
 		<result column="STATUS" property="status"/>
 	</resultMap>
+	<resultMap type="review" id="reviewResult">
+		<result column="REVIEW_NO" property="reviewNo"/>
+		<result column="REF_MEMBER_NO" property="memberNo"/>
+		<result column="MEMBER_NICKNAME" property="memberNickname"/>
+		<result column="REF_PRODUCT_NO" property="productNo"/>
+		<result column="REVIEW_CONTENT" property="content"/>
+		<result column="RATING" property="rating"/>
+		<result column="CREATE_DATE" property="createDate"/>
+		<result column="STATUS" property="status"/>
+	</resultMap>
+	<resultMap type="reviewAttachment" id="reviewAttachmentResult">
+		<result column="PRODUCT_ATTACHMENT_NO" property="attachmentNo"/>
+		<result column="REF_REVIEW_NO" property="reviewNo"/>
+		<result column="REVIEW_ATTACHMENT_ORIGIN_NAME" property="originName"/>
+		<result column="REVIEW_ATTACHMENT_CHANGE_NAME" property="changeName"/>
+		<result column="REVIEW_ATTACHMENT_FILE_PATH" property="filePath"/>
+	</resultMap>
 	
 	<select id="loginMember" resultMap="memberMap">
 	SELECT
@@ -207,7 +224,7 @@
 		)
 		VALUES(
 			SEQ_REVIEW.NEXTVAL,
-			#{memberNickname}, 
+			#{memberNo}, 
 			#{productNo}, 
 			#{content},
 			#{rating}
@@ -230,6 +247,36 @@
 			#{filePath}
 		)
 	</insert>
+	<!-- 리뷰 수정 전 조회 -->
+	<select id="showReview" resultType="_int" resultMap="reviewResult">
+	SELECT
+	    r.review_no,
+	    m.member_nickname,
+	    r.ref_product_no,
+	    r.review_content,
+	    r.rating,
+	    r.create_date
+	FROM
+         review r
+    	JOIN member m ON ( m.member_no = r.ref_member_no )
+	WHERE
+        m.member_no = #{memberNo}
+        AND r.ref_product_no = #{productNo}
+    	AND r.status = 'Y'
+	</select>
+	<select id="showReviewPics" resultType="_int" resultMap="reviewAttachmentResult">
+	SELECT
+	    review_attachment_no,
+	    ref_review_no,
+	    review_attachment_origin_name,
+	    review_attachment_change_name,
+	    review_attachment_file_path
+	FROM
+    	review_attachment
+	WHERE
+    	ref_review_no = #{reviewNo}
+	</select>
+	
 	<!-- 리뷰 삭제 -->
 	<update id="removeReview" parameterType="review">
 		UPDATE REVIEW
@@ -274,4 +321,6 @@
 		SET STATUS = 'N'
 		WHERE MEMBER_NO LIKE #{memberNo}
 	</update>
+	
+	
 </mapper>

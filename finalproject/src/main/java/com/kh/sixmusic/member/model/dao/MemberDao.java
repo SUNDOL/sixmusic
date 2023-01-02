@@ -81,4 +81,12 @@ public class MemberDao {
 		return sqlSession.selectOne("memberMapper.orderListCount", memberNo);
 	}
 
+	public Review showReview(SqlSessionTemplate sqlSession, Review r) {
+		return sqlSession.selectOne("memberMapper.showReview", r);
+	}
+
+	public ReviewAttachment showReviewPics(SqlSessionTemplate sqlSession, int reviewNo) {
+		return sqlSession.selectOne("memberMapper.showReviewPics", reviewNo);
+	}
+
 }

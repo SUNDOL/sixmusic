@@ -35,6 +35,8 @@ public class MemberController {
 		Member loginUser = memberService.loginMember(m);
 		if (loginUser != null) {
 			session.setAttribute("loginUser", loginUser);
+		} else {
+			session.setAttribute("alertMsg", "아이디 혹은 비밀번호를 다시 확인해주세요.");
 		}
 		return "redirect:/";
 	}
@@ -165,7 +167,7 @@ public class MemberController {
 	}
 	
 	// My Order History 페이지 이동
-	@GetMapping
+	@GetMapping("orderHistory.me")
 	public String myOrderHistory() {
 		return "member/myOrderHistory";
 	}

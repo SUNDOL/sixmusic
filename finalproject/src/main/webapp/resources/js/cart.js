@@ -85,13 +85,12 @@ function showCart() {
             var cartArray = "";
             let totalPrice = 0;
             if (result.product.length == 0) {
-                cartArray += "<h3 class='text-muted'>Your cart is empty</h3>";
+                cartArray = "<h3 class='text-muted'>Your cart is empty</h3>";
                 $(".owl-cart").html(cartArray);
                 $("#cartAlert").css("display", "none");
                 $("#cartLength-min").css("display", "none");
                 $("#confirmation").css("display", "none");
-            }
-            if (result.product.length != 0) {
+            } else if (result.product.length != 0) {
                 for (var i = 0; i < result.product.length; i++) {
                     var price = (String(result.product[i].price).replace(won, comma));
                     cartArray += "<div class='item'>"
@@ -130,7 +129,7 @@ function showCart() {
                         }
                     }
                 });
-            }
+            };
             $("#cartLength").html(result.product.length);
             $("#cartLength-min").html(result.product.length);
         },
@@ -161,24 +160,23 @@ function showWishlist() {
         success: function (result) {
             var wishArray = "";
             if (result.length == 0) {
-                wishArray += "<h3 class='text-muted'>Your wishlist is empty</h3>";
+                wishArray = "<h3 class='text-muted'>Your wishlist is empty</h3>";
             }
             if (result.length != 0) {
-
+                result.forEach(e => {
+                    wishArray += "<div class='item'>";
+                    wishArray += "<div class='card shadow-sm' style='cursor:pointer;'>";
+                    wishArray += "<div style='text-align:center;'>";
+                    wishArray += "<img class='img-fluid img-responsive card-img-top' src='" + e.filePath + e.changeName + "' alt='thumbnail'>";
+                    wishArray += "</div>";
+                    wishArray += "<div class='card-body'>";
+                    wishArray += "<a href='#' class='card-link text-muted' onclick='openProductModal(" + e.productNo + ");'>View</a>";
+                    wishArray += "<a href='#' class='card-link text-muted' onclick='wishlistRemove(" + e.productNo + ");'>Remove</a>";
+                    wishArray += "</div>"
+                    wishArray += "</div>"
+                    wishArray += "</div>";
+                });
             }
-            result.forEach(e => {
-                wishArray += "<div class='item'>";
-                wishArray += "<div class='card shadow-sm' style='cursor:pointer;'>";
-                wishArray += "<div style='text-align:center;'>";
-                wishArray += "<img class='img-fluid img-responsive card-img-top' src='" + e.filePath + e.changeName + "' alt='thumbnail'>";
-                wishArray += "</div>";
-                wishArray += "<div class='card-body'>";
-                wishArray += "<a href='#' class='card-link text-muted' onclick='openProductModal(" + e.productNo + ");'>View</a>";
-                wishArray += "<a href='#' class='card-link text-muted' onclick='wishlistRemove(" + e.productNo + ");'>Remove</a>";
-                wishArray += "</div>"
-                wishArray += "</div>"
-                wishArray += "</div>";
-            });
             $("#wishlistLength").html(result.length);
             $('.owl-wishlist').html(wishArray);
             $('.owl-wishlist').trigger('destroy.owl.carousel');

@@ -22,4 +22,5 @@ public class Product {
 	private int count;//	REVIEW 의 갯수 값
 	private String filePath;
 	private String changeName;
+	private int refOrderNo;
 }

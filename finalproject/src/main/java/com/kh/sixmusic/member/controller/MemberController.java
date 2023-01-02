@@ -12,15 +12,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
+import com.kh.sixmusic.common.model.vo.PageInfo;
 import com.kh.sixmusic.member.model.service.MemberService;
 import com.kh.sixmusic.member.model.vo.Member;
 import com.kh.sixmusic.order.model.vo.ProductOrder;
 import com.kh.sixmusic.order.model.vo.TotalOrder;
+import com.kh.sixmusic.product.model.vo.Product;
 import com.kh.sixmusic.product.model.vo.Review;
 import com.kh.sixmusic.product.model.vo.ReviewAttachment;
 
@@ -172,16 +175,44 @@ public class MemberController {
 		return "member/myOrderHistory";
 	}
 
-	// 주문 내역 조회
+	// 마지막 주문 내역 조회
 	@ResponseBody
-	@RequestMapping(value = "viewOrder.me", produces = "application/json; charset=UTF-8")
-	public String viewOrder(HttpSession session) {
+	@RequestMapping(value = "viewLastOrder.me", produces = "application/json; charset=UTF-8")
+	public String viewListOrder(HttpSession session) {
 		Member loginUser = (Member) session.getAttribute("loginUser");
-		ArrayList<TotalOrder> toList = memberService.viewTotalOrder(loginUser.getMemberNo());
-		ArrayList<ProductOrder> poList = memberService.viewProductOrder(loginUser.getMemberNo());
+		ArrayList<TotalOrder> toList = memberService.viewLastTotalOrder(loginUser.getMemberNo());
+		ArrayList<Product> poList = memberService.viewLastProductOrder(loginUser.getMemberNo());
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("toList", toList);
 		map.put("poList", poList);
+		return new Gson().toJson(map);
+	}
+	
+	// 주문 내역 조회
+	@ResponseBody
+	@RequestMapping(value = "viewOrder.me", produces = "application/json; charset=UTF-8")
+	public String viewOrder(HttpSession session, @RequestParam(defaultValue = "1") int currentPage) {
+		Member loginUser = (Member) session.getAttribute("loginUser");
+		int listCount = memberService.orderListCount(loginUser.getMemberNo());
+		
+		PageInfo pi = new PageInfo(listCount, currentPage, 10, 10);
+		ArrayList<Product> poList = memberService.viewProductOrder(loginUser.getMemberNo(), pi);
+		
+		ArrayList<Integer> orderNo = new ArrayList<>();
+		
+		for (Product po : poList) {
+			orderNo.add(po.getRefOrderNo());
+		}
+		HashMap<String, Object> toSearch = new HashMap<>();
+		toSearch.put("memberNo", loginUser.getMemberNo());
+		toSearch.put("orderNo", orderNo);
+		ArrayList<TotalOrder> toList = memberService.viewTotalOrder(toSearch);
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("toList", toList);
+		map.put("poList", poList);
+		map.put("pi", pi);
+		
 		return new Gson().toJson(map);
 	}
 

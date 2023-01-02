@@ -79,15 +79,85 @@
 		<result column="COUNT" property="count"/>
 		<result column="REF_ORDER_NO" property="refOrderNo"/>
 	</resultMap>
-	
-	<!-- 주문 조회 -->
-	<select id="viewTotalOrder" parameterType="_int" resultMap="totalOrderResult">
-		SELECT ORDER_NO, PAYMENT, ORDER_DATE FROM TOTAL_ORDER
+	<!-- 주문 상품 갯수 -->
+	<select id="orderListCount" parameterType="_int" resultType="_int">
+		SELECT COUNT(*)
+		FROM PRODUCT_ORDER PO
+		JOIN TOTAL_ORDER O ON(PO.REF_ORDER_NO = O.ORDER_NO)
+		WHERE O.REF_MEMBER_NO LIKE #{memberNo}
+	</select>
+	<!-- 마지막 주문 조회 -->
+	<select id="viewLastTotalOrder" parameterType="_int" resultMap="totalOrderResult">
+		SELECT 
+			ORDER_NO, 
+			PAYMENT, 
+			ORDER_DATE 
+        FROM TOTAL_ORDER
 		WHERE STATUS LIKE 'Y'
 		AND REF_MEMBER_NO LIKE #{memberNo}
+		AND ORDER_NO LIKE (
+		    SELECT MAX(ORDER_NO) 
+		    FROM TOTAL_ORDER 
+		    WHERE REF_MEMBER_NO LIKE #{memberNo}
+	    )
 		ORDER BY ORDER_NO DESC
 	</select>
 	
+	<!-- 주문 조회 -->
+	<select id="viewTotalOrder" parameterType="java.util.HashMap" resultMap="totalOrderResult">
+		SELECT ORDER_NO, PAYMENT, ORDER_DATE 
+		FROM TOTAL_ORDER
+		WHERE STATUS LIKE 'Y'
+		AND REF_MEMBER_NO LIKE #{memberNo}
+		AND ORDER_NO IN
+			<foreach collection="orderNo" item="orderNo" open="(" close=")" separator=",">
+				#{orderNo}
+			</foreach>
+		ORDER BY ORDER_NO DESC
+	</select>
+	<!-- 마지막 주문 내역 조회 -->
+	<select id="viewLastProductOrder" parameterType="_int" resultMap="productResult">
+		SELECT 
+            NVL2(PG.REF_PRODUCT_NO,1,0) COUNT,
+			P.PRODUCT_NO,
+			P.PRODUCT_NAME,
+			P.PRODUCT_PRICE,
+			P.PRODUCT_COLOR,
+			PO.REF_ORDER_NO,
+            PO.QUANTITY,
+			M.MODEL_NAME,
+			B.BRAND_NAME,
+			PAT.PRODUCT_ATTACHMENT_FILE_PATH FILE_PATH,
+			PAT.PRODUCT_ATTACHMENT_CHANGE_NAME CHANGE_NAME
+		FROM PRODUCT P
+		JOIN PRODUCT_ATTACHMENT PAT ON(PAT.REF_PRODUCT_NO = P.PRODUCT_NO)
+		JOIN PRODUCT_ORDER PO ON(PO.REF_PRODUCT_NO = P.PRODUCT_NO)
+		JOIN TOTAL_ORDER O ON(O.ORDER_NO = PO.REF_ORDER_NO)
+		JOIN MODEL M ON(M.MODEL_NO = P.REF_MODEL_NO)
+		JOIN BRAND B ON(B.BRAND_NO = M.REF_BRAND_NO)
+        LEFT JOIN (SELECT REF_PRODUCT_NO
+            FROM PRODUCT_GROUP
+            WHERE GROUP_NO IN(
+                SELECT GROUP_NO
+                FROM PRODUCT_GROUP
+                WHERE REF_PRODUCT_NO IN(
+                    SELECT REF_PRODUCT_NO                      
+                    FROM REVIEW 
+                    WHERE STATUS LIKE 'Y'
+                    AND REF_MEMBER_NO LIKE #{memberNo}
+                )
+            )
+        )PG ON(PG.REF_PRODUCT_NO = P.PRODUCT_NO)
+		WHERE O.REF_MEMBER_NO LIKE #{memberNo}
+		AND O.STATUS LIKE 'Y'
+		AND ORDER_NO LIKE (
+		    SELECT MAX(ORDER_NO) 
+		    FROM TOTAL_ORDER 
+		    WHERE REF_MEMBER_NO LIKE #{memberNo}
+	    )
+        AND PAT.PRODUCT_ATTACHMENT_CHANGE_NAME LIKE '%-1.%'
+		ORDER BY O.ORDER_NO DESC, P.PRODUCT_PRICE DESC
+	</select>
 	<!-- 주문 내역 조회 -->
 	<select id="viewProductOrder" parameterType="_int" resultMap="productResult">
 		SELECT 
@@ -136,11 +206,12 @@
 			RATING
 		)
 		VALUES(
-		SEQ_REVIEW.NEXTVAL,
-		#{memberNickname}, 
-		#{productNo}, 
-		#{content},
-		#{rating})
+			SEQ_REVIEW.NEXTVAL,
+			#{memberNickname}, 
+			#{productNo}, 
+			#{content},
+			#{rating}
+		)
 	</insert>
 	<!-- 리뷰 사진 생성  -->
 	<insert id="addToReviewImage" parameterType="ReviewAttachment">

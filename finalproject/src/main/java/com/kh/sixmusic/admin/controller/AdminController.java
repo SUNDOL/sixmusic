@@ -12,11 +12,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kh.sixmusic.admin.model.service.AdminService;
+import com.kh.sixmusic.common.model.vo.PageInfo;
 import com.kh.sixmusic.product.model.service.ProductService;
 import com.kh.sixmusic.product.model.vo.Product;
 import com.kh.sixmusic.product.model.vo.ProductAttachment;
@@ -28,7 +30,14 @@ public class AdminController {
 		@Autowired
 		private AdminService adminService;
 		
-		
+		public ModelAndView productList(ModelAndView mv,@RequestParam(defaultValue = "1") int currentPage,
+				@RequestParam(defaultValue = "20") int boardLimit) {
+			
+			int listCount = 0;
+			int pageLimit = 10;
+			PageInfo pi = new PageInfo(listCount, currentPage, pageLimit, boardLimit);
+			return mv;
+		}
 		
 		//제품 등록 
 		@PostMapping("addToProduct.ad")
@@ -94,6 +103,7 @@ public class AdminController {
 			}
 		}
 		
+		//제품 제거
 		@ResponseBody
 		@RequestMapping(value = "removeProduct.ad" , produces = "application/json; charset=UTF-8")
 		public int removeProduct(int productNo) {

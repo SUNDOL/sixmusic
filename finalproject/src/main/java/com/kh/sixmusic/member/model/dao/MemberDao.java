@@ -1,12 +1,16 @@
 package com.kh.sixmusic.member.model.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
+
+import com.kh.sixmusic.common.model.vo.PageInfo;
 import com.kh.sixmusic.member.model.vo.Member;
 import com.kh.sixmusic.order.model.vo.ProductOrder;
 import com.kh.sixmusic.order.model.vo.TotalOrder;
+import com.kh.sixmusic.product.model.vo.Product;
 import com.kh.sixmusic.product.model.vo.Review;
 import com.kh.sixmusic.product.model.vo.ReviewAttachment;
 
@@ -30,13 +34,13 @@ public class MemberDao {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public ArrayList<TotalOrder> viewTotalOrder(SqlSessionTemplate sqlSession, int memberNo) {
-		return (ArrayList) sqlSession.selectList("memberMapper.viewTotalOrder", memberNo);
+	public ArrayList<TotalOrder> viewTotalOrder(SqlSessionTemplate sqlSession, HashMap<String, Object> map) {
+		return (ArrayList) sqlSession.selectList("memberMapper.viewTotalOrder", map);
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public ArrayList<ProductOrder> viewProductOrder(SqlSessionTemplate sqlSession, int memberNo) {
-		return (ArrayList) sqlSession.selectList("memberMapper.viewProductOrder", memberNo);
+	public ArrayList<Product> viewProductOrder(SqlSessionTemplate sqlSession, int memberNo, PageInfo pi) {
+		return (ArrayList) sqlSession.selectList("memberMapper.viewProductOrder", memberNo, pi.getRowBounds());
 	}
 
 	public int updateAccount(SqlSessionTemplate sqlSession, Member m) {
@@ -61,6 +65,20 @@ public class MemberDao {
 
 	public int removeReview(SqlSessionTemplate sqlSession, Review r) {
 		return sqlSession.update("memberMapper.updateMemberPwd", r);
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public ArrayList<TotalOrder> viewLastTotalOrder(SqlSessionTemplate sqlSession, int memberNo) {
+		return (ArrayList) sqlSession.selectList("memberMapper.viewLastTotalOrder", memberNo);
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public ArrayList<Product> viewLastProductOrder(SqlSessionTemplate sqlSession, int memberNo) {
+		return (ArrayList) sqlSession.selectList("memberMapper.viewLastProductOrder", memberNo);
+	}
+
+	public int orderListCount(SqlSessionTemplate sqlSession, int memberNo) {
+		return sqlSession.selectOne("memberMapper.orderListCount", memberNo);
 	}
 
 }

@@ -55,7 +55,7 @@
 <script src="resources/js/myorderhistory.js"></script>
 <script>
 	myRecentOrder();
-	myOrderHistory();
+	myOrderHistory(1);
 </script>
 
 </html>

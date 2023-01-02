@@ -1,15 +1,18 @@
 package com.kh.sixmusic.member.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kh.sixmusic.common.model.vo.PageInfo;
 import com.kh.sixmusic.member.model.dao.MemberDao;
 import com.kh.sixmusic.member.model.vo.Member;
 import com.kh.sixmusic.order.model.vo.ProductOrder;
 import com.kh.sixmusic.order.model.vo.TotalOrder;
+import com.kh.sixmusic.product.model.vo.Product;
 import com.kh.sixmusic.product.model.vo.Review;
 import com.kh.sixmusic.product.model.vo.ReviewAttachment;
 
@@ -41,13 +44,13 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public ArrayList<TotalOrder> viewTotalOrder(int memberNo) {
-		return memberDao.viewTotalOrder(sqlSession, memberNo);
+	public ArrayList<TotalOrder> viewTotalOrder(HashMap<String, Object> map) {
+		return memberDao.viewTotalOrder(sqlSession, map);
 	}
 
 	@Override
-	public ArrayList<ProductOrder> viewProductOrder(int memberNo) {
-		return memberDao.viewProductOrder(sqlSession, memberNo);
+	public ArrayList<Product> viewProductOrder(int memberNo, PageInfo pi) {
+		return memberDao.viewProductOrder(sqlSession, memberNo, pi);
 	}
 
 	@Override
@@ -75,6 +78,21 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public int removeReview(Review r) {
 		return memberDao.removeReview(sqlSession, r);
+	}
+
+	@Override
+	public ArrayList<TotalOrder> viewLastTotalOrder(int memberNo) {
+		return memberDao.viewLastTotalOrder(sqlSession, memberNo);
+	}
+
+	@Override
+	public ArrayList<Product> viewLastProductOrder(int memberNo) {
+		return memberDao.viewLastProductOrder(sqlSession, memberNo);
+	}
+
+	@Override
+	public int orderListCount(int memberNo) {
+		return memberDao.orderListCount(sqlSession, memberNo);
 	}
 
 }

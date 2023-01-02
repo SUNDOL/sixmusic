@@ -8,8 +8,7 @@ function kakaoPay(){
         success:function(data){
         	if(data!=null){
             	const url = data['next_redirect_pc_url'];
-            	window.close();
-            	window.open(url);
+                window.open(url, '_self');
         	}else{
         		location.href = 'error.co';
         	}
@@ -17,5 +16,6 @@ function kakaoPay(){
         error:function(error){
             alert(error);
         }
-    })
+    });
+
 }

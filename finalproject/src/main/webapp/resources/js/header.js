@@ -114,7 +114,6 @@ function reviewDetails(reviewNo) {
         },
         success: data => {
             var reviewPic = data.reviewAttachment.filePath + data.reviewAttachment.changeName;
-            console.log(reviewPic);
             $("#review-pic").attr('href', reviewPic);
             $("#review-pic>img").attr('src', reviewPic);
             $("#review-writer").text(data.review.memberNickname);

@@ -95,4 +95,14 @@ public class MemberServiceImpl implements MemberService {
 		return memberDao.orderListCount(sqlSession, memberNo);
 	}
 
+	@Override
+	public Review showReview(Review r) {
+		return memberDao.showReview(sqlSession, r);
+	}
+
+	@Override
+	public ReviewAttachment showReviewPics(int reviewNo) {
+		return memberDao.showReviewPics(sqlSession, reviewNo);
+	}
+
 }

@@ -29,6 +29,8 @@ public interface MemberService {
 	ArrayList<TotalOrder> viewLastTotalOrder(int memberNo);
 	ArrayList<Product> viewLastProductOrder(int memberNo);
 	int orderListCount(int memberNo);
+	Review showReview(Review r);
+	ReviewAttachment showReviewPics(int reviewNo);
 	
 	
 

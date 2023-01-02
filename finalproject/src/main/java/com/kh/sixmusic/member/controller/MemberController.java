@@ -219,43 +219,53 @@ public class MemberController {
 	// 리뷰 작성
 	@PostMapping("addToReview.me")
 	public ModelAndView addToReview(ModelAndView mv, HttpSession session, MultipartFile image, Review r) {
-
 		ReviewAttachment rat = new ReviewAttachment();
 		String filePath = "resources/image/productReview";
 		String realPath = session.getServletContext().getRealPath("/" + filePath);
 		int result = 0;
-
 		if (!image.getOriginalFilename().equals("")) {// 파일 업로드가 되었다면
 			String originName = image.getOriginalFilename();
-
 			// 변경 이미지 명 : review-회원 정보-제품 정보.확장자명
 			String ext = originName.substring(originName.lastIndexOf("."));
-			String changeName = "review" + r.getWriter() + "-" + r.getProductNo() + ext;
-
+			String changeName = "review" + r.getMemberNo() + "-" + r.getProductNo() + ext;
 			try {
 				image.transferTo(new File(realPath + changeName));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-
 			rat.setOriginName(image.getOriginalFilename());
 			rat.setChangeName(changeName);
 			rat.setFilePath(filePath);
-
 			result = memberService.addToReview(r, rat);
 			if (!(result > 0)) {
 				new File(realPath + changeName).delete();
 			}
-
 		}
-
 		if (result > 0) {
-			mv.setViewName("");
+			session.setAttribute("alertMsg", "감사합니다. 고객님의 소중한 리뷰가 성공적으로 등록되었습니다.");
+			mv.setViewName("member/myOrderHistory");
 		} else {
 			mv.addObject("errorMsg", "");
 			mv.setViewName("common/error");
 		}
 		return mv;
+	}
+	
+	// 리뷰 보기/수정
+	@ResponseBody
+	@RequestMapping(value = "showReview.me", produces = "application/json; charset=UTF-8")
+	public String showReview(int productNo, int memberNo) {
+		Review r = new Review();
+		r.setProductNo(productNo);
+		r.setMemberNo(memberNo);
+		r = memberService.showReview(r);
+		int reviewNo = r.getReviewNo();
+		ReviewAttachment reviewAttachment = memberService.showReviewPics(reviewNo);
+		Gson gson = new Gson();
+		HashMap<String, Object> rMap = new HashMap<>();
+		rMap.put("review", r);
+		rMap.put("reviewAttachment", reviewAttachment);
+		return gson.toJson(rMap);
 	}
 
 	@ResponseBody

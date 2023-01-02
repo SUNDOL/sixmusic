@@ -31,7 +31,7 @@
 <!-- Review -->
 <resultMap type="review" id="reviewResult">
 	<result column="REVIEW_NO" property="reviewNo"/>
-	<result column="REF_MEMBER_NO" property="writer"/>
+	<result column="REF_MEMBER_NO" property="memberNo"/>
 	<result column="MEMBER_NICKNAME" property="memberNickname"/>
 	<result column="REF_PRODUCT_NO" property="productNo"/>
 	<result column="REVIEW_CONTENT" property="content"/>

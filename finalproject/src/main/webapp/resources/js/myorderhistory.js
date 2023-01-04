@@ -102,7 +102,6 @@ function showReview(productNo) {
         }
     })
     showReview.show(productNo);
-
 }
 
 function modifyReview(productNo) {
@@ -114,15 +113,26 @@ function modifyReview(productNo) {
             productNo: productNo
         },
         success: data => {
-            var reviewPic = data.reviewAttachment.filePath + data.reviewAttachment.changeName;
+            console.log(data);
             $("#showYourRating2").html(data.review.rating);
             $("#yourRating2").val(data.review.rating);
             $("#yourReview2").val(data.review.content);
+            $("#reviewOriginName2").val(data.reviewAttachment.originName);
+            $("#reviewFilePath2").val(data.reviewAttachment.filePath);
+            $("#reviewChangeName2").val(data.reviewAttachment.changeName);
             $("#checkFile").val(data.reviewAttachment.changeName);
+            $("#upfile2Div-1").show();
+            $("#upfile2Div-2").hide();
+            $("#upfile2").attr("required", false);
         }
     })
     modifyReview.show(productNo);
+};
 
+function modifyPic() {
+    $("#upfile2Div-1").hide();
+    $("#upfile2Div-2").show();
+    $("#upfile2").attr("required", true);
 };
 
 $("#yourRating").on("change", function() {

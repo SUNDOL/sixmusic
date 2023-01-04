@@ -24,6 +24,7 @@ import com.kh.sixmusic.member.model.vo.Member;
 import com.kh.sixmusic.order.model.vo.ProductOrder;
 import com.kh.sixmusic.order.model.vo.TotalOrder;
 import com.kh.sixmusic.product.model.vo.Product;
+import com.kh.sixmusic.product.model.vo.ProductAttachment;
 import com.kh.sixmusic.product.model.vo.Review;
 import com.kh.sixmusic.product.model.vo.ReviewAttachment;
 
@@ -138,7 +139,7 @@ public class MemberController {
 		}
 		return mv;
 	}
-	
+
 	// 회원 탈퇴 - 비밀번호 확인
 	@ResponseBody
 	@RequestMapping(value = "deleteMemberPwdCheck.me", produces = "application/json; charset=UTF-8")
@@ -153,7 +154,7 @@ public class MemberController {
 		}
 		return result;
 	}
-	
+
 	// 회원 탈퇴
 	@PostMapping(value = "deleteMember.me")
 	public ModelAndView deleteMember(ModelAndView mv, HttpSession session, int memberNo) {
@@ -168,7 +169,7 @@ public class MemberController {
 		}
 		return mv;
 	}
-	
+
 	// My Order History 페이지 이동
 	@GetMapping("orderHistory.me")
 	public String myOrderHistory() {
@@ -187,19 +188,19 @@ public class MemberController {
 		map.put("poList", poList);
 		return new Gson().toJson(map);
 	}
-	
+
 	// 주문 내역 조회
 	@ResponseBody
 	@RequestMapping(value = "viewOrder.me", produces = "application/json; charset=UTF-8")
 	public String viewOrder(HttpSession session, @RequestParam(defaultValue = "1") int currentPage) {
 		Member loginUser = (Member) session.getAttribute("loginUser");
 		int listCount = memberService.orderListCount(loginUser.getMemberNo());
-		
+
 		PageInfo pi = new PageInfo(listCount, currentPage, 10, 10);
 		ArrayList<Product> poList = memberService.viewProductOrder(loginUser.getMemberNo(), pi);
-		
+
 		ArrayList<Integer> orderNo = new ArrayList<>();
-		
+
 		for (Product po : poList) {
 			orderNo.add(po.getRefOrderNo());
 		}
@@ -207,12 +208,12 @@ public class MemberController {
 		toSearch.put("memberNo", loginUser.getMemberNo());
 		toSearch.put("orderNo", orderNo);
 		ArrayList<TotalOrder> toList = memberService.viewTotalOrder(toSearch);
-		
+
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("toList", toList);
 		map.put("poList", poList);
 		map.put("pi", pi);
-		
+
 		return new Gson().toJson(map);
 	}
 
@@ -220,7 +221,7 @@ public class MemberController {
 	@PostMapping("addToReview.me")
 	public ModelAndView addToReview(ModelAndView mv, HttpSession session, MultipartFile image, Review r) {
 		ReviewAttachment rat = new ReviewAttachment();
-		String filePath = "resources/image/productReview";
+		String filePath = "resources/image/productReview/";
 		String realPath = session.getServletContext().getRealPath("/" + filePath);
 		int result = 0;
 		if (!image.getOriginalFilename().equals("")) {// 파일 업로드가 되었다면
@@ -245,12 +246,12 @@ public class MemberController {
 			session.setAttribute("alertMsg", "감사합니다. 고객님의 소중한 리뷰가 성공적으로 등록되었습니다.");
 			mv.setViewName("member/myOrderHistory");
 		} else {
-			mv.addObject("errorMsg", "");
+			mv.addObject("errorMsg", "에러 발생");
 			mv.setViewName("common/error");
 		}
 		return mv;
 	}
-	
+
 	// 리뷰 보기/수정
 	@ResponseBody
 	@RequestMapping(value = "showReview.me", produces = "application/json; charset=UTF-8")
@@ -266,6 +267,24 @@ public class MemberController {
 		rMap.put("review", r);
 		rMap.put("reviewAttachment", reviewAttachment);
 		return gson.toJson(rMap);
+	}
+
+	// 리뷰 수정
+	@PostMapping("confirmReviewModification.me")
+	public void modifyReview(ModelAndView mv, HttpSession session, MultipartFile image, Review r, ReviewAttachment rat) {
+		System.out.println("review: " + r);
+		System.out.println("filePath: " + rat);
+		String savePath = session.getServletContext().getRealPath("/resources/images/productReview/");
+//		String filePath = "resources/image/productReview/";
+//		String realPath = session.getServletContext().getRealPath("/" + filePath);
+//		int result = 0;
+//		// 1. 기존 이미지 삭제 후 새 이미지로 변경
+		new File(savePath + rat.getChangeName()).delete();
+		if (!image.getOriginalFilename().equals("")) {
+			new File(savePath + rat.getChangeName()).delete();
+		}
+//		
+//		return mv;
 	}
 
 	@ResponseBody

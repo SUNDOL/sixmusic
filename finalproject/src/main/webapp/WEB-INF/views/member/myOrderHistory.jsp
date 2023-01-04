@@ -15,6 +15,7 @@
 <jsp:include page="../common/header.jsp"/>
 <body>
 <br><br><br><br>
+
     <div class="container">
         <h1 class="fw-bolder"><span>${loginUser.memberNickname}</span>님의 ORDER HISTORY</h1>
         <input type="hidden" id="hidden-memberNo" value="${loginUser.memberNo}">
@@ -50,6 +51,7 @@
   			<ul class="pagination justify-content-center" id="orderHistoryFoot"></ul>
   		</nav>
     </div>
+    
     <!-- Modal for Review/write -->
     <div class="modal fade" id="writeReview" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="writeReviewLabel" aria-hidden="true">
   		<div class="modal-dialog modal-lg modal-dialog-centered">
@@ -66,11 +68,11 @@
     	  				<label for="rating" class="form-label">RATING (<span id=showYourRating>0</span>)</label>
 						<input type="range" name="rating" class="form-range" min="0" max="5" id="yourRating" value="0">
       				<div class="input-group">
-      					<textarea class="form-control" name="content" rows="3" style="resize:none;" placeholder="리뷰 입력"></textarea>
+      					<textarea class="form-control" name="content" rows="3" style="resize:none;" placeholder="리뷰 입력" required></textarea>
       				</div>
       				<br>
       				<div class="input-group">
-  						<input type="file" class="form-control" id="upfile" name="image">
+  						<input type="file" class="form-control" id="upfile" name="image" required>
       				</div>        			
       			</div>
       			<div class="modal-footer">
@@ -81,6 +83,7 @@
     		</div>
   		</div>
 	</div>
+	
 	<!-- Modal for Review/modify -->
 	<div class="modal fade" id="modifyReview" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modifyReviewLabel" aria-hidden="true">
   		<div class="modal-dialog modal-lg modal-dialog-centered">
@@ -89,28 +92,31 @@
         			<h1 class="modal-title fs-5" id="modifyReview"><strong>Modify Your Review</strong></h1>
         			<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       			</div>
-      			<form>
+      			<form action="confirmReviewModification.me" method="post" enctype="multipart/form-data">
       			<div class="modal-body">
         			<input type="hidden" name="memberNo" value="${loginUser.memberNo}">
     	  			<input type="hidden" name="memberNickname" value="${loginUser.memberNickname}">
-    	  			<input type="hidden" id="reviewProductNo2" name="productNo" value="">
+    	  			<input type="hidden" id="reviewProductNo2" name="refProductNo" value="">
+    	  			<input type="hidden" id="reviewOriginName2" name="originName" value="">
+    	  			<input type="hidden" id="reviewFilePath2" name="filePath" value="">
+    	  			<input type="hidden" id="reviewChangeName2" name="changeName" value="">
         			<label for="rating" class="form-label">RATING (<span id=showYourRating2>0</span>)</label>
 					<input type="range" name="rating" class="form-range" min="0" max="5" id="yourRating2" value="0">
 					<div class="input-group">
       					<textarea class="form-control" id="yourReview2" name="content" rows="3" style="resize:none;" placeholder="리뷰 입력"></textarea>
       				</div>
       				<br>
-      				<div class="input-group">
-      					<span class="input-group-text">현재 업로드된 파일</span>
-      					<input type="text" class="form-control" id="checkFile" name="image" value="" readonly>
+      				<div class="input-group" id="upfile2Div-1">
+      					<span class="input-group-text">현재 첨부파일</span>
+      					<input type="text" class="form-control" id="checkFile" name="image2" value="" readonly>
+      					<a class="btn btn-outline-dark" onclick="modifyPic();">변경</a>
       				</div>
-      				<br>
-      				<div class="input-group">
+      				<div class="input-group" id="upfile2Div-2">
   						<input type="file" class="form-control" id="upfile2" name="image">
       				</div>
       			</div>
       			<div class="modal-footer">
-        			<button type="button" class="btn btn-dark">Submit</button>
+        			<button type="submit" class="btn btn-dark">Submit</button>
         			<button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Close</button>
       			</div>
       			</form>

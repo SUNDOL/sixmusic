@@ -74,7 +74,7 @@ public class AdminController {
 			mv.addObject("alertMsg", "제품등록에 성공했습니다.");
 			mv.setViewName("");
 		} else {
-			deleteImge(patList);
+			deleteImge(patList, savePath);
 			mv.setViewName("common/error");
 		}
 
@@ -82,9 +82,9 @@ public class AdminController {
 	}
 
 	// 이미지 삭제
-	public void deleteImge(ArrayList<ProductAttachment> patList) {
+	public void deleteImge(ArrayList<ProductAttachment> patList, String savePath) {
 		for (ProductAttachment pat : patList) {
-			new File("/" + pat.getFilePath() + pat.getChangeName()).delete();
+			new File(savePath + pat.getChangeName()).delete();
 		}
 	}
 

@@ -31,6 +31,7 @@ public interface MemberService {
 	int orderListCount(int memberNo);
 	Review showReview(Review r);
 	ReviewAttachment showReviewPics(int reviewNo);
+	int confirmReviewModification(Review r, ReviewAttachment rat);
 	
 	
 

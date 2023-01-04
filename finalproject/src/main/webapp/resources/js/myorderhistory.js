@@ -117,10 +117,11 @@ function modifyReview(productNo) {
             $("#showYourRating2").html(data.review.rating);
             $("#yourRating2").val(data.review.rating);
             $("#yourReview2").val(data.review.content);
-            $("#reviewOriginName2").val(data.reviewAttachment.originName);
+            $("#reviewNo2").val(data.reviewAttachment.reviewNo);
             $("#reviewFilePath2").val(data.reviewAttachment.filePath);
             $("#reviewChangeName2").val(data.reviewAttachment.changeName);
-            $("#checkFile").val(data.reviewAttachment.changeName);
+            $("#productNo2").val(data.review.productNo);
+            $("#checkFile").val(data.reviewAttachment.originName);
             $("#upfile2Div-1").show();
             $("#upfile2Div-2").hide();
             $("#upfile2").attr("required", false);

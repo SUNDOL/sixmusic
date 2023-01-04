@@ -34,6 +34,12 @@ public class AdminController {
 
 	@Autowired
 	private AdminService adminService;
+	
+	@GetMapping("admin.ad")
+	public String admin() {
+		return "admin/admin";
+	}
+	
 	//제품 등록폼 이동
 	@ResponseBody
 	@RequestMapping("addToProductData.ad")
@@ -53,7 +59,7 @@ public class AdminController {
 		return new Gson().toJson(map);
 	}
 	
-	
+
 	// 제품 등록
 	// 브랜드 / 모델
 	@PostMapping("addToProduct.ad")

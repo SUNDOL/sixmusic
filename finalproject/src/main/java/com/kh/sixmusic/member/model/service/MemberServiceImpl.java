@@ -104,4 +104,13 @@ public class MemberServiceImpl implements MemberService {
 		return memberDao.showReviewPics(sqlSession, reviewNo);
 	}
 
+	@Override
+	public int confirmReviewModification(Review r, ReviewAttachment rat) {
+		int result = memberDao.ReviewModification(sqlSession, r);
+		if (rat != null) {
+			result *= memberDao.ReviewAttachmentModification(sqlSession, rat);
+		}
+		return result;
+	}
+
 }

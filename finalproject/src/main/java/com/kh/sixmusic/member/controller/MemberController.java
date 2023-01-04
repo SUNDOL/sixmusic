@@ -271,20 +271,43 @@ public class MemberController {
 
 	// 리뷰 수정
 	@PostMapping("confirmReviewModification.me")
-	public void modifyReview(ModelAndView mv, HttpSession session, MultipartFile image, Review r, ReviewAttachment rat) {
-		System.out.println("review: " + r);
-		System.out.println("filePath: " + rat);
-		String savePath = session.getServletContext().getRealPath("/resources/images/productReview/");
-//		String filePath = "resources/image/productReview/";
-//		String realPath = session.getServletContext().getRealPath("/" + filePath);
-//		int result = 0;
-//		// 1. 기존 이미지 삭제 후 새 이미지로 변경
-		new File(savePath + rat.getChangeName()).delete();
+	public ModelAndView modifyReview(ModelAndView mv, HttpSession session, MultipartFile image, Review r, ReviewAttachment rat) {
+		String realPath = session.getServletContext().getRealPath("/"+rat.getFilePath());
+		ReviewAttachment changeRat = null;
+		// 1. 기존 이미지 삭제 후 새 이미지로 변경
 		if (!image.getOriginalFilename().equals("")) {
-			new File(savePath + rat.getChangeName()).delete();
+			changeRat = new ReviewAttachment();
+			String originName = image.getOriginalFilename();
+			// 변경 이미지 명 : review-회원 정보-제품 정보.확장자명
+			String ext = originName.substring(originName.lastIndexOf("."));
+			String changeName = "review-" + r.getMemberNo() + "-" + r.getProductNo() + ext;
+			try {
+				image.transferTo(new File(realPath + changeName));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			changeRat.setReviewNo(rat.getReviewNo());
+			changeRat.setOriginName(originName);
+			changeRat.setChangeName(changeName);
+			changeRat.setFilePath(rat.getFilePath());
+	
 		}
-//		
-//		return mv;
+		int result = memberService.confirmReviewModification(r, changeRat);
+		if(result>0) {
+			if (changeRat!= null) {
+				new File(realPath + rat.getChangeName()).delete();
+			}
+			session.setAttribute("alertMsg", "리뷰 수정에 성공했습니다!!!");
+			
+		}else {
+			if (changeRat!= null) {
+				new File(realPath + changeRat.getChangeName()).delete();
+			}
+			session.setAttribute("alertMsg", "리뷰 수정에 실패했습니다.");
+			
+		}
+		mv.setViewName("member/myOrderHistory");
+		return mv;
 	}
 
 	@ResponseBody

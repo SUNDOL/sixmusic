@@ -89,4 +89,12 @@ public class MemberDao {
 		return sqlSession.selectOne("memberMapper.showReviewPics", reviewNo);
 	}
 
+	public int ReviewModification(SqlSessionTemplate sqlSession, Review r) {
+		return sqlSession.update("memberMapper.ReviewModification", r);
+	}
+
+	public int ReviewAttachmentModification(SqlSessionTemplate sqlSession, ReviewAttachment rat) {
+		return sqlSession.update("memberMapper.ReviewAttachmentModification", rat);
+	}
+
 }

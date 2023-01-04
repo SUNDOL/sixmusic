@@ -96,10 +96,10 @@
       			<div class="modal-body">
         			<input type="hidden" name="memberNo" value="${loginUser.memberNo}">
     	  			<input type="hidden" name="memberNickname" value="${loginUser.memberNickname}">
-    	  			<input type="hidden" id="reviewProductNo2" name="refProductNo" value="">
-    	  			<input type="hidden" id="reviewOriginName2" name="originName" value="">
-    	  			<input type="hidden" id="reviewFilePath2" name="filePath" value="">
-    	  			<input type="hidden" id="reviewChangeName2" name="changeName" value="">
+    	  			<input type="hidden" id="reviewFilePath2" name="filePath">
+    	  			<input type="hidden" id="reviewChangeName2" name="changeName">
+    	  			<input type="hidden" id="reviewNo2" name="reviewNo">
+    	  			<input type="hidden" id="productNo2" name="productNo">
         			<label for="rating" class="form-label">RATING (<span id=showYourRating2>0</span>)</label>
 					<input type="range" name="rating" class="form-range" min="0" max="5" id="yourRating2" value="0">
 					<div class="input-group">

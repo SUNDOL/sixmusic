@@ -277,7 +277,21 @@
 	WHERE
     	ref_review_no = #{reviewNo}
 	</select>
-	
+	<!-- 리뷰 수정 -->
+	<update id="ReviewModification" parameterType="review">
+		UPDATE REVIEW
+		SET REVIEW_CONTENT = #{content},
+		RATING = #{rating}
+		WHERE STATUS LIKE 'Y'
+		AND REVIEW_NO LIKE #{reviewNo}
+	</update>
+	<update id="ReviewAttachmentModification" parameterType="reviewAttachment">
+		UPDATE REVIEW_ATTACHMENT
+		SET REVIEW_ATTACHMENT_ORIGIN_NAME = #{originName},
+		REVIEW_ATTACHMENT_CHANGE_NAME = #{changeName},
+		REVIEW_ATTACHMENT_FILE_PATH = #{filePath}
+		WHERE REF_REVIEW_NO LIKE #{reviewNo}
+	</update>
 	<!-- 리뷰 삭제 -->
 	<update id="removeReview" parameterType="review">
 		UPDATE REVIEW

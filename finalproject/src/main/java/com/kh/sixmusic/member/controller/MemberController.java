@@ -312,7 +312,9 @@ public class MemberController {
 
 	@ResponseBody
 	@RequestMapping(value = "removeReview.me")
-	public int removeReview(Review r) {
+	public int removeReview(HttpSession session,Review r) {
+		Member loginUser = (Member)session.getAttribute("loginUser");
+		r.setMemberNo(loginUser.getMemberNo());
 		return memberService.removeReview(r);
 	}
 

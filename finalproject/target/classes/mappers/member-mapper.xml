@@ -297,7 +297,7 @@
 		UPDATE REVIEW
 		SET STATUS = 'N'
 		WHERE REF_MEMBER_NO LIKE #{memberNo}
-		AND REVIEW_NO LIKE #{reviewNo}
+		AND REF_PRODUCT_NO LIKE #{productNo}
 	</update>
 	<!-- 회원정보 변경 -->
 	<update id="updateAccount" parameterType="member">

@@ -95,7 +95,7 @@
                         <h1 class="modal-title fs-5 fw-bold" id="newBrandLabel">NEW BRAND</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form action="#">
+                    <form action="addToBrand.ad" method="post">
                         <div class="modal-body">
                             <label for="newBrandName" class="form-label fw-bold">Jot Down</label>
                             <input type="text" name="brand" id="newBrandName" class="form-control" required>
@@ -118,7 +118,7 @@
                         <h1 class="modal-title fs-5 fw-bold" id="newModelLabel">NEW MODEL</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form action="#">
+                    <form action="addToModel.ad" method="post">
                         <div class="modal-body">
                             <div class="row row-cols-1 row-cols-md-2 g-3">
                                 <div class="col">
@@ -135,7 +135,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-dark">Submit</button>
+                            <button type="submit" class="btn btn-dark">Submit</button>
                             <button type="button" class="btn btn-outline-secondary"
                                 data-bs-dismiss="modal">Close</button>
                         </div>
@@ -152,7 +152,7 @@
                         <h1 class="modal-title fs-5 fw-bold" id="modiBrandLabel">MODIFY BRAND INFO</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form action="#">
+                    <form action="modiBrand.ad" method="post">
                         <div class="modal-body">
                             <div class="row row-cols-1 row-cols-md-2 g-3">
                                 <div class="col">
@@ -169,7 +169,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-dark">Submit</button>
+                            <button type="submit" class="btn btn-dark">Submit</button>
                             <button type="button" class="btn btn-outline-secondary"
                                 data-bs-dismiss="modal">Close</button>
                         </div>
@@ -186,7 +186,7 @@
                         <h1 class="modal-title fs-5 fw-bold" id="modiModelLabel">MODIFY MODEL INFO</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form action="#">
+                    <form action="modiModel.ad" method="post">
                         <div class="modal-body">
                             <div class="row row-cols-1 row-cols-md-2 g-3">
                                 <div class="col">
@@ -213,7 +213,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-dark">Submit</button>
+                            <button type="submit" class="btn btn-dark">Submit</button>
                             <button type="button" class="btn btn-outline-secondary"
                                 data-bs-dismiss="modal">Close</button>
                         </div>

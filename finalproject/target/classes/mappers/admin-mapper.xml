@@ -111,22 +111,22 @@
 		</foreach>
 	</delete>
 	<!-- 제품 등록 데이터 -->
-	<select id="selectAllCategory" parameterType="category">
+	<select id="selectAllCategory" resultType="category">
 		SELECT CATEGORY_NO AS categoryNo,
 		CATEGORY_NAME AS name
 		FROM CATEGORY 
 		WHERE STATUS LIKE 'Y'   
 	    ORDER BY CATEGORY_NO
 	</select>
-	<select id="selectAllBrand" parameterType="brand">
+	<select id="selectAllBrand" resultType="brand">
 		SELECT
-	    BRAND_NO AS brandNo brandNo,
-		BRAND_NAME AS name name
+	    BRAND_NO as brandNo,
+		BRAND_NAME as name
 		FROM BRAND
 		WHERE STATUS LIKE 'Y'   
 	    ORDER BY BRAND_NO
 	</select>
-	<select id="selectAllType" parameterType="type">
+	<select id="selectAllType" resultType="type">
 		SELECT TYPE_NO AS typeNo,
 		REF_CATEGORY_NO AS categoryNo,
 		TYPE_NAME AS name
@@ -134,17 +134,27 @@
 		WHERE STATUS LIKE 'Y'   
 	    ORDER BY TYPE_NO
 	</select>
-	<select id="selectAllModel" parameterType="model">
+	<select id="selectAllModel" resultType="model">
 		SELECT MODEL_NO AS modelNo,
-		SELECT MODEL_NAME AS name,
+		MODEL_NAME AS name,
 		REF_BRAND_NO AS brandNo
 		FROM MODEL
 		WHERE STATUS LIKE 'Y'   
 	    ORDER BY MODEL_NO
 	</select>
 	
+	<select id="selectModel" parameterType="_int" resultType="model">
+		SELECT MODEL_NO AS modelNo,
+		MODEL_NAME AS name,
+		REF_BRAND_NO AS brandNo
+		FROM MODEL
+		WHERE STATUS LIKE 'Y'
+		AND REF_BRAND_NO LIKE #{brandNo}
+	    ORDER BY MODEL_NO
+	</select>
 	
-	<select id="selectAllProduct" parameterType="product">
+	
+	<select id="selectAllProduct" resultType="product">
 		SELECT
 	    P.PRODUCT_NO AS productNo,
 		P.REF_CATEGORY_NO AS category,
@@ -154,7 +164,7 @@
 		P.PRODUCT_NAME AS name,
 		M.REF_BRAND_NO AS brand,
 		P.PRODUCT_CONTENT AS content,
-		P.PRODUCT_PRICE AS price,
+		P.PRODUCT_PRICE AS price
 		FROM PRODUCT P
 		JOIN CATEGORY C ON(C.CATEGORY_NO = P.REF_CATEGORY_NO)
 		JOIN MODEL M ON(M.MODEL_NO = P.REF_MODEL_NO)
@@ -190,7 +200,17 @@
 			#{brandNo}
 		)
 	</insert>
-	
+	<!-- 브랜드 모델 수정 -->
+	<update id="modiBrand" parameterType="brand">
+		UPDATE BRAND
+		SET BRAND_NAME = #{name}
+		WHERE BRAND_NO LIKE #{brandNo}
+	</update>
+	<update id="modiModel" parameterType="model">
+		UPDATE MODEL
+		SET MODEL_NAME = #{name}
+		WHERE MODEL_NO LIKE #{modelNo}
+	</update>
 	<!-- 현재 입력한 데이터 시퀀스 번호 -->
 	<select id="selectSeqProduct" resultType="_int">
 		SELECT SEQ_PRODUCT.CURRVAL FROM DUAL

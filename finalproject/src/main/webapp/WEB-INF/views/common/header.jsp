@@ -147,6 +147,20 @@
 	                        	</ul>
 	                    </li>
                     </c:if>
+                    <c:if test="${not empty loginUser && loginUser.gradeNo eq 3}">
+	                    <li class="nav-item dropdown">
+	                    	<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+	                        aria-expanded="false">
+	                        ${loginUser.memberNickname}님
+	                        </a>
+	                        	<ul class="dropdown-menu dropdown-menu-dark">
+	                        		<li><a class="dropdown-item" href="admin.ad">Administrator</a></li>
+	                            	<li><a class="dropdown-item" href="myAccount.me">My Account</a></li>
+	                            	<li><a class="dropdown-item" href="orderHistory.me">My Order History</a></li>
+	                            	<li><a class="dropdown-item" href="logout.me">Sign Out</a></li>
+	                        	</ul>
+	                    </li>
+                    </c:if>
                     <li>
                         <a class="nav-link" data-bs-toggle="offcanvas" href="#offcanvasCart" role="button"
                             aria-controls="offcanvasCart">

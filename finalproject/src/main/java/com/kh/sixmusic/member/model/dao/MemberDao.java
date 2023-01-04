@@ -64,7 +64,7 @@ public class MemberDao {
 	}
 
 	public int removeReview(SqlSessionTemplate sqlSession, Review r) {
-		return sqlSession.update("memberMapper.updateMemberPwd", r);
+		return sqlSession.update("memberMapper.removeReview", r);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })

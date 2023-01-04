@@ -33,6 +33,7 @@ function myOrderHistory(currentPage) {
         url: "viewOrder.me",
         data:{currentPage:currentPage},
         success: function (result) {
+            console.log(result);
             var orderHistoryBody = "";
             for (var j = 0; j < result.poList.length; j++) {
                 for (var i = 0; i < result.toList.length; i++) {
@@ -129,6 +130,26 @@ function modifyReview(productNo) {
     })
     modifyReview.show(productNo);
 };
+
+function deleteReview(productNo){
+    $.ajax({
+        url:"removeReview.me",
+        method:"post",
+        data:{productNo:productNo},
+        success:result=>{
+            if(result>0){
+                alert("리뷰가 제거 되었습니다!!!");
+                location.href="orderHistory.me";
+            }else{
+                alert("리뷰 제거에 실패했습니다.");
+            }
+        },
+        error:()=>{
+            alert("리뷰제거 도중 오류가 발생했습니다!!!");
+        }
+        
+    });
+}
 
 function modifyPic() {
     $("#upfile2Div-1").hide();

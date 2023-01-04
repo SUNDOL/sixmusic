@@ -134,7 +134,7 @@
 		                    </a>
                         </li>
                     </c:if>
-                    <c:if test="${not empty loginUser}">
+                    <c:if test="${not empty loginUser && loginUser.gradeNo ne 3}">
 	                    <li class="nav-item dropdown">
 	                    	<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
 	                        aria-expanded="false">

@@ -38,6 +38,12 @@ public interface AdminService {
 
 	int addToModel(Model m);
 
+	int modiBrand(Brand b);
+
+	int modiModel(Model m);
+
+	ArrayList<Model> selectModel(int brandNo);
+
 
 
 }

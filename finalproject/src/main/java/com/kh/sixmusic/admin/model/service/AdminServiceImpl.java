@@ -99,4 +99,19 @@ public class AdminServiceImpl implements AdminService {
 		return result;
 	}
 
+	@Override
+	public int modiBrand(Brand b) {
+		return AdminDao.modiBrand(sqlSession, b);
+	}
+
+	@Override
+	public int modiModel(Model m) {
+		return AdminDao.modiModel(sqlSession, m);
+	}
+
+	@Override
+	public ArrayList<Model> selectModel(int brandNo) {
+		return AdminDao.selectModel(sqlSession,brandNo);
+	}
+
 }

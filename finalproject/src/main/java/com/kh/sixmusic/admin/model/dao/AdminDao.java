@@ -85,6 +85,19 @@ public class AdminDao {
 		return sqlSession.selectOne("adminMapper.selectSeqModel");
 	}
 
+	public int modiBrand(SqlSessionTemplate sqlSession, Brand b) {
+		return sqlSession.update("adminMapper.modiBrand", b);
+	}
+
+	public int modiModel(SqlSessionTemplate sqlSession, Model m) {
+		return sqlSession.update("adminMapper.modiModel", m);
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public ArrayList<Model> selectModel(SqlSessionTemplate sqlSession, int brandNo) {
+		return (ArrayList)sqlSession.selectList("adminMapper.selectModel", brandNo);
+	}
+
 
 
 }

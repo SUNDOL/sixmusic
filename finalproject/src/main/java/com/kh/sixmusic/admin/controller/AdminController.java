@@ -40,10 +40,63 @@ public class AdminController {
 		return "admin/admin";
 	}
 	
-	//제품 등록폼 이동
+	@PostMapping("addToBrand.ad")
+	public String addToBrand(HttpSession session,String brand) {
+		int result = adminService.addToBrand(brand);
+		if (result>0) {
+			session.setAttribute("alertMsg", "브래드를 추가 했습니다!!!");
+		}else{
+			session.setAttribute("alertMsg", "브래드 추가에 실패했습니다.");
+		}
+		return "redirect:/admin.ad";
+	}
+	@PostMapping("addToModel.ad")
+	public String addToModel(HttpSession session,Model m) {
+		int result = adminService.addToModel(m);
+		if (result>0) {
+			session.setAttribute("alertMsg", "모델를 추가 했습니다!!!");
+		}else{
+			session.setAttribute("alertMsg", "모델 추가에 실패했습니다.");
+		}
+		return "redirect:/admin.ad";
+	}
+	@PostMapping("modiBrand.ad")
+	public String modiBrand(HttpSession session,Brand b) {
+		int result = adminService.modiBrand(b);
+		if (result>0) {
+			session.setAttribute("alertMsg", "브랜드를 수정 했습니다!!!");
+		}else{
+			session.setAttribute("alertMsg", "브랜드 수정에 실패했습니다.");
+		}
+		return "redirect:/admin.ad";
+	}
+	@PostMapping("modiModel.ad")
+	public String modiModel(HttpSession session,Model m) {
+		int result = adminService.modiModel(m);
+		if (result>0) {
+			session.setAttribute("alertMsg", "모델를 수정 했습니다!!!");
+		}else{
+			session.setAttribute("alertMsg", "모델 수정에 실패했습니다.");
+		}
+		return "redirect:/admin.ad";
+	}
 	@ResponseBody
-	@RequestMapping("addToProductData.ad")
-	public String addToProduct(){
+	@RequestMapping(value = "brandData.ad", produces = "application/json; charset=utf-8")
+	public String brandData(){
+		ArrayList<Brand> list = adminService.selectAllBrand();
+		return new Gson().toJson(list);
+	}
+	@ResponseBody
+	@RequestMapping(value = "modelData.ad", produces = "application/json; charset=utf-8")
+	public String modelData(int brandNo){
+		System.out.println(brandNo);
+		ArrayList<Model> list = adminService.selectModel(brandNo);
+		return new Gson().toJson(list);
+	}
+	
+	@ResponseBody
+	@RequestMapping("ProductData.ad")
+	public String ProductData(){
 		ArrayList<Category> cList = adminService.selectAllCategory();
 		ArrayList<Brand> bList = adminService.selectAllBrand();
 		ArrayList<Type> tList = adminService.selectAllType();

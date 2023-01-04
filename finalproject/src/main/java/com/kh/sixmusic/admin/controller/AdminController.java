@@ -3,6 +3,7 @@ package com.kh.sixmusic.admin.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -17,8 +18,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
 import com.kh.sixmusic.admin.model.service.AdminService;
 import com.kh.sixmusic.common.model.vo.PageInfo;
+import com.kh.sixmusic.data.model.vo.Brand;
+import com.kh.sixmusic.data.model.vo.Category;
+import com.kh.sixmusic.data.model.vo.Model;
+import com.kh.sixmusic.data.model.vo.Type;
 import com.kh.sixmusic.member.model.vo.Member;
 import com.kh.sixmusic.product.model.vo.Product;
 import com.kh.sixmusic.product.model.vo.ProductAttachment;
@@ -28,11 +34,50 @@ public class AdminController {
 
 	@Autowired
 	private AdminService adminService;
-
+	//제품 등록폼 이동
+	@ResponseBody
+	@RequestMapping("addToProductData.ad")
+	public String addToProduct(){
+		ArrayList<Category> cList = adminService.selectAllCategory();
+		ArrayList<Brand> bList = adminService.selectAllBrand();
+		ArrayList<Type> tList = adminService.selectAllType();
+		ArrayList<Model> mList = adminService.selectAllModel();
+		ArrayList<Product> pList = adminService.selectAllProduct();
+		
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("cList", cList);
+		map.put("bList", bList);
+		map.put("tList", tList);
+		map.put("mList", mList);
+		map.put("pList", pList);
+		return new Gson().toJson(map);
+	}
+	
+	
 	// 제품 등록
+	// 브랜드 / 모델
 	@PostMapping("addToProduct.ad")
-	public ModelAndView insertBoard(Product p, List<MultipartFile> imageList, ModelAndView mv, HttpSession session) {
-
+	public ModelAndView addToProduct(Product p, List<MultipartFile> imageList, ModelAndView mv, HttpSession session) {
+		
+		//새로운 브랜드 일 경우
+		try {
+			Integer.parseInt(p.getBrand());
+		} catch (Exception e) {
+			int brandNo = adminService.addToBrand(p.getBrand());
+			p.setBrand(String.valueOf(brandNo));
+		}
+		
+		//새로운 모델 일 경우
+		try {
+			Integer.parseInt(p.getModel());
+		} catch (Exception e) {
+			Model m = new Model();
+			m.setBrandNo(Integer.parseInt(p.getBrand()));
+			m.setName(p.getModel());
+			int modelNo = adminService.addToModel(m);
+			p.setModel(String.valueOf(modelNo));
+		}	
+		
 		int productNo = adminService.addToProduct(p);
 
 		if (productNo > 0) {
@@ -88,12 +133,12 @@ public class AdminController {
 		}
 	}
 
-	// 제품 등록
+	// 제품 삭제
 	@PostMapping("removeProduct.ad")
 	public ModelAndView removeProduct(int productNo, ModelAndView mv, HttpSession session) {
 		int result = adminService.removeProduct(productNo);
 		if (result > 0) {
-			session.setAttribute("alertMsg", "제품등록에 성공했습니다.");
+			session.setAttribute("alertMsg", "제품 삭제에 성공했습니다.");
 			mv.setViewName("");
 		} else {
 			mv.setViewName("common/error");

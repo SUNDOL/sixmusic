@@ -249,7 +249,7 @@
 	</insert>
 	<!-- 리뷰 수정 전 조회 -->
 	<select id="showReview" resultType="_int" resultMap="reviewResult">
-	SELECT
+   SELECT
 	    r.review_no,
 	    m.member_nickname,
 	    r.ref_product_no,
@@ -259,9 +259,10 @@
 	FROM
          review r
     	JOIN member m ON ( m.member_no = r.ref_member_no )
+        JOIN PRODUCT_GROUP PG ON(PG.REF_PRODUCT_NO = R.REF_PRODUCT_NO)
 	WHERE
         m.member_no = #{memberNo}
-        AND r.ref_product_no = #{productNo}
+        AND PG.GROUP_NO LIKE (SELECT GROUP_NO FROM PRODUCT_GROUP WHERE REF_PRODUCT_NO LIKE #{productNo})
     	AND r.status = 'Y'
 	</select>
 	<select id="showReviewPics" resultType="_int" resultMap="reviewAttachmentResult">

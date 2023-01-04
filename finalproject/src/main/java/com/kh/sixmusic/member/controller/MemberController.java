@@ -227,7 +227,7 @@ public class MemberController {
 			String originName = image.getOriginalFilename();
 			// 변경 이미지 명 : review-회원 정보-제품 정보.확장자명
 			String ext = originName.substring(originName.lastIndexOf("."));
-			String changeName = "review" + r.getMemberNo() + "-" + r.getProductNo() + ext;
+			String changeName = "review-" + r.getMemberNo() + "-" + r.getProductNo() + ext;
 			try {
 				image.transferTo(new File(realPath + changeName));
 			} catch (IOException e) {

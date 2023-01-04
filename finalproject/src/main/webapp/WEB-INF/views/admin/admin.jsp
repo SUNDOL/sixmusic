@@ -101,7 +101,7 @@
                             <input type="text" name="brand" id="newBrandName" class="form-control" required>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-dark">Add a New Brand</button>
+                            <button type="button" class="btn btn-dark">Submit</button>
                             <button type="button" class="btn btn-outline-secondary"
                                 data-bs-dismiss="modal">Close</button>
                         </div>
@@ -120,11 +120,22 @@
                     </div>
                     <form action="#">
                         <div class="modal-body">
-                            <label for="newModelName" class="form-label fw-bold">Jot Down</label>
-                            <input type="text" name="model" id="newModelName" class="form-control" required>
+                            <div class="row row-cols-1 row-cols-md-2 g-3">
+                                <div class="col">
+                                    <label for="brandsList1" class="form-label fw-bold">Brands</label>
+                                    <select name="brandNo" id="brandsList1" class="form-select">
+                                        <option value="1">Fender</option>
+                                        <option value="2">Gibson</option>
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <label for="newModelName" class="form-label fw-bold">Jot Down</label>
+                                    <input type="text" name="name" id="newModelName" class="form-control" required>
+                                </div>
+                            </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-dark">Add a New Model</button>
+                            <button type="button" class="btn btn-dark">Submit</button>
                             <button type="button" class="btn btn-outline-secondary"
                                 data-bs-dismiss="modal">Close</button>
                         </div>

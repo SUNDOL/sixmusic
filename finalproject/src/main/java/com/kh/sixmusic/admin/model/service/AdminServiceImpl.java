@@ -7,6 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.sixmusic.admin.model.dao.AdminDao;
+import com.kh.sixmusic.data.model.vo.Brand;
+import com.kh.sixmusic.data.model.vo.Category;
+import com.kh.sixmusic.data.model.vo.Model;
+import com.kh.sixmusic.data.model.vo.Type;
 import com.kh.sixmusic.member.model.vo.Member;
 import com.kh.sixmusic.product.model.vo.Product;
 import com.kh.sixmusic.product.model.vo.ProductAttachment;
@@ -50,6 +54,49 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public int modifyMemberGrade(Member m) {
 		return AdminDao.modifyMemberGrade(sqlSession, m);
+	}
+
+	@Override
+	public ArrayList<Category> selectAllCategory() {
+		return AdminDao.selectAllCategory(sqlSession);
+	}
+
+	@Override
+	public ArrayList<Brand> selectAllBrand() {
+		return AdminDao.selectAllBrand(sqlSession);
+	}
+
+	@Override
+	public ArrayList<Type> selectAllType() {
+		return AdminDao.selectAllType(sqlSession);
+	}
+
+	@Override
+	public ArrayList<Product> selectAllProduct() {
+		return AdminDao.selectAllProduct(sqlSession);
+	}
+
+	@Override
+	public ArrayList<Model> selectAllModel() {
+		return AdminDao.selectAllModel(sqlSession);
+	}
+
+	@Override
+	public int addToBrand(String brand) {
+		int result = AdminDao.addToBrand(sqlSession, brand);
+		if (result>0) {
+			result = AdminDao.selectSeqBrand(sqlSession);
+		}
+		return result;
+	}
+
+	@Override
+	public int addToModel(Model model) {
+		int result = AdminDao.addToModel(sqlSession, model);
+		if (result>0) {
+			result = AdminDao.selectSeqModel(sqlSession);
+		}
+		return result;
 	}
 
 }

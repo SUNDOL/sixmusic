@@ -17,6 +17,7 @@
 	<result column="RATING" property="rating"/>
 	<result column="COUNT" property="count"/>
 	<result column="POINT" property="point"/>
+	<result column="GROUP_NO" property="groupNo"/>
 	<result column="CHANGE_NAME" property="changeName"/>
 	<result column="FILE_PATH" property="filePath"/>
 </resultMap>
@@ -155,7 +156,50 @@
 		</otherwise>
 	</choose>
 </select>
-
+<!-- 상품 추가/변경 정보 담아오기 -->
+<select id="groupAdmin" parameterType="filter" resultMap="productResult">
+	SELECT
+        PG.GROUP_NO,
+		MAX(P.PRODUCT_NAME) PRODUCT_NAME
+	FROM PRODUCT P
+	    JOIN MODEL M ON ( P.REF_MODEL_NO = M.MODEL_NO )
+	    JOIN BRAND B ON ( M.REF_BRAND_NO = B.BRAND_NO )
+	    JOIN PRODUCT_GROUP PG ON ( P.PRODUCT_NO = PG.REF_PRODUCT_NO )
+	WHERE P.STATUS LIKE 'Y'
+	    AND P.REF_TYPE_NO LIKE #{typeNo}
+        <if test="brandNo != 0">
+	        AND M.REF_BRAND_NO LIKE #{brandNo}
+        </if>
+        <if test="modelNo != null">
+	        AND P.REF_MODEL_NO IN
+			<foreach collection="modelNo" item="modelNo" open="(" close=")" separator=",">
+				#{modelNo}
+			</foreach>
+        </if>
+	GROUP BY PG.GROUP_NO
+	ORDER BY PG.GROUP_NO
+</select>
+<select id="productAdmin" parameterType="_int" resultMap="productResult">
+    SELECT P.PRODUCT_NO,
+    P.PRODUCT_COLOR
+    FROM PRODUCT P
+    JOIN PRODUCT_GROUP PG ON(P.PRODUCT_NO = PG.REF_PRODUCT_NO)
+    WHERE PG.GROUP_NO LIKE #{groupNo}
+</select>
+<select id="detailAdmin" parameterType="_int" resultMap="productResult">
+    SELECT
+		P.PRODUCT_NAME,
+		P.PRODUCT_PRICE,
+        P.PRODUCT_QUANTITY,
+        P.PRODUCT_CONTENT,
+		PAT.PRODUCT_ATTACHMENT_FILE_PATH FILE_PATH,
+		PAT.PRODUCT_ATTACHMENT_CHANGE_NAME CHANGE_NAME
+	FROM PRODUCT P
+    JOIN PRODUCT_ATTACHMENT PAT ON(P.PRODUCT_NO = PAT.REF_PRODUCT_NO) 
+    WHERE PAT.PRODUCT_ATTACHMENT_CHANGE_NAME LIKE '%-1.%'
+    AND P.PRODUCT_NO LIKE #{productNo}
+</select>
+<!-- 상품 정보 -->
 <select id="selectProductAttachmentList" resultMap="productAttachmentResult">
 	SELECT
 		REF_PRODUCT_NO ,

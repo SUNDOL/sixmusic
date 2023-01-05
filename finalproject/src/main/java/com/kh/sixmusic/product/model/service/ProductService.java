@@ -18,5 +18,8 @@ public interface ProductService {
 	ArrayList<Review> productReviewList(int productNo);
 	Review reviewDetails(int reviewNo);
 	ReviewAttachment reviewDetailsPic(int reviewNo);
+	ArrayList<Product> groupAdmin(Filter f);
+	ArrayList<Product> productAdmin(Integer groupNo);
+	Product detailAdmin(Integer productNo);
 
 }

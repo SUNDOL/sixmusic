@@ -51,4 +51,18 @@ public class ProductDao {
 		return sqlSession.selectOne("productMapper.reviewDetailsPic", reviewNo);
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public ArrayList<Product> groupAdmin(SqlSessionTemplate sqlSession, Filter f) {
+		return (ArrayList) sqlSession.selectList("productMapper.groupAdmin", f);
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public ArrayList<Product> productAdmin(SqlSessionTemplate sqlSession, Integer groupNo) {
+		return (ArrayList) sqlSession.selectList("productMapper.productAdmin", groupNo);
+	}
+
+	public Product detailAdmin(SqlSessionTemplate sqlSession, Integer productNo) {
+		return sqlSession.selectOne("productMapper.detailAdmin",productNo);
+	}
+
 }

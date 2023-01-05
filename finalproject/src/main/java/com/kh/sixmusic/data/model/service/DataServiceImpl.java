@@ -32,4 +32,12 @@ public class DataServiceImpl implements DataService {
 	public ArrayList<Price> selectPrice(Filter f) {
 		return dataDao.selectPrice(sqlSession,f);
 	}
+	@Override
+	public ArrayList<Brand> selectAdminBrand() {
+		return dataDao.selectAdminBrand(sqlSession);
+	}
+	@Override
+	public ArrayList<Model> selectAdminModel(Filter f) {
+		return dataDao.selectAdminModel(sqlSession,f);
+	}
 }

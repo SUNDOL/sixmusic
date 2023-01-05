@@ -29,4 +29,14 @@ public class DataDao {
 	public ArrayList<Price> selectPrice(SqlSessionTemplate sqlSession, Filter f) {
 		return (ArrayList)sqlSession.selectList("dataMapper.selectPrice", f);
 	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public ArrayList<Brand> selectAdminBrand(SqlSessionTemplate sqlSession) {
+		return (ArrayList)sqlSession.selectList("dataMapper.selectAdminBrand");
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public ArrayList<Model> selectAdminModel(SqlSessionTemplate sqlSession, Filter f) {
+		return (ArrayList)sqlSession.selectList("dataMapper.selectAdminModel", f);
+	}
 }

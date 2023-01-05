@@ -24,15 +24,7 @@ public interface AdminService {
 
 	int modifyMemberGrade(Member m);
 
-	ArrayList<Category> selectAllCategory();
-
-	ArrayList<Brand> selectAllBrand();
-
-	ArrayList<Type> selectAllType();
-
-	ArrayList<Product> selectAllProduct();
-
-	ArrayList<Model> selectAllModel();
+	ArrayList<Brand> selectBrand();
 
 	int addToBrand(String brand);
 

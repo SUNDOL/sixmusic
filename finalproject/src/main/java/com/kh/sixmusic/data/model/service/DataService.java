@@ -17,4 +17,8 @@ public interface DataService {
 
 	ArrayList<Price> selectPrice(Filter f);
 
+	ArrayList<Brand> selectAdminBrand();
+
+	ArrayList<Model> selectAdminModel(Filter f);
+
 }

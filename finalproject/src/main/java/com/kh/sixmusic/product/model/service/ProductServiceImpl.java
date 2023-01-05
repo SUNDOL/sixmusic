@@ -60,4 +60,19 @@ public class ProductServiceImpl implements ProductService {
 		return productDao.reviewDetailsPic(sqlSession, reviewNo);
 	}
 
+	@Override
+	public ArrayList<Product> groupAdmin(Filter f) {
+		return productDao.groupAdmin(sqlSession, f);
+	}
+
+	@Override
+	public ArrayList<Product> productAdmin(Integer groupNo) {
+		return productDao.productAdmin(sqlSession, groupNo);
+	}
+
+	@Override
+	public Product detailAdmin(Integer productNo) {
+		return productDao.detailAdmin(sqlSession, productNo);
+	}
+
 }

@@ -23,4 +23,5 @@ public class Product {
 	private String filePath;
 	private String changeName;
 	private int refOrderNo;
+	private int groupNo;
 }

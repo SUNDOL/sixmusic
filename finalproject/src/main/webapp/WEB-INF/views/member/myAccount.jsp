@@ -64,51 +64,80 @@
             <div class="col-lg-9 g-1">
                 <h3 class="fw-bolder">My Activities</h3>
                 <br>
-                <h4>My Articles on Communities</h4>
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Community</th>
-                            <th>Title</th>
-                            <th>Created at</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Bass</td>
-                            <td>안넝하세요 베이스</td>
-                            <td>2022-12-28</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Electric</td>
-                            <td>there is no cow level</td>
-                            <td>2022-12-28</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <br>
-                <h4>My Replies on Communities</h4>
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Community</th>
-                            <th>Content</th>
-                            <th>Created at</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>101</td>
-                            <td>Bass</td>
-                            <td>power overwhelming</td>
-                            <td>2022-12-28</td>
-                        </tr>
-                    </tbody>
-                </table>
+            	<div class="row">
+	                <h4>My Articles on Communities</h4>
+	                <table class="table table-hover">
+	                    <thead>
+	                        <tr>
+	                            <th>No</th>
+	                            <th>Community</th>
+	                            <th>Title</th>
+	                            <th>Created at</th>
+	                        </tr>
+	                    </thead>
+	                    <tbody>
+	                        <tr>
+	                            <td>1</td>
+	                            <td>Bass</td>
+	                            <td>안넝하세요 베이스</td>
+	                            <td>2022-12-28</td>
+	                        </tr>
+	                        <tr>
+	                            <td>2</td>
+	                            <td>Electric</td>
+	                            <td>there is no cow level</td>
+	                            <td>2022-12-28</td>
+	                        </tr>
+	                    </tbody>
+	                </table>
+	                <br>
+            	</div>
+            	<br>
+            	<div class="row">
+	                <h4>My Replies on Communities</h4>
+	                <table class="table table-hover">
+	                    <thead>
+	                        <tr>
+	                            <th>No</th>
+	                            <th>Community</th>
+	                            <th>Content</th>
+	                            <th>Created at</th>
+	                        </tr>
+	                    </thead>
+	                    <tbody>
+	                        <tr>
+	                            <td>101</td>
+	                            <td>Bass</td>
+	                            <td>power overwhelming</td>
+	                            <td>2022-12-28</td>
+	                        </tr>
+	                    </tbody>
+	                </table>
+	                <br>
+            	</div>
+            	<br>
+            	<div class="row">
+            		<h4>Customer Services</h4>
+            		<div class="table-responsive-sm">
+            		<table class="table table-hover" style="cursor:pointer;">
+            			<thead>
+            				<tr>
+            					<th>No</th>
+            					<th>Category</th>
+            					<th colspan="2">Title</th>
+            					<th>Created at</th>
+            					<th>Replied</th>
+            				</tr>
+            			</thead>
+            			<tbody id="myAccount-table-cs">
+            			</tbody>
+            		</table>
+            		</div>
+            		<br>
+            		<nav aria-label="Page navigation" class="justify-content-center" style="cursor:pointer;">
+  						<ul class="pagination justify-content-center" id="myAccount-table-cs-foot"></ul>
+  					</nav>
+            	</div>
             </div>
         </div>
     </div>
@@ -328,5 +357,8 @@
 
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="resources/js/myaccount.js"></script>
+<script>
+	myAccountCsInfo(1);
+</script>
 
 </html>

@@ -1,3 +1,8 @@
+// $("#memberId").keyup(function () {
+//     var memberId = $("#memberId").val();
+
+// })
+
 $("#memberPwd").keyup(function () {
     var memberPwd = $("#memberPwd").val();
     var pwdRegExp = new RegExp(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/);

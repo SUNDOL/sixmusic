@@ -1,5 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
 <mapper namespace="questionMapper">
+<resultMap type="question" id="questionMap">
+	<result column="SERVICE_NO" property="serviceNo"/>
+	<result column="REF_MEMBER_NO" property="memberNo"/>
+	<result column="MEMBER_ID" property="memberId"/>
+	<result column="MEMBER_NICKNAME" property="memberNickname"/>
+	<result column="QUESTION_CATEGORY" property="questionCategory"/>
+	<result column="QUESTION_TITLE" property="questionTitle"/>
+	<result column="QUESTION_CONTENT" property="questionContent"/>
+	<result column="QUESTION_ORIGIN_NAME" property="questionOriginName"/>
+	<result column="QUESTION_FILE_PATH" property="questionFilePath"/>
+	<result column="QUESTION_CHANGE_NAME" property="questionChangeName"/>
+	<result column="QUESTION_REPLY" property="questionReply"/>
+	<result column="STATUS" property="status"/>
+	<result column="CREATE_DATE" property="createDate"/>
+</resultMap>
+
+<insert id="addToQuestion" parameterType="question">
+	INSERT INTO customer_service (
+        service_no,
+        ref_member_no,
+        question_category,
+        question_title,
+        question_content,
+        question_origin_name,
+        question_file_path,
+        question_change_name
+    ) VALUES (
+        seq_customer_service.NEXTVAL,
+        #{memberNo},
+		#{questionCategory},
+		#{questionTitle},
+		#{questionContent},
+		#{questionOriginName},
+		#{questionFilePath},
+		#{questionChangeName}
+    )
+</insert>
+
+<select id="csListCount" parameterType="_int" resultType="_int">
+	SELECT
+    	COUNT(*)
+	FROM
+    	customer_service
+	WHERE
+    	ref_member_no LIKE #{memberNo}
+</select>
+
+<select id="memberCsInfo" parameterType="_int" resultMap="questionMap">
+	SELECT
+	    service_no,
+	    ref_member_no,
+	    member_id,
+	    member_nickname,
+	    question_category,
+	    question_title,
+	    question_content,
+	    question_origin_name,
+	    question_file_path,
+	    question_change_name,
+	    cs.create_date,
+	    question_reply
+	FROM
+         customer_service cs
+    	JOIN member m ON ( cs.ref_member_no = m.member_no )
+	WHERE
+    	cs.ref_member_no LIKE #{memberNo}
+    ORDER BY
+    	cs.create_date desc
+</select>
 
 </mapper>

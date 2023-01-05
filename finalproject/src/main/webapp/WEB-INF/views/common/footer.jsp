@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,7 +21,12 @@
         <li class="nav-item"><a href="#" class="nav-link px-2 text-muted" data-bs-toggle="modal" data-bs-target="#privacyModal">Privacy</a></li>
         <li class="nav-item"><a href="#" class="nav-link px-2 text-muted" data-bs-toggle="modal" data-bs-target="#termsOfServiceModal">Terms of Service</a></li>
         <li class="nav-item"><a href="#" class="nav-link px-2 text-muted" data-bs-toggle="modal" data-bs-target="#aboutUsModal">About Us</a></li>
-        <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Customer Services</a></li>
+      	<c:if test="${not empty loginUser}">  
+        	<li class="nav-item"><a href="#" class="nav-link px-2 text-muted" data-bs-toggle="modal" data-bs-target="#customerServices">Customer Services</a></li>
+      	</c:if>
+      	<c:if test="${empty loginUser}">
+      		<li class="nav-item"><a href="#" class="nav-link px-2 text-muted" onclick="loginRequired();">Customer Services</a></li>
+      	</c:if>
       </ul>
       <h2 class="text-center"><b><i class="bi bi-music-note-beamed"></i>SIXMUSIC</b></h2>
       <p class="text-center text-muted">&copy; 2022 SIXMUSIC LLC.</p>
@@ -243,6 +249,57 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
       </div>
     </div>
   </div>
+  
+  <!-- Modal: Customer Services -->
+  <div class="modal fade" id="customerServices" tabindex="-1" aria-labelledby="customerServicesLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg modal-fullscreen-sm-down">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 fw-bold" id="customerServicesLabel">Customer Services</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      <form action="addToQuestion.qa" method="post" enctype="multipart/form-data">
+      	<div class="mb-3">
+      		<div class="col">
+      			<label for="qna-topic" class="form-label fw-bold">Topic (required)</label>
+      			<select name="questionCategory" class="form-select">
+      				<option value="1" selected>상품문의</option>
+      				<option value="2">결제문의</option>
+      				<option value="3">배송문의</option>
+      				<option value="4">커뮤니티</option>
+      				<option value="5">회원관리</option>
+      			</select>
+      		</div>
+      		<br>
+      		<div class="col">
+      			<label for="qna-title" class="form-label fw-bold">Title (required, 최대 30자)</label>
+      			<input type="text" name="questionTitle" id="qna-title" class="form-control" maxlength="30" required>
+      			<input type="hidden" name="memberNo" id="qna-member" value="${loginUser.memberNo}">
+      		</div>
+      		<br>
+      		<div class="col">
+      			<label for="qna-content" class="form-label fw-bold">Content (required)</label>
+      			<textarea name=questionContent id="qna-content" class="form-control" rows="10" style="resize:none;" required></textarea>
+      		</div>
+      		<br>
+      		<div class="col">
+      			<label for="qna-attachment" class="form-label fw-bold">Attachments (optional)</label>
+      			<input type="file" name="image" id="qna-attachment" class="form-control">
+      		</div>
+      	 </div>
+      	 	<br>
+	      	<div class="d-flex justify-content-end">
+		        <button type="submit" class="btn btn-dark">Submit</button>
+		        &nbsp;
+	    	    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+	      	<br>
+	      	</div>
+      </form>
+      	</div>
+    </div>
+  </div>
+</div>
 
 </body>
 <!-- <script charset="UTF-8" class="daum_roughmap_loader_script" src="https://ssl.daumcdn.net/dmaps/map_js_init/roughmapLoader.js"></script>

@@ -11,13 +11,10 @@
     <title>SIXMUSIC</title>
 </head>
 
+<jsp:include page="common/header.jsp"/>
 <body>
-	<jsp:include page="common/header.jsp"/>
-	<br>
-    <br>
-    <br>
-
-	<jsp:include page="common/footer.jsp"/>
+<jsp:include page="common/carousel-main.jsp"/>
 </body>
+<jsp:include page="common/footer.jsp"/>
 
 </html>

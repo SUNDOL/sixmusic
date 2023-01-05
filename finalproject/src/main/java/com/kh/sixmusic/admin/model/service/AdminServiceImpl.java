@@ -14,6 +14,7 @@ import com.kh.sixmusic.data.model.vo.Type;
 import com.kh.sixmusic.member.model.vo.Member;
 import com.kh.sixmusic.product.model.vo.Product;
 import com.kh.sixmusic.product.model.vo.ProductAttachment;
+import com.kh.sixmusic.product.model.vo.ProductGroup;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -24,16 +25,23 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public int addToProduct(Product p) {
+		if (p.getGroupNo() != 0) {
+			String name = AdminDao.groupName(sqlSession, p.getGroupNo());
+			p.setName(name);
+		}
 		int result = AdminDao.addToProduct(sqlSession, p);
 		if (result > 0) {
-			return AdminDao.selectSeqProduct(sqlSession);
+			result = AdminDao.selectSeqProduct(sqlSession);
+			ProductGroup pg = new ProductGroup(p.getGroupNo(), result);
+			result *= AdminDao.addToGroup(sqlSession, pg);
 		}
 		return result;
 	}
 
 	@Override
 	public int addToProductImage(ArrayList<ProductAttachment> patList) {
-		return AdminDao.addToProduct(sqlSession, patList);
+		int result = AdminDao.addToProductImage(sqlSession, patList);
+		return result;
 	}
 
 	@Override
@@ -56,30 +64,12 @@ public class AdminServiceImpl implements AdminService {
 		return AdminDao.modifyMemberGrade(sqlSession, m);
 	}
 
-	@Override
-	public ArrayList<Category> selectAllCategory() {
-		return AdminDao.selectAllCategory(sqlSession);
-	}
 
 	@Override
-	public ArrayList<Brand> selectAllBrand() {
-		return AdminDao.selectAllBrand(sqlSession);
+	public ArrayList<Brand> selectBrand() {
+		return AdminDao.selectBrand(sqlSession);
 	}
 
-	@Override
-	public ArrayList<Type> selectAllType() {
-		return AdminDao.selectAllType(sqlSession);
-	}
-
-	@Override
-	public ArrayList<Product> selectAllProduct() {
-		return AdminDao.selectAllProduct(sqlSession);
-	}
-
-	@Override
-	public ArrayList<Model> selectAllModel() {
-		return AdminDao.selectAllModel(sqlSession);
-	}
 
 	@Override
 	public int addToBrand(String brand) {

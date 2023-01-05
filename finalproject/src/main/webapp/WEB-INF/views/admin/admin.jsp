@@ -232,7 +232,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form action="#" method="post" enctype="multipart/form-data">
+                        <form action="addToProduct.ad" method="post" enctype="multipart/form-data">
                             <div class="container">
                                 <div class="mb-3">
                                     <div class="row row-cols-1 row-cols-md-2 g-3">
@@ -257,16 +257,12 @@
                                     <div class="row row-cols-1 row-cols-md-2 g-3">
                                         <div class="col">
                                             <label for="selectBrand" class="form-label fw-bold">Brand</label>
-                                            <select name="selectBrand" id="selectBrand" class="form-select" required>
-                                                <option value="1">Fender</option>
-                                                <option value="2">Gibson</option>
+                                            <select name="brand" id="selectBrand" class="form-select" required>
                                             </select>
                                         </div>
                                         <div class="col">
                                             <label for="selectModel" class="form-label fw-bold">Model</label>
-                                            <select name="selectModel" id="selectModel" class="form-select" required>
-                                                <option value="1">Stratocaster</option>
-                                                <option value="2">Telecaster</option>
+                                            <select name="model" id="selectModel" class="form-select" required>
                                             </select>
                                         </div>
                                     </div>
@@ -282,14 +278,11 @@
                                         </div>
                                         <div class="col" id="selectNameA">
                                             <label for="nameA" class="form-label fw-bold">Input New Name</label>
-                                            <input type="text" name="name" id="nameA" class="form-control" required>
+                                            <input type="text" name="name" id="nameA" class="form-control" >
                                         </div>
                                         <div class="col" id="selectNameB">
                                             <label for="nameB" class="form-label fw-bold">Choose Existing Name</label>
-                                            <select name="name" id="nameB" class="form-select" required>
-                                                <option value="1">American Vintage II Stratocaster</option>
-                                                <option value="2">American Professional II Stratocaster</option>
-                                                <option value="3">Eric Clapton Stratocaster</option>
+                                            <select name="groupNo" id="nameB" class="form-select" >
                                             </select>
                                         </div>
                                     </div>
@@ -359,7 +352,7 @@
                                     </div>
                                     <div class="col">
                                         <label for="type2" class="form-label fw-bold">Type</label>
-                                        <select name="type2" id="type2" class="form-select" required>
+                                        <select name="type" id="type2" class="form-select" required>
                                             <option value="1">Solid Body</option>
                                             <option value="2">Hollow & Semi-Hollow Body</option>
                                         </select>
@@ -370,18 +363,12 @@
                                 <div class="row row-cols-1 row-cols-md-2 g-3">
                                     <div class="col">
                                         <label for="selectBrand2" class="form-label fw-bold">Brand</label>
-                                        <select name="selectBrand2" id="selectBrand2" class="form-select" required>
-                                            <option value="1">Fender</option>
-                                            <option value="2">Gibson</option>
-                                            <option value="3">Rickenbacker</option>
+                                        <select name="brand" id="selectBrand2" class="form-select" required>
                                         </select>
                                     </div>
                                     <div class="col">
                                         <label for="selectModel2" class="form-label fw-bold">Model</label>
-                                        <select name="selectModel2" id="selectModel2" class="form-select" required>
-                                            <option value="1">Stratocaster</option>
-                                            <option value="2">Telecaster</option>
-                                            <option value="3">Jazzmaster</option>
+                                        <select name="model" id="selectModel2" class="form-select" required>
                                         </select>
                                     </div>
                                 </div>
@@ -390,18 +377,12 @@
                                 <div class="row row-cols-1 row-cols-md-2 g-3">
                                     <div class="col">
                                         <label for="selectName2" class="form-label fw-bold">Choose Product</label>
-                                        <select name="selectName2" id="selectName2" class="form-select" required>
-                                            <option value="1">American Vintage II Stratocaster</option>
-                                            <option value="2">American Professional II Stratocaster</option>
-                                            <option value="3">Eric Clapton Stratocaster</option>
+                                        <select name="groupNo" id="selectName2" class="form-select" required>
                                         </select>
                                     </div>
                                     <div class="col">
                                         <label for="selectColor2" class="form-label fw-bold">Choose Color</label>
-                                        <select name="selectColor2" id="selectColor2" class="form-select" required>
-                                            <option value="1">Olympic White</option>
-                                            <option value="2">Fiesta Red</option>
-                                            <option value="3">Pewter</option>
+                                        <select name="productNo" id="selectColor2" class="form-select" required>
                                         </select>
                                     </div>
                                 </div>
@@ -478,7 +459,7 @@
                                 <div class="row row-cols-1 row-cols-md-2 g-3">
                                     <div class="col">
                                         <label for="category3" class="form-label fw-bold">Category</label>
-                                        <select name="category3" id="category3" class="form-select" required>
+                                        <select name="category" id="category3" class="form-select" required>
                                             <option value="1">Electric Guitars</option>
                                             <option value="2">Acoustic Guitars</option>
                                             <option value="3">Basses</option>
@@ -486,7 +467,7 @@
                                     </div>
                                     <div class="col">
                                         <label for="type3" class="form-label fw-bold">Type</label>
-                                        <select name="type3" id="type3" class="form-select" required>
+                                        <select name="type" id="type3" class="form-select" required>
                                             <option value="1">Solid Body</option>
                                             <option value="2">Hollow & Semi-Hollow Body</option>
                                         </select>
@@ -497,7 +478,7 @@
                                 <div class="row row-cols-1 row-cols-md-2 g-3">
                                     <div class="col">
                                         <label for="selectBrand3" class="form-label fw-bold">Brand</label>
-                                        <select name="selectBrand3" id="selectBrand3" class="form-select" required>
+                                        <select name="brand" id="selectBrand3" class="form-select" required>
                                             <option value="1">Fender</option>
                                             <option value="2">Gibson</option>
                                             <option value="3">Rickenbacker</option>
@@ -505,7 +486,7 @@
                                     </div>
                                     <div class="col">
                                         <label for="selectModel3" class="form-label fw-bold">Model</label>
-                                        <select name="selectModel3" id="selectModel3" class="form-select" required>
+                                        <select name="model" id="selectModel3" class="form-select" required>
                                             <option value="1">Stratocaster</option>
                                             <option value="2">Telecaster</option>
                                             <option value="3">Jazzmaster</option>
@@ -517,7 +498,7 @@
                                 <div class="row row-cols-1 row-cols-md-2 g-3">
                                     <div class="col">
                                         <label for="selectName3" class="form-label fw-bold">Choose Product</label>
-                                        <select name="selectName3" id="selectName3" class="form-select" required>
+                                        <select name="groupNo" id="selectName3" class="form-select" required>
                                             <option value="1">American Vintage II Stratocaster</option>
                                             <option value="2">American Professional II Stratocaster</option>
                                             <option value="3">Eric Clapton Stratocaster</option>
@@ -525,7 +506,7 @@
                                     </div>
                                     <div class="col">
                                         <label for="selectColor3" class="form-label fw-bold">Choose Color</label>
-                                        <select name="selectColor3" id="selectColor3" class="form-select" required>
+                                        <select name="productNo" id="selectColor3" class="form-select" required>
                                             <option value="1">Olympic White</option>
                                             <option value="2">Fiesta Red</option>
                                             <option value="3">Pewter</option>
@@ -584,5 +565,6 @@
 </body>
 <jsp:include page="../common/footer.jsp"/>
 <script src="resources/js/admin.js"></script>
+<script src="resources/js/adminFilter.js"></script>
 
 </html>

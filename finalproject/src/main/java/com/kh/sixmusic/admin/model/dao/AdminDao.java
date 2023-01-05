@@ -12,6 +12,7 @@ import com.kh.sixmusic.data.model.vo.Type;
 import com.kh.sixmusic.member.model.vo.Member;
 import com.kh.sixmusic.product.model.vo.Product;
 import com.kh.sixmusic.product.model.vo.ProductAttachment;
+import com.kh.sixmusic.product.model.vo.ProductGroup;
 
 @Repository
 public class AdminDao {
@@ -24,10 +25,24 @@ public class AdminDao {
 		return sqlSession.selectOne("adminMapper.selectSeqProduct");
 	}
 	
-	public int addToProduct(SqlSessionTemplate sqlSession, ArrayList<ProductAttachment> patList) {
-		return sqlSession.insert("adminMapper.addToProduct",patList);
+	public String groupName(SqlSessionTemplate sqlSession, int groupNo) {
+		return sqlSession.selectOne("adminMapper.groupName", groupNo);
 	}
+	
+	public int addToProductImage(SqlSessionTemplate sqlSession, ArrayList<ProductAttachment> patList) {
 
+		int result = 0;
+		for (ProductAttachment pat:patList) {
+			result += sqlSession.insert("adminMapper.addToProductImage",pat);
+		}
+		return result;
+	}
+	
+	
+	public int addToGroup(SqlSessionTemplate sqlSession, ProductGroup pg) {
+		return sqlSession.insert("adminMapper.addToGroup",pg);
+	}
+	
 	public int removeProduct(SqlSessionTemplate sqlSession, int productNo) {
 		return sqlSession.update("adminMapper.removeProduct",productNo);
 	}
@@ -48,25 +63,9 @@ public class AdminDao {
 	public ArrayList<Category> selectAllCategory(SqlSessionTemplate sqlSession) {
 		return (ArrayList)sqlSession.selectList("adminMapper.selectAllCategory");
 	}
-
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public ArrayList<Brand> selectAllBrand(SqlSessionTemplate sqlSession) {
-		return (ArrayList)sqlSession.selectList("adminMapper.selectAllBrand");
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public ArrayList<Type> selectAllType(SqlSessionTemplate sqlSession) {
-		return (ArrayList)sqlSession.selectList("adminMapper.selectAllType");
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public ArrayList<Product> selectAllProduct(SqlSessionTemplate sqlSession) {
-		return (ArrayList)sqlSession.selectList("adminMapper.selectAllProduct");
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public ArrayList<Model> selectAllModel(SqlSessionTemplate sqlSession) {
-		return (ArrayList)sqlSession.selectList("adminMapper.selectAllModel");
+	public ArrayList<Brand> selectBrand(SqlSessionTemplate sqlSession) {
+		return (ArrayList)sqlSession.selectList("adminMapper.selectBrand");
 	}
 
 	public int addToBrand(SqlSessionTemplate sqlSession, String brand) {
@@ -97,6 +96,11 @@ public class AdminDao {
 	public ArrayList<Model> selectModel(SqlSessionTemplate sqlSession, int brandNo) {
 		return (ArrayList)sqlSession.selectList("adminMapper.selectModel", brandNo);
 	}
+
+
+
+
+
 
 
 

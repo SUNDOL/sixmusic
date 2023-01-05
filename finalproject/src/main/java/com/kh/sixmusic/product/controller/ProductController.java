@@ -78,5 +78,31 @@ public class ProductController {
 		map.put("p", list);
 		return gson.toJson(map);
 	}
-
+	
+	// 상품 그룹
+	@ResponseBody
+	@RequestMapping(value = "groupAdmin.pr", produces = "application/json; charset=utf-8")
+	public String groupAdmin(Filter f) {
+		ArrayList<Product> list = productService.groupAdmin(f);
+		Gson gson = new Gson();
+		return gson.toJson(list);
+	}
+	
+	// 상품 검색
+	@ResponseBody
+	@RequestMapping(value = "productAdmin.pr", produces = "application/json; charset=utf-8")
+	public String productAdmin(Integer groupNo) {
+		ArrayList<Product> list = productService.productAdmin(groupNo);
+		Gson gson = new Gson();
+		return gson.toJson(list);
+	}
+	
+	// 상품 정보
+	@ResponseBody
+	@RequestMapping(value = "detailAdmin.pr", produces = "application/json; charset=utf-8")
+	public String detailAdmin(Integer productNo) {
+		Product p = productService.detailAdmin(productNo);
+		Gson gson = new Gson();
+		return gson.toJson(p);
+	}
 }

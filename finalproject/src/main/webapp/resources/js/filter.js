@@ -1,7 +1,7 @@
 
 function filter(f) {
     $.ajax({
-        url: "select.da",
+        url: "filter.da",
         data: {
             typeNo: f.typeNo,
             brandNo: f.brandNo,

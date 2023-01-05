@@ -44,6 +44,14 @@
 			BRAND_NAME
 		ORDER BY QUANTITY DESC
 	</select>
+	
+	<select id="selectAdminBrand" resultMap="brandResult">
+        SELECT
+			BRAND_NO ,
+			BRAND_NAME
+		FROM BRAND
+		ORDER BY BRAND_NO
+	</select>
 	<!-- model -->
 	<resultMap type="model" id="modelResult">
 		<result column="MODEL_NO" property="modelNo"/>
@@ -89,6 +97,14 @@
         ORDER BY QUANTITY DESC
 	</select>
 	
+	<select id="selectAdminModel" parameterType="filter" resultMap="modelResult">
+		SELECT
+	        M.MODEL_NO ,
+	        M.MODEL_NAME 
+		FROM MODEL M
+        WHERE M.REF_BRAND_NO LIKE #{brandNo}
+        ORDER BY MODEL_NO 
+	</select>
 	
 	<!-- price -->
 	<resultMap type="Price" id="priceResult">

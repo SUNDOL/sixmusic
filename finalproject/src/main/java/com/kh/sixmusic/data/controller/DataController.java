@@ -20,8 +20,8 @@ public class DataController {
 	private DataService dataService;
 	
 	@ResponseBody
-	@RequestMapping(value = "select.da", produces = "application/json; charset=utf-8")
-	public String selectPrice(Filter f){
+	@RequestMapping(value = "filter.da", produces = "application/json; charset=utf-8")
+	public String filter(Filter f){
 		ArrayList<Brand> brand = dataService.selectBrand(f);
 		ArrayList<Model> model = dataService.selectModel(f);
 		ArrayList<Price> price = dataService.selectPrice(f);
@@ -33,4 +33,20 @@ public class DataController {
 		return gson.toJson(map);
 	}
 	
+
+	@ResponseBody
+	@RequestMapping(value = "brand.da", produces = "application/json; charset=utf-8")
+	public String selectBrand(){
+		ArrayList<Brand> brand = dataService.selectAdminBrand();
+		Gson gson = new Gson();
+		return gson.toJson(brand);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "model.da", produces = "application/json; charset=utf-8")
+	public String selectProduct(Filter f){
+		ArrayList<Model> model = dataService.selectAdminModel(f);
+		Gson gson = new Gson();
+		return gson.toJson(model);
+	}
 }

@@ -39,29 +39,52 @@
 		    #{type},
 		    #{model},
 		    #{color},
-		    #{name},
+			#{name},
 		    #{content},
 		    #{price},
 		    #{quantity}
 		)
 	</insert>
+	<!-- 제품 이름 추가 -->
+	<select id="groupName" parameterType="_int" resultType="String">
+		SELECT MAX(PRODUCT_NAME)
+		FROM PRODUCT P
+		JOIN PRODUCT_GROUP PG ON(PG.REF_PRODUCT_NO = P.PRODUCT_NO)
+		WHERE PG.GROUP_NO LIKE #{groupNo}
+	</select>
+	<!-- 제품 그룹 추가 -->
+	<select id="addToGroup" parameterType="productGroup">
+		INSERT INTO PRODUCT_GROUP(GROUP_NO, REF_PRODUCT_NO)
+		VALUES(
+			<choose>
+				<when test="groupNo == 0">
+					SEQ_PRODUCT_GROUP.NEXTVAL
+				</when>
+				<otherwise>
+					#{product}
+				</otherwise>
+			</choose>
+			,
+			#{productNo}
+		)
+	</select>
 	<!-- 제품 이미지 추가 -->
-	<insert id="addToProductImage" parameterType="list">
+	<insert id="addToProductImage" parameterType="productAttachment">
 		INSERT INTO PRODUCT_ATTACHMENT(
 			PRODUCT_ATTACHMENT_NO ,
 			REF_PRODUCT_NO ,
 			PRODUCT_ATTACHMENT_ORIGIN_NAME ,
 			PRODUCT_ATTACHMENT_CHANGE_NAME ,
 			PRODUCT_ATTACHMENT_FILE_PATH)
-		VALUES 
-		<foreach collection="productAttachment" item="pat" open="(" close=")" index="index" separator=",">
-		    SEQ_PRODUCT_ATTACHMENT.NEXTVAL,
-			SEQ_PRODUCT.CURRVAL,
+		VALUES (
+			(SEQ_PRODUCT_ATTACHMENT.NEXTVAL),
+			#{productNo},
 			#{originName},
 			#{changeName},
 			#{filePath}
-		</foreach>
+		)
 	</insert>
+
 	<!-- 제품 정보 변경 -->
 	<update id="changeToProduct" parameterType="product">
 		UPDATE PRODUCT
@@ -100,7 +123,7 @@
 			<if test="filePath != null">
 				, PRODUCT_ATTACHMENT_FILE_PATH = #{filePath}
 			</if>
-			AND PRODUCT_ATTACHMENT_NO LIKE #{attachmentNo}
+			WHERE PRODUCT_ATTACHMENT_NO LIKE #{attachmentNo}
 		</foreach>
 	</update>
 	<delete id="removerPoductImage">
@@ -111,14 +134,7 @@
 		</foreach>
 	</delete>
 	<!-- 제품 등록 데이터 -->
-	<select id="selectAllCategory" resultType="category">
-		SELECT CATEGORY_NO AS categoryNo,
-		CATEGORY_NAME AS name
-		FROM CATEGORY 
-		WHERE STATUS LIKE 'Y'   
-	    ORDER BY CATEGORY_NO
-	</select>
-	<select id="selectAllBrand" resultType="brand">
+	<select id="selectBrand" resultType="brand">
 		SELECT
 	    BRAND_NO as brandNo,
 		BRAND_NAME as name
@@ -126,23 +142,6 @@
 		WHERE STATUS LIKE 'Y'   
 	    ORDER BY BRAND_NO
 	</select>
-	<select id="selectAllType" resultType="type">
-		SELECT TYPE_NO AS typeNo,
-		REF_CATEGORY_NO AS categoryNo,
-		TYPE_NAME AS name
-		FROM TYPE
-		WHERE STATUS LIKE 'Y'   
-	    ORDER BY TYPE_NO
-	</select>
-	<select id="selectAllModel" resultType="model">
-		SELECT MODEL_NO AS modelNo,
-		MODEL_NAME AS name,
-		REF_BRAND_NO AS brandNo
-		FROM MODEL
-		WHERE STATUS LIKE 'Y'   
-	    ORDER BY MODEL_NO
-	</select>
-	
 	<select id="selectModel" parameterType="_int" resultType="model">
 		SELECT MODEL_NO AS modelNo,
 		MODEL_NAME AS name,
@@ -151,31 +150,6 @@
 		WHERE STATUS LIKE 'Y'
 		AND REF_BRAND_NO LIKE #{brandNo}
 	    ORDER BY MODEL_NO
-	</select>
-	
-	
-	<select id="selectAllProduct" resultType="product">
-		SELECT
-	    P.PRODUCT_NO AS productNo,
-		P.REF_CATEGORY_NO AS category,
-		P.REF_TYPE_NO AS type,
-		P.REF_MODEL_NO AS model,
-		P.P.PRODUCT_COLOR AS color,
-		P.PRODUCT_NAME AS name,
-		M.REF_BRAND_NO AS brand,
-		P.PRODUCT_CONTENT AS content,
-		P.PRODUCT_PRICE AS price
-		FROM PRODUCT P
-		JOIN CATEGORY C ON(C.CATEGORY_NO = P.REF_CATEGORY_NO)
-		JOIN MODEL M ON(M.MODEL_NO = P.REF_MODEL_NO)
-		JOIN BRAND B ON(B.BRAND_NO = M.REF_BRAND_NO)
-		JOIN TYPE T ON(T.TYPE_NO = P.REF_TYPE_NO)
-		WHERE P.STATUS LIKE 'Y'
-		AND M.STATUS LIKE 'Y'
-		AND B.STATUS LIKE 'Y'
-		AND C.STATUS LIKE 'Y'
-		AND T.STATUS LIKE 'Y'
-		ORDER BY P.PRODUCT_NO
 	</select>
 	<!-- 브랜드 모델 추가 -->
 	<insert id="addToBrand" parameterType="string">

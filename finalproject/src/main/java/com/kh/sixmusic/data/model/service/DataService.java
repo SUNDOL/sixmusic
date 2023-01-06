@@ -21,4 +21,6 @@ public interface DataService {
 
 	ArrayList<Model> selectAdminModel(Filter f);
 
+	ArrayList<Type> selectAdminType(Filter f);
+
 }

@@ -13,6 +13,7 @@ import com.kh.sixmusic.data.model.vo.Brand;
 import com.kh.sixmusic.data.model.vo.Filter;
 import com.kh.sixmusic.data.model.vo.Model;
 import com.kh.sixmusic.data.model.vo.Price;
+import com.kh.sixmusic.data.model.vo.Type;
 
 @Controller
 public class DataController {
@@ -32,7 +33,13 @@ public class DataController {
 		map.put("model", model);
 		return gson.toJson(map);
 	}
-	
+	@ResponseBody
+	@RequestMapping(value = "type.da", produces = "application/json; charset=utf-8")
+	public String selectType(Filter f){
+		ArrayList<Type> type = dataService.selectAdminType(f);
+		Gson gson = new Gson();
+		return gson.toJson(type);
+	}
 
 	@ResponseBody
 	@RequestMapping(value = "brand.da", produces = "application/json; charset=utf-8")

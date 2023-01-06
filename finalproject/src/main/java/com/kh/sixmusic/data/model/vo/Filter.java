@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class Filter {
+	private int categoryNo;
 	private int typeNo;
 	private int brandNo;
 	private int[] modelNo;

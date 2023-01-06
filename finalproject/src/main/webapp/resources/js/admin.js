@@ -3,21 +3,6 @@ $("#selectNameB").hide();
 $("#oldAttachment2").show();
 $("#newAttachment2").hide();
 $("#modelsList2").hide();
-$("#selectName").on("change", function () {
-    if ($("#selectName").val() == "a") {
-        $("#nameA").removeAttr("disabled");
-        $("#nameB").attr("disabled", true);
-        $("#selectNameA").show();
-        $("#selectNameB").hide();
-    }
-    if ($("#selectName").val() == "b") {
-        $("#selectNameA").hide();
-        $("#selectNameB").show();
-        $("#nameA").attr("disabled", true);
-        $("#nameB").removeAttr("disabled");
-
-    }
-});
 
 $("#brandsList2").on("change", function() {
     $("#modelsList2").show();
@@ -88,39 +73,3 @@ $("#modiModel").on("show.bs.modal",()=>{
     });
 });
 
-$("#addNewProducts").on("show.bs.modal",()=>{
-    productClear();
-    $("select[name=type]").change(()=>{
-        let f = {level : 1};
-        typeCraft(f)
-    });
-});
-
-
-$("#modifyProductInfo").on("show.bs.modal",()=>{
-    productClear();
-    $("select[name=type]").change(()=>{
-        let f = {level : 2};
-        typeCraft(f)
-    });
-});
-
-
-$("#deleteProducts").on("show.bs.modal",()=>{
-    productClear();
-    $("select[name=type]").change(()=>{
-        let f = {level : 3};
-        typeCraft(f)
-    });
-});
-function typeCraft(f){
-    f.typeNo = $("select[name=type]>option:selected").val();
-    brand(f);
-}
-
-function productClear(){
-    $("select[name=brand]").html("");
-    $("select[name=model]").html("");
-    $("select[name=groupNo]").html("");
-    $("select[name=productNo]").html("");
-}

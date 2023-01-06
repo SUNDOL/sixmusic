@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
 <mapper namespace="dataMapper">
+
+
+	<resultMap type="type" id="typeResult">
+		<result column="TYPE_NO" property="typeNo"/>
+		<result column="TYPE_NAME" property="name"/>
+	</resultMap>
+	
+	<select id="selectAdminType" parameterType="filter" resultMap="typeResult">
+		SELECT
+			TYPE_NO ,
+			TYPE_NAME 
+		FROM TYPE
+		WHERE REF_CATEGORY_NO LIKE #{categoryNo}
+		AND STATUS LIKE 'Y'
+	</select>
 	<!-- brand -->
 	<resultMap type="brand" id="brandResult">
 		<result column="BRAND_NO" property="brandNo"/>

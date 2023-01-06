@@ -53,6 +53,7 @@
 		WHERE PG.GROUP_NO LIKE #{groupNo}
 	</select>
 	<!-- 제품 그룹 추가 -->
+	
 	<select id="addToGroup" parameterType="productGroup">
 		INSERT INTO PRODUCT_GROUP(GROUP_NO, REF_PRODUCT_NO)
 		VALUES(
@@ -61,7 +62,7 @@
 					SEQ_PRODUCT_GROUP.NEXTVAL
 				</when>
 				<otherwise>
-					#{product}
+					#{productNo}
 				</otherwise>
 			</choose>
 			,

@@ -35,7 +35,7 @@
 		    	<img src="resources/image/carousel-main/carousel-main-3.jpg" class="d-block w-100" alt="carousel-main-3">
 		      	<div class="carousel-caption">
 		        	<h1>Acoustic Guitars</h1>
-		        	<p>Back to the howling old owl out in the woods</p>
+		        	<p>I see the girls walk by dressed in their summer clothes</p>
 		      	</div>
 		    </div>
 		    <div class="carousel-item">

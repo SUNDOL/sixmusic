@@ -7,12 +7,13 @@
 <title>Modi Product</title>
 </head>
 <body>
+
 <div class="container">
                             <div class="mb-3">
                                 <div class="row row-cols-1 row-cols-md-2 g-3">
                                     <div class="col">
                                         <label for="category2" class="form-label fw-bold">Category</label>
-                                        <select name="category2" id="category2" class="form-select" required>
+                                        <select name="category" id="category2" class="form-select" required>
                                             <option value="1">Electric Guitars</option>
                                             <option value="2">Acoustic Guitars</option>
                                             <option value="3">Basses</option>

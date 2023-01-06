@@ -39,4 +39,9 @@ public class DataDao {
 	public ArrayList<Model> selectAdminModel(SqlSessionTemplate sqlSession, Filter f) {
 		return (ArrayList)sqlSession.selectList("dataMapper.selectAdminModel", f);
 	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public ArrayList<Type> selectAdminType(SqlSessionTemplate sqlSession, Filter f) {
+		return (ArrayList)sqlSession.selectList("dataMapper.selectAdminType", f);
+	}
 }

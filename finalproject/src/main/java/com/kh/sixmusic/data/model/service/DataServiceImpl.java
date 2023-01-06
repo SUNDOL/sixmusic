@@ -40,4 +40,8 @@ public class DataServiceImpl implements DataService {
 	public ArrayList<Model> selectAdminModel(Filter f) {
 		return dataDao.selectAdminModel(sqlSession,f);
 	}
+	@Override
+	public ArrayList<Type> selectAdminType(Filter f) {
+		return dataDao.selectAdminType(sqlSession,f);
+	}
 }

@@ -405,8 +405,8 @@
                                             <input type="number" name="price" id="price" class="form-control" required>
                                         </div>
                                         <div class="col">
-                                            <label for="quantity" class="form-label fw-bold">Quantity</label>
-                                            <input type="number" name="quantity" id="quantity" class="form-control"
+                                            <label for="quantity1" class="form-label fw-bold">Quantity</label>
+                                            <input type="number" name="quantity" id="quantity1" class="form-control"
                                                 max="20" required>
                                         </div>
                                     </div>
@@ -525,22 +525,7 @@
                                         </tr>
                                     </thead>
                                     <tbody id="whatToDelete3">
-                                        <tr>
-                                            <td>
-                                                <img class="img-thumbnail" src="pics/1-1.jpg" alt="thumbnail">
-                                            </td>
-                                            <td>
-                                                <div class="fs-5"><span>Fender</span><span> American Standard II
-                                                        Stratocaster</span></div>
-                                            </td>
-                                            <td>
-                                                3-Tone Sunburst
-                                                <div><strong>2,500,000 원</strong></div>
-                                            </td>
-                                            <td>
-                                                2022-12-30
-                                            </td>
-                                        </tr>
+                                        
                                     </tbody>
                                 </table>
                             </div>

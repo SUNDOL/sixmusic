@@ -13,9 +13,16 @@
 
 <jsp:include page="../common/header.jsp"/>
 <body>
-	<br><br><br><br>
+
+	<div class="bg-light rounded-3">
+	<br><br>
+      <div class="container-fluid py-5 text-white" style="background-image: url('resources/image/jumbotron/jumbotron-confirmation.jpg');">
+        <h1 class="display-5 fw-bold">ORDER CONFIRMATION</h1>
+        <p class="col-md-8 fs-4"><span>${loginUser.memberNickname}</span>님의 ORDER CONFIRMATION</p>
+      </div>
+    </div>
+
     <div class="container">
-        <h1><b>ORDER CONFIRMATION</b></h1>
         <br>
         <table class="table table-hover">
             <thead>

@@ -37,7 +37,7 @@
 		<result column="REVIEW_ATTACHMENT_FILE_PATH" property="filePath"/>
 	</resultMap>
 	
-	<select id="loginMember" resultMap="memberMap">
+	<select id="loginMember" resultMap="memberMap" parameterType="member">
 	SELECT
 	    member_no,
 	    ref_type_no,
@@ -55,17 +55,19 @@
 	    phone
 	FROM
 	    member
-	WHERE
-	        member_id = #{memberId}
-	    AND member_pwd = #{memberPwd}
-	    AND status = 'Y'
+	WHERE 
+		member_id = #{memberId} 
+		AND status = 'Y'
+		<if test="typeNo == 0">
+	    	member_pwd = #{memberPwd}
+		</if>
 	</select>
 	<select id="nicknameCheck" resultType="int" parameterType="String">
 		SELECT COUNT(*)
 		FROM MEMBER
 		WHERE MEMBER_NICKNAME = #{memberNickname}
 	</select>
-	<select id="idCheck" parameterType="string">
+	<select id="idCheck" parameterType="String" resultType="_int">
 		SELECT COUNT(*) 
 		FROM MEMBER 
 		WHERE MEMBER_ID LIKE #{memberId}

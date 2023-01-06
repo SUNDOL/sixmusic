@@ -170,12 +170,6 @@
                             </c:if>                            
                         </a>
                     </li>
-                    <li>
-                        <a class="nav-link" data-bs-toggle="offcanvas" href="#offcanvasSearch" role="button"
-                            aria-controls="offcanvasSearch">
-                            SEARCH
-                        </a>
-                    </li>
                 </ul>
             </div>
 
@@ -208,7 +202,7 @@
                     </form>
                     <hr>
                     <div class="d-grid" style="text-align:center;">
-                        <a href="#"><img src="${pageContext.request.contextPath}/resources/kakaologinbuttonimg/kakao_login_medium_wide.png" alt="kakaoLogin"></a>
+                        <a href="#" onclick="kakaoLogin();"><img src="${pageContext.request.contextPath}/resources/kakaologinbuttonimg/kakao_login_medium_wide.png" alt="kakaoLogin"></a>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -348,24 +342,6 @@
             </c:choose>
         </div>
     </div>
-
-    <!-- Offcanvas: Search -->
-    <div class="offcanvas offcanvas-top container" data-bs-scroll="true" tabindex="-1" id="offcanvasSearch"
-        aria-labelledby="offcanvasSearchLabel">
-        <div class="offcanvas-header">
-            <h2 class="offcanvas-title" id="offcanvasSearchLabel"><b>SEARCH</b></h2>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-            <form action="#" method="GET">
-                <div class="input-group input-group-lg">
-                    <input class="form-control form-control-lg" name="searchFormInput" type="text"
-                        placeholder="Find your sound" aria-label="form-control-lg example">
-                    <button class="btn btn-outline-dark" type="button" id="searchFormButton">SEARCH</button>
-                </div>
-            </form>
-        </div>
-    </div>
     
     <!-- Modal: Product Details -->
     <div class="modal fade" id="productDetailsModal" tabindex="-1" aria-labelledby="productDetailsModalLabel"
@@ -496,6 +472,10 @@
 <script src="${pageContext.request.contextPath}/resources/js/header.js"></script>
 <!-- JavaScript for cart -->
 <script src="${pageContext.request.contextPath}/resources/js/cart.js"></script>
+<!-- JavaScript for kakaoLogin -->
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/kakao.js"></script>
+
 <c:if test="${not empty loginUser}">
 	<script>
 		refreshCartWishlist();

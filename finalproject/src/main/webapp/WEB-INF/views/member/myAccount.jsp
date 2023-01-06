@@ -13,9 +13,16 @@
 
 <jsp:include page="../common/header.jsp"/>
 <body>
-<br><br><br><br>
+
+	<div class="bg-light rounded-3">
+	<br><br>
+      <div class="container-fluid py-5 text-white" style="background-image: url('resources/image/jumbotron/jumbotron-myaccount.jpg');">
+        <h1 class="display-5 fw-bold">My Account</h1>
+        <p class="col-md-8 fs-4">Welcome <span>${loginUser.memberNickname}</span>님!</p>
+      </div>
+    </div>
+
     <div class="container">
-        <h1 class="fw-bolder">Welcome <span>${loginUser.memberNickname}</span>님!</h1>
         <br>
         <div class="row">
             <div class="col-lg-3 g-1">

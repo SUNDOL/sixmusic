@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,9 +13,16 @@
 
 <jsp:include page="../common/header.jsp"/>
 <body>
-	<br><br><br><br>
+
+	<div class="bg-light rounded-3">
+	<br><br>
+      <div class="container-fluid py-5 text-white" style="background-image: url('resources/image/jumbotron/jumbotron-signup.jpg');">
+        <h1 class="display-5 fw-bold">Sign Up</h1>
+        <p class="col-md-8 fs-4">Welcome to SIXMUSIC</p>
+      </div>
+    </div>
+	
     <div class="container">
-        <h1><strong>SIGN UP</strong></h1>
         <br>
         <div class="card card-body shadow-sm g-5">
             <form action="submitSignUp.me" method="post" class="justify-content-center">
@@ -22,8 +30,14 @@
                 <div class="mb-3">
                     <label for="memberId" class="form-label">ID <br><small class="msg" id="memberIdMsg">EMAIL
                             형식으로 입력</small></label>
-                    <input type="email" name="memberId" id="memberId" class="form-control" required>
-                    <input type="hidden" name="typeNo" value="1">
+                    <c:if test="${not empty m}">
+	                    <input type="email" name="memberId" id="memberId" class="form-control" value="${m.memberId}" required>
+	                    <input type="hidden" name="typeNo" value="${m.typeNo}">
+                    </c:if>
+                    <c:if test="${empty m}">
+                    	<input type="email" name="memberId" id="memberId" class="form-control" required>
+	                    <input type="hidden" name="typeNo" value="1">
+                    </c:if>
                 </div>
                 <div class="mb-3">
                     <div class="row row-cols-1 row-cols-md-2 g-3">

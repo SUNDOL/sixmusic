@@ -14,10 +14,16 @@
 
 <jsp:include page="../common/header.jsp"/>
 <body>
-<br><br><br><br>
+
+	<div class="bg-light rounded-3">
+	<br><br>
+      <div class="container-fluid py-5 text-white" style="background-image: url('resources/image/jumbotron/jumbotron-myorderhistory.jpg');">
+        <h1 class="display-5 fw-bold">My Order History</h1>
+        <p class="col-md-8 fs-4"><span>${loginUser.memberNickname}</span>님의 ORDER HISTORY</p>
+      </div>
+    </div>
 
     <div class="container">
-        <h1 class="fw-bolder"><span>${loginUser.memberNickname}</span>님의 ORDER HISTORY</h1>
         <input type="hidden" id="hidden-memberNo" value="${loginUser.memberNo}">
         <br>
         <h3 class="fw-bold">Your Recent Orders</h3>

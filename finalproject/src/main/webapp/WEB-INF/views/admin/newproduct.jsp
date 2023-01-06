@@ -7,6 +7,7 @@
 <title>New Product</title>
 </head>
 <body>
+
 <form action="addToProduct.ad" method="post" enctype="multipart/form-data">
                             <div class="container">
                                 <div class="mb-3">

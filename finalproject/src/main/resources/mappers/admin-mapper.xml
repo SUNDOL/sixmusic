@@ -90,32 +90,15 @@
 	<update id="changeToProduct" parameterType="product">
 		UPDATE PRODUCT
 		SET 
-		<trim prefixOverrides=",">
-			<if test="category != null">
-				,REF_CATEGORY_NO = #{category}
-			</if>
-			<if test="type != null">
-				,REF_TYPE_NO = #{type}
-			</if>
-			<if test="model != null">
-				,REF_MODEL_NO = #{model}
-			</if>
-			<if test="color != null">
-				,PRODUCT_COLOR = #{color}
-			</if>
-			<if test="name != null">
-				,PRODUCT_NAME = #{name}
-			</if>
-			<if test="content != null">
-				,PRODUCT_CONTENT = #{content}
-			</if>
-			<if test="price != 0">
-				,PRODUCT_PRICE = #{price}
-			</if>
-		</trim>
+        PRODUCT_COLOR = #{color},
+        PRODUCT_NAME = #{name},
+		PRODUCT_CONTENT = #{content},
+		PRODUCT_PRICE = #{price},
+        PRODUCT_QUANTITY = #{quantity}
 		WHERE PRODUCT_NO LIKE #{productNo}
 	</update>
 	<!-- 제품 이미지 변경 -->
+	<!-- 
 	<update id="changeToProductImage" parameterType="list">
 		<foreach collection="list" item="productAttachment">
 			UPDATE PRODUCT_ATTACHMENT
@@ -127,6 +110,7 @@
 			WHERE PRODUCT_ATTACHMENT_NO LIKE #{attachmentNo}
 		</foreach>
 	</update>
+	 -->
 	<delete id="removerPoductImage">
 		DELETE FROM PRODUCT_ATTACHMENT
 		AND PRODUCT_ATTACHMENT_NO IN

@@ -15,11 +15,10 @@ function kakaoLogin() {
                 success: (res) => {
                     const kakao_account = res.kakao_account;
                     console.log(kakao_account.email); //사용자 정보
-                    let email = kakao_account.email;
-                    location.href='kakaoLogin.me?id='+email+'&type=2';
+                    let memberId = kakao_account.email;
+                    location.href='kakaoLogin.me?memberId='+memberId+'&typeNo=2';
                 }
             });
-            location.href='/sixmusicTest1' //리다이렉트 되는 코드
         },
         fail: function (error) {
             console.log(error);

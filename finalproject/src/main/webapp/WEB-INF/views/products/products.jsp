@@ -21,11 +21,16 @@
 <jsp:include page="../common/header.jsp"/>
 <body>
 
-	<br><br><br><br>
+	<div class="bg-light rounded-3">
+	<br><br>
+      <div class="container-fluid py-5 text-white" style="background-image: url('resources/image/jumbotron/jumbotron-product.jpg');">
+        <h1 class="display-5 fw-bold">Products</h1>
+        <p class="col-md-8 fs-4">Electric, Acoustic Guitars and basses</p>
+      </div>
+    </div>
 
 	<div class="container">
 		<br>
-
 		<!-- Filter section -->
 		<div class="row">
 			<div class="col-4 d-grid mx-auto">

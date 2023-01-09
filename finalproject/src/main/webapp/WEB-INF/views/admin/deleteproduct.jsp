@@ -98,7 +98,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <form action="#" method="post" enctype="multipart/form-data">
+                            <form action="removeProduct.ad" method="post" >
                                 <input type="hidden" name="productNo" id="productNo3" value="">
                                 <div class="d-flex justify-content-end">
                                     <button type="submit" class="btn btn-dark">Delete Products</button>

@@ -86,7 +86,6 @@ public class AdminController {
 	@ResponseBody
 	@RequestMapping(value = "modelData.ad", produces = "application/json; charset=utf-8")
 	public String modelData(int brandNo){
-		System.out.println(brandNo);
 		ArrayList<Model> list = adminService.selectModel(brandNo);
 		return new Gson().toJson(list);
 	}
@@ -149,14 +148,26 @@ public class AdminController {
 			new File(savePath + pat.getChangeName()).delete();
 		}
 	}
-
+	//제품 변경
+	@PostMapping("changeToProduct.ad")
+	public ModelAndView changeToProduct(Product p, ModelAndView mv, HttpSession session) {
+		int result = adminService.changeToProduct(p);
+		if (result > 0) {
+			session.setAttribute("alertMsg", "제품 수정에 성공했습니다.");
+			mv.setViewName("redirect:/admin.ad");
+		} else {
+			mv.setViewName("common/error");
+		}
+		return mv;
+	}
+	
 	// 제품 삭제
 	@PostMapping("removeProduct.ad")
 	public ModelAndView removeProduct(int productNo, ModelAndView mv, HttpSession session) {
 		int result = adminService.removeProduct(productNo);
 		if (result > 0) {
 			session.setAttribute("alertMsg", "제품 삭제에 성공했습니다.");
-			mv.setViewName("");
+			mv.setViewName("redirect:/admin.ad");
 		} else {
 			mv.setViewName("common/error");
 		}
@@ -176,7 +187,7 @@ public class AdminController {
 		return mv;
 	}
 
-	// 회원 제거
+	// 포인트 변경
 	@PostMapping("grandPoint.ad")
 	public ModelAndView grandPoint(Member m, ModelAndView mv, HttpSession session) {
 		int result = adminService.grandPoint(m);
@@ -188,7 +199,8 @@ public class AdminController {
 		}
 		return mv;
 	}
-	
+
+	//맴버 등급 변경
 	@PostMapping("modifyMemberGrade.ad")
 	public ModelAndView modifyMemberGrade(Member m, ModelAndView mv, HttpSession session) {
 

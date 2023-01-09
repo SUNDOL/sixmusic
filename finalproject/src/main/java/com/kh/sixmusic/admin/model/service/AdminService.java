@@ -36,6 +36,8 @@ public interface AdminService {
 
 	ArrayList<Model> selectModel(int brandNo);
 
+	int changeToProduct(Product p);
+
 
 
 }

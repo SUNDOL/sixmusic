@@ -57,7 +57,7 @@
                                 </div>
                             </div>
                             <hr>
-                            <form action="#" method="post" enctype="multipart/form-data">
+                            <form action="changeToProduct.ad" method="post" enctype="multipart/form-data">
                                 <div class="mb-3">
                                     <label for="name2" class="form-label fw-bold">Product Name</label>
                                     <input type="text" name="name" id="name2" class="form-control" required>
@@ -85,6 +85,7 @@
                                     <textarea name="content" id="content" class="form-control" rows="20"
                                         style="resize:none;" required></textarea>
                                 </div>
+                                <!--
                                 <div class="mb-3" id="oldAttachment2">
                                     <div class="input-group">
                                         <span class="input-group-text">Existing Attachments</span>
@@ -99,6 +100,7 @@
                                     <input type="file" name="imageList" id="imageList2" class="form-control" multiple
                                         required>
                                 </div>
+                                -->
                                 <br>
                                 <div class="d-flex justify-content-end">
                                     <button type="submit" class="btn btn-dark">Modify Product Info</button>

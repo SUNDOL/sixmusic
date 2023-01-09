@@ -73,6 +73,7 @@ $("#modiModel").on("show.bs.modal",()=>{
     });
 });
 
+// good
 function adminCsInfo(currentPage) {
     $.ajax({
         url: "adminCsInfo.qa",

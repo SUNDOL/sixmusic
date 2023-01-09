@@ -44,8 +44,10 @@
     	COUNT(*)
 	FROM
     	customer_service
-	WHERE
-    	ref_member_no LIKE #{memberNo}
+    <if test="memberNo != 0">
+		WHERE
+    		ref_member_no LIKE #{memberNo}
+    </if>
 </select>
 
 <select id="memberCsInfo" parameterType="_int" resultMap="questionMap">
@@ -65,10 +67,21 @@
 	FROM
          customer_service cs
     	JOIN member m ON ( cs.ref_member_no = m.member_no )
-	WHERE
-    	cs.ref_member_no LIKE #{memberNo}
+	<if test="memberNo != 0">
+		WHERE
+    		cs.ref_member_no LIKE #{memberNo}
+	</if>
     ORDER BY
     	cs.create_date desc
 </select>
+
+<update id="addToAnswer" parameterType="question">
+	UPDATE
+		customer_service
+	SET
+		question_reply = #{questionReply}
+	WHERE
+		service_no LIKE #{serviceNo}
+</update>
 
 </mapper>

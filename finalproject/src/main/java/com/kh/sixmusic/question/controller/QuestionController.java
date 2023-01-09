@@ -76,13 +76,26 @@ public class QuestionController {
 		return gson.toJson(pMap);
 	}
 	
+	@ResponseBody
+	@RequestMapping(value = "adminCsInfo.qa", produces = "application/json; charset=UTF-8")
+	public String adminCsInfo(HttpSession session, @RequestParam(defaultValue = "1") int currentPage) {
+		int listCount = questionService.csListCount(0);
+		PageInfo pi = new PageInfo(listCount, currentPage, 10, 10);
+		ArrayList<Question> question = questionService.memberCsInfo(0, pi);
+		Gson gson = new Gson();
+		HashMap<String, Object> qMap = new HashMap<>();
+		qMap.put("pi", pi);
+		qMap.put("question", question);
+		return gson.toJson(qMap);		
+	}
 
 	@PostMapping("addToAnswer.qa")
 	public ModelAndView addToAnswer(HttpSession session, ModelAndView mv, Question q) {
+		System.out.println(q);
 		int result = questionService.addToAnswer(q);
 		if (result > 0) {
-			session.setAttribute("alertMsg", "");
-			mv.setViewName("");
+			session.setAttribute("alertMsg", "답변이 등록되었습니다.");
+			mv.setViewName("redirect:/admin.ad");
 		} else {
 			mv.setViewName("common/error");
 		}

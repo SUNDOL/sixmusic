@@ -284,3 +284,4 @@ function csInfoPaging(pi) {
     str += ">&raquo;</span></a></li>";
     $("#myAccount-table-cs-foot").html(str);
 };
+// good

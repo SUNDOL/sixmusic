@@ -75,4 +75,14 @@ public class ProductServiceImpl implements ProductService {
 		return productDao.detailAdmin(sqlSession, productNo);
 	}
 
+	@Override
+	public ArrayList<Product> bestSellers() {
+		return productDao.bestSellers(sqlSession);
+	}
+
+	@Override
+	public ArrayList<Product> newArrivals() {
+		return productDao.newArrivals(sqlSession);
+	}
+
 }

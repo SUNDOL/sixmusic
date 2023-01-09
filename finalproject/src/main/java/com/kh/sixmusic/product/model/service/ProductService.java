@@ -11,15 +11,29 @@ import com.kh.sixmusic.product.model.vo.ReviewAttachment;
 
 public interface ProductService {
 	ArrayList<Product> productList(Filter f, PageInfo pi);
+
 	int listCount(Filter f);
+
 	Product productDetails(int productNo);
+
 	ArrayList<ProductAttachment> productPics(int productNo);
+
 	ArrayList<ProductAttachment> productColors(int productNo);
+
 	ArrayList<Review> productReviewList(int productNo);
+
 	Review reviewDetails(int reviewNo);
+
 	ReviewAttachment reviewDetailsPic(int reviewNo);
+
 	ArrayList<Product> groupAdmin(Filter f);
+
 	ArrayList<Product> productAdmin(Integer groupNo);
+
 	Product detailAdmin(Integer productNo);
+
+	ArrayList<Product> bestSellers();
+
+	ArrayList<Product> newArrivals();
 
 }

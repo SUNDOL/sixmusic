@@ -206,8 +206,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a href="#" style="color:#000; text-decoration:none;">Forgot ID?</a>&nbsp;|&nbsp;
-                    <a href="#" style="color:#000; text-decoration:none;">Forgot Password?</a>&nbsp;|&nbsp;
+                    <small>아직 SIXMUSIC 회원이 아니라면?</small>&nbsp;
                     <a href="signUp.me" style="color:#000; text-decoration:none;">Sign Up</a>
                 </div>
             </div>
@@ -350,7 +349,13 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="productDetailsModalLabel"><b>PRODUCT DETAILS</b></h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="refreshCartWishlist();"></button>
+                    <c:if test="${not empty loginUser}">
+	                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="damn1();"></button>
+                    </c:if>
+                    <c:if test="${empty loginUser}">
+                    	<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="damn2();"></button>
+                    </c:if>
+                    
                 </div>
                 <div class="modal-body">
                     <div class="container">
@@ -488,5 +493,18 @@
     </script>
     <c:remove var="alertMsg" scope="session"/>
 </c:if>
+<script>
+	function damn1(){
+		showCart();
+		showWishlist();
+		bestSellers();
+		newArrivals();
+	}
+	function damn2() {
+	    bestSellers();
+	    newArrivals();
+	};
+
+</script>
 
 </html>

@@ -55,7 +55,20 @@
 		    <span class="visually-hidden">Next</span>
 		</button>
 	</div>
+	<br>
+	<div class="container">
+		<h2 class="fs-1 fw-bold" id="bestSellers">Best Sellers</h2>
+		<div class="owl-bestSellers owl-carousel owl-theme g-1"></div>
+		<br>
+		<h2 class="fs-1 fw-bold" id="newArrivals">New Arrivals</h2>
+		<div class="owl-newArrivals owl-carousel owl-theme g-1"></div>
+		<br>
+	</div>
 </div>
 
 </body>
+<script src="resources/js/main-carousel.js"></script>
+<script>
+	mainview();
+</script>
 </html>

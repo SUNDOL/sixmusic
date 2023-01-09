@@ -70,21 +70,17 @@
                     <tr>
                         <th>No</th>
                         <th>Category</th>
-                        <th>Title</th>
+                        <th colspan="2">Title</th>
                         <th>Writer</th>
-                        <th>Date</th>
+                        <th>Replied</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>3</td>
-                        <td>배송문의</td>
-                        <td>시벌롬들아 내가 기타를 얼마나 많이 샀는데</td>
-                        <td>성기사</td>
-                        <td>2023-01-02</td>
-                    </tr>
+                <tbody id="cs-admin">
                 </tbody>
             </table>
+            <nav aria-label="Page navigation" class="justify-content-center" style="cursor:pointer;">
+  						<ul class="pagination justify-content-center" id="cs-admin-footer"></ul>
+  			</nav>
         </div>
 
         <!-- Modal: Brands/Models - Add a New Brand -->
@@ -270,12 +266,37 @@
             </div>
         </div>
 
-        <!-- Modal: Member -->
+        <!-- Modal: AdminCSReply -->
+        <div class="modal fade" id="adminCsReply" tabindex="-1" aria-labelledby="adminCsReplyLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-3 fw-bolder" id="deleteProductsLabel">WRITE A REPLY</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                    	<form action="addToAnswer.qa" method="post">
+	                    	<input type="hidden" name="serviceNo" id="adminCsServiceNo" value="">
+    	                	<textarea name="questionReply" class="form-control" rows="10" style="resize:none;" required></textarea>
+    	                	<br>
+    	                	<button type="submit" class="btn btn-dark">Submit</button>
+    	                	<button type="button" class="btn btn-outline-secondary"
+                                data-bs-dismiss="modal">Close</button>
+                    	</form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
 
     </div>
 </body>
 <jsp:include page="../common/footer.jsp"/>
 <script src="resources/js/admin.js"></script>
 <script src="resources/js/adminFilter.js"></script>
+<script>
+	adminCsInfo(1);
+</script>
 
 </html>

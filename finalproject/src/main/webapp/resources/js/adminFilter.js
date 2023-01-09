@@ -241,6 +241,7 @@ function detail(f){
                     console.log(result);
                 }
             }
+            $(f.id + "form input[name=productNo]").val(f.productNo);
         }
     });
     return;

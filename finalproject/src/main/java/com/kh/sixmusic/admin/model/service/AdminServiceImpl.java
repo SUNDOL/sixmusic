@@ -104,4 +104,9 @@ public class AdminServiceImpl implements AdminService {
 		return AdminDao.selectModel(sqlSession,brandNo);
 	}
 
+	@Override
+	public int changeToProduct(Product p) {
+		return AdminDao.changeToProduct(sqlSession,p);
+	}
+
 }

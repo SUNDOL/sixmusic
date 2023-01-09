@@ -97,6 +97,10 @@ public class AdminDao {
 		return (ArrayList)sqlSession.selectList("adminMapper.selectModel", brandNo);
 	}
 
+	public int changeToProduct(SqlSessionTemplate sqlSession, Product p) {
+		return sqlSession.update("adminMapper.changeToProduct", p);
+	}
+
 
 
 

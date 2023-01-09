@@ -185,6 +185,7 @@
     FROM PRODUCT P
     JOIN PRODUCT_GROUP PG ON(P.PRODUCT_NO = PG.REF_PRODUCT_NO)
     WHERE PG.GROUP_NO LIKE #{groupNo}
+    AND P.STATUS LIKE 'Y'
 </select>
 <select id="detailAdmin" parameterType="_int" resultMap="productResult">
     SELECT

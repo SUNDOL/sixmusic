@@ -330,4 +330,124 @@ WHERE
     ref_review_no = #{reviewNo}
 </select>
 
+<select id="bestSellers" resultType="product" resultMap="productResult">
+SELECT
+    f.bestsellers,
+    p.product_no,
+    b.brand_name,
+    p.product_name,
+    p.product_color,
+    p.product_price,
+    pat.product_attachment_file_path   file_path,
+    pat.product_attachment_change_name change_name,
+    nvl(rg.rating, 0)                  rating,
+    nvl(rg.count, 0)                   count
+FROM
+         product p
+    JOIN product_attachment pat ON ( p.product_no = pat.ref_product_no )
+    JOIN model              m ON ( p.ref_model_no = m.model_no )
+    JOIN brand              b ON ( m.ref_brand_no = b.brand_no )
+    JOIN product_group      pg ON ( p.product_no = pg.ref_product_no )
+    LEFT JOIN product_order      po ON ( po.ref_product_no = p.product_no )
+    LEFT JOIN review             r ON ( p.product_no = r.ref_product_no )
+    LEFT JOIN (
+        SELECT
+            ref_product_no,
+            COUNT(*) AS bestsellers
+        FROM
+            product_order
+        GROUP BY
+            ref_product_no
+    )                  f ON ( f.ref_product_no = p.product_no )
+    LEFT JOIN (
+        SELECT
+            group_no                AS group_no,
+            round(AVG(r.rating), 2) AS rating,
+            COUNT(r.review_no)      AS count
+        FROM
+            product_group pg
+            LEFT JOIN review        r ON ( pg.ref_product_no = r.ref_product_no )
+        WHERE
+            ( r.status LIKE 'Y'
+              OR r.status IS NULL )
+        GROUP BY
+            group_no
+    )                  rg ON ( pg.group_no = rg.group_no )
+WHERE
+    product_attachment_change_name LIKE '%-1.%'
+GROUP BY
+    f.bestsellers,
+    p.product_no,
+    b.brand_name,
+    p.product_name,
+    p.product_color,
+    p.product_price,
+    pat.product_attachment_file_path,
+    pat.product_attachment_change_name,
+    nvl(rg.rating, 0),
+    nvl(rg.count, 0)
+ORDER BY
+    f.bestsellers DESC
+</select>
+
+<select id="newArrivals" resultType="product" resultMap="productResult">
+SELECT
+    f.bestsellers,
+    p.product_no,
+    b.brand_name,
+    p.product_name,
+    p.product_color,
+    p.product_price,
+    pat.product_attachment_file_path   file_path,
+    pat.product_attachment_change_name change_name,
+    nvl(rg.rating, 0)                  rating,
+    nvl(rg.count, 0)                   count
+FROM
+         product p
+    JOIN product_attachment pat ON ( p.product_no = pat.ref_product_no )
+    JOIN model              m ON ( p.ref_model_no = m.model_no )
+    JOIN brand              b ON ( m.ref_brand_no = b.brand_no )
+    JOIN product_group      pg ON ( p.product_no = pg.ref_product_no )
+    LEFT JOIN product_order      po ON ( po.ref_product_no = p.product_no )
+    LEFT JOIN review             r ON ( p.product_no = r.ref_product_no )
+    LEFT JOIN (
+        SELECT
+            ref_product_no,
+            COUNT(*) AS bestsellers
+        FROM
+            product_order
+        GROUP BY
+            ref_product_no
+    )                  f ON ( f.ref_product_no = p.product_no )
+    LEFT JOIN (
+        SELECT
+            group_no                AS group_no,
+            round(AVG(r.rating), 2) AS rating,
+            COUNT(r.review_no)      AS count
+        FROM
+            product_group pg
+            LEFT JOIN review        r ON ( pg.ref_product_no = r.ref_product_no )
+        WHERE
+            ( r.status LIKE 'Y'
+              OR r.status IS NULL )
+        GROUP BY
+            group_no
+    )                  rg ON ( pg.group_no = rg.group_no )
+WHERE
+    product_attachment_change_name LIKE '%-1.%'
+GROUP BY
+    f.bestsellers,
+    p.product_no,
+    b.brand_name,
+    p.product_name,
+    p.product_color,
+    p.product_price,
+    pat.product_attachment_file_path,
+    pat.product_attachment_change_name,
+    nvl(rg.rating, 0),
+    nvl(rg.count, 0)
+ORDER BY
+    p.product_no desc
+</select>
+
 </mapper>

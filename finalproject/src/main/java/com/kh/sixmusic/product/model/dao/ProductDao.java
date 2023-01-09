@@ -55,14 +55,24 @@ public class ProductDao {
 	public ArrayList<Product> groupAdmin(SqlSessionTemplate sqlSession, Filter f) {
 		return (ArrayList) sqlSession.selectList("productMapper.groupAdmin", f);
 	}
-	
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ArrayList<Product> productAdmin(SqlSessionTemplate sqlSession, Integer groupNo) {
 		return (ArrayList) sqlSession.selectList("productMapper.productAdmin", groupNo);
 	}
 
 	public Product detailAdmin(SqlSessionTemplate sqlSession, Integer productNo) {
-		return sqlSession.selectOne("productMapper.detailAdmin",productNo);
+		return sqlSession.selectOne("productMapper.detailAdmin", productNo);
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public ArrayList<Product> bestSellers(SqlSessionTemplate sqlSession) {
+		return (ArrayList) sqlSession.selectList("productMapper.bestSellers");
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public ArrayList<Product> newArrivals(SqlSessionTemplate sqlSession) {
+		return (ArrayList) sqlSession.selectList("productMapper.newArrivals");
 	}
 
 }

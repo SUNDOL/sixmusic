@@ -32,7 +32,7 @@ public class ProductController {
 		return mv;
 	}
 
-	// 상품 상세페이지  + 사진 + 리뷰 목록
+	// 상품 상세페이지 + 사진 + 리뷰 목록
 	@ResponseBody
 	@RequestMapping(value = "product.pr", produces = "application/json; charset=UTF-8")
 	public String productDetails(int productNo) {
@@ -48,7 +48,7 @@ public class ProductController {
 		pMap.put("productReviewList", productReviewList);
 		return gson.toJson(pMap);
 	}
-	
+
 	// 리뷰: 상세 리뷰
 	@ResponseBody
 	@RequestMapping(value = "reviewDetails.pr", produces = "application/json; charset=UTF-8")
@@ -61,7 +61,6 @@ public class ProductController {
 		rMap.put("reviewAttachment", reviewAttachment);
 		return gson.toJson(rMap);
 	}
-	
 
 	// 상품 검색
 	@ResponseBody
@@ -78,7 +77,7 @@ public class ProductController {
 		map.put("p", list);
 		return gson.toJson(map);
 	}
-	
+
 	// 상품 그룹
 	@ResponseBody
 	@RequestMapping(value = "groupAdmin.pr", produces = "application/json; charset=utf-8")
@@ -87,7 +86,7 @@ public class ProductController {
 		Gson gson = new Gson();
 		return gson.toJson(list);
 	}
-	
+
 	// 상품 검색
 	@ResponseBody
 	@RequestMapping(value = "productAdmin.pr", produces = "application/json; charset=utf-8")
@@ -96,7 +95,7 @@ public class ProductController {
 		Gson gson = new Gson();
 		return gson.toJson(list);
 	}
-	
+
 	// 상품 정보
 	@ResponseBody
 	@RequestMapping(value = "detailAdmin.pr", produces = "application/json; charset=utf-8")
@@ -104,5 +103,23 @@ public class ProductController {
 		Product p = productService.detailAdmin(productNo);
 		Gson gson = new Gson();
 		return gson.toJson(p);
+	}
+
+	// 메인화면 베스트셀러 (Best Sellers)
+	@ResponseBody
+	@RequestMapping(value = "bestSellers.pr", produces = "application/json; charset=UTF-8")
+	public String bestSellers() {
+		ArrayList<Product> list = productService.bestSellers();
+		Gson gson = new Gson();
+		return gson.toJson(list);
+	}
+
+	// 메인화면 최신 상품 (New Arrivals)
+	@ResponseBody
+	@RequestMapping(value = "newArrivals.pr", produces = "application/json; charset=UTF-8")
+	public String newArrivals() {
+		ArrayList<Product> list = productService.newArrivals();
+		Gson gson = new Gson();
+		return gson.toJson(list);
 	}
 }

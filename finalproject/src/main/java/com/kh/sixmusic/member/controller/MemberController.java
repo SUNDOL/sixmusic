@@ -275,12 +275,14 @@ public class MemberController {
 		String realPath = session.getServletContext().getRealPath("/"+rat.getFilePath());
 		ReviewAttachment changeRat = null;
 		// 1. 기존 이미지 삭제 후 새 이미지로 변경
+		
 		if (!image.getOriginalFilename().equals("")) {
 			changeRat = new ReviewAttachment();
 			String originName = image.getOriginalFilename();
 			// 변경 이미지 명 : review-회원 정보-제품 정보.확장자명
 			String ext = originName.substring(originName.lastIndexOf("."));
 			String changeName = "review-" + r.getMemberNo() + "-" + r.getProductNo() + ext;
+			new File(realPath + rat.getChangeName()).delete();
 			try {
 				image.transferTo(new File(realPath + changeName));
 			} catch (IOException e) {
@@ -294,17 +296,9 @@ public class MemberController {
 		}
 		int result = memberService.confirmReviewModification(r, changeRat);
 		if(result>0) {
-			if (changeRat!= null) {
-				new File(realPath + rat.getChangeName()).delete();
-			}
 			session.setAttribute("alertMsg", "리뷰 수정에 성공했습니다!!!");
-			
 		}else {
-			if (changeRat!= null) {
-				new File(realPath + changeRat.getChangeName()).delete();
-			}
 			session.setAttribute("alertMsg", "리뷰 수정에 실패했습니다.");
-			
 		}
 		mv.setViewName("member/myOrderHistory");
 		return mv;

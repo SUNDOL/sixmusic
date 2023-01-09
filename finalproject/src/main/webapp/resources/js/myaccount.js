@@ -213,7 +213,7 @@ function myAccountCsInfo(currentPage) {
                     }
                     if (a.question[i].questionReply == null) {
                         adminYn = "N";
-                        adminReply = "관리자가 아직 응답을 하지 않았습니다. 빠른 시일 내로 답변 드리겠습니다."
+                        adminReply = "관리자가 아직 답변을 하지 않았습니다. 빠른 시일 내로 답변 드리겠습니다."
                     }
                     if (a.question[i].questionReply != null) {
                         adminYn = "Y";
@@ -284,3 +284,4 @@ function csInfoPaging(pi) {
     str += ">&raquo;</span></a></li>";
     $("#myAccount-table-cs-foot").html(str);
 };
+// good

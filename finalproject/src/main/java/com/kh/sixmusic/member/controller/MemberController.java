@@ -4,9 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,15 +14,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.google.gson.Gson;
 import com.kh.sixmusic.common.model.vo.PageInfo;
 import com.kh.sixmusic.member.model.service.MemberService;
 import com.kh.sixmusic.member.model.vo.Member;
-import com.kh.sixmusic.order.model.vo.ProductOrder;
 import com.kh.sixmusic.order.model.vo.TotalOrder;
 import com.kh.sixmusic.product.model.vo.Product;
-import com.kh.sixmusic.product.model.vo.ProductAttachment;
 import com.kh.sixmusic.product.model.vo.Review;
 import com.kh.sixmusic.product.model.vo.ReviewAttachment;
 

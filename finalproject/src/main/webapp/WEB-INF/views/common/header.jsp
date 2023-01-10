@@ -106,22 +106,22 @@
                             COMMUNITIES
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark">
-                            <li><a class="dropdown-item" href="#">Electric Guitar Community</a></li>
+                            <li><a class="dropdown-item" href="list.bo?boardCate=3">Electric Guitar Community</a></li>
                             <li>
                                 <hr class="dropdown-divider bg-light">
                             </li>
-                            <li><a class="dropdown-item" href="#">Acoustic Guitar Community</a></li>
+                            <li><a class="dropdown-item" href="list.bo?boardCate=2">Acoustic Guitar Community</a></li>
                             <li>
                                 <hr class="dropdown-divider bg-light">
                             </li>
-                            <li><a class="dropdown-item" href="#">Bass Community</a></li>
+                            <li><a class="dropdown-item" href="list.bo?boardCate=4">Bass Community</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">BLOG</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">ANNOUNCEMENTS</a>
+                        <a class="nav-link" href="list.bo?boardCate=1">ANNOUNCEMENTS</a>
                     </li>
                 </ul>
 

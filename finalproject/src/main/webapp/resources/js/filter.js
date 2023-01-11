@@ -95,6 +95,9 @@ function check(f) {
 }
 
 function search(f) {
+    if(typeof f.currentPage === 'undefined'){
+        f.currentPage = 1;
+    }
     $.ajax({
         url: "select.pr",
         data: {
@@ -151,7 +154,16 @@ function productList(list) {
 }
 
 function pageInfo(f, pi) {
-    let copyf = f;
+    let copyf = {
+        typeNo: f.typeNo,
+        brandNo: f.brandNo,
+        modelNo: f.modelNo,
+        priceNo: f.priceNo,
+        sort: f.sort,
+        boardLimit: f.boardLimit,
+        currentPage: f.currentPage
+    };
+    
     copyf.currentPage = pi.startPage - 1;
     let str = "<li class='page-item'><a class='page-link' aria-label='Previous' onclick='filter(" + JSON.stringify(copyf) + ");'><span aria-hidden='true'>&laquo;</span></a></li>";
 

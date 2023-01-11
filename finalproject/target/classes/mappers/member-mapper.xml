@@ -58,7 +58,7 @@
 	WHERE 
 		member_id = #{memberId} 
 		AND status = 'Y'
-		<if test="typeNo == 0">
+		<if test="typeNo == null">
 	    	member_pwd = #{memberPwd}
 		</if>
 	</select>

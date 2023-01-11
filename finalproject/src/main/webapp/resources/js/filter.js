@@ -11,32 +11,31 @@ function filter(f) {
         dataType: "json",
         success: result => {
             search(f);
-
             brand(result.brand);
             model(result.model);
             price(result.price);
-            $("input[name=brandNo]").change(() => {
+            $("input[name=brandNo]").on("change",() => {
                 f.brandNo = $("input[name=brandNo]:checked").val();
                 filter(f);
             });
-            $("input[name=modelNo]").change(() => {
+            $("input[name=modelNo]").on("change",() => {
                 let list = $("input[name=modelNo]:checked").get();
                 f.modelNo = [];
                 list.forEach(e => f.modelNo.push($(e).val()));
                 filter(f);
             });
-            $("input[name=priceNo]").change(() => {
+            $("input[name=priceNo]").on("change",() => {
                 let list = $("input[name=priceNo]:checked").get();
                 f.priceNo = [];
                 list.forEach(e => f.priceNo.push($(e).val()));
                 filter(f);
             });
-            $("#sortBy").change(() => {
+            $("#sortBy").on("change",() => {
                 f.sort = $("#sortBy").val();
                 search(f);
             });
             
-            $("#boardLimit").change(() => {
+            $("#boardLimit").on("change",() => {
                 f.boardLimit = $("#boardLimit").val();
                 search(f);
             });
@@ -96,6 +95,9 @@ function check(f) {
 }
 
 function search(f) {
+    if(typeof f.currentPage === 'undefined'){
+        f.currentPage = 1;
+    }
     $.ajax({
         url: "select.pr",
         data: {
@@ -152,23 +154,33 @@ function productList(list) {
 }
 
 function pageInfo(f, pi) {
-    let currentPage = pi.startPage - 1;
-    let str = "<li class='page-item'><a class='page-link' aria-label='Previous' onclick='filter(" + JSON.stringify(f) + ");'><span aria-hidden='true'>&laquo;</span></a></li>";
+    let copyf = {
+        typeNo: f.typeNo,
+        brandNo: f.brandNo,
+        modelNo: f.modelNo,
+        priceNo: f.priceNo,
+        sort: f.sort,
+        boardLimit: f.boardLimit,
+        currentPage: f.currentPage
+    };
+    
+    copyf.currentPage = pi.startPage - 1;
+    let str = "<li class='page-item'><a class='page-link' aria-label='Previous' onclick='filter(" + JSON.stringify(copyf) + ");'><span aria-hidden='true'>&laquo;</span></a></li>";
 
     if (pi != null) {
         for (let i = pi.startPage; i < pi.endPage + 1; i++) {
-            currentPage = i;
-            str += "<li class='page-item'><a class='page-link' onclick='filter(" + JSON.stringify(f) + ");'>" + i + "</a></li>";
+            copyf.currentPage = i;
+            str += "<li class='page-item'><a class='page-link' onclick='filter(" + JSON.stringify(copyf) + ");'>" + i + "</a></li>";
         }
     }
 
-    currentPage = pi.endPage + 1;
+    copyf.currentPage =  pi.endPage + 1;
     str += "<li class='page-item'><a class='page-link' aria-label='Previous' value='1'><span aria-hidden='true'";
     if (pi.endPage != pi.maxPage) {
-        str += "onclick='filter(" + JSON.stringify(f) + ");'";
+        str += "onclick='filter(" + JSON.stringify(copyf) + ");'";
     }
     str += ">&raquo;</span></a></li>";
-
+    
     $("#pageInfo-area").html(str);
 }
 

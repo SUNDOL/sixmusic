@@ -128,8 +128,6 @@ public class AdminController {
 			pat.setChangeName(changeName);
 			patList.add(pat);
 		}
-
-		System.out.println(patList);
 		int result = adminService.addToProductImage(patList);
 
 		if (result > 0) {

@@ -117,7 +117,7 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">BLOG</a>
+                        <a class="nav-link" href="blog.bo">BLOG</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="list.bo?boardCate=1">ANNOUNCEMENTS</a>

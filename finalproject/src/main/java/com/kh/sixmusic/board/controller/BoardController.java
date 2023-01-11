@@ -33,6 +33,11 @@ public class BoardController {
 	@Autowired
 	private BoardService boardService;
 	
+	@GetMapping("blog.bo")
+	public String blog() {
+		return "common/blog";
+	}
+	
 	@RequestMapping("list.bo")
 	public String selectList(@RequestParam(value="currentPage",defaultValue = "1") int currentPage,
 							@RequestParam(value="boardCate") int boardCate,

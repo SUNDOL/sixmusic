@@ -8,7 +8,7 @@
 <script src="resources/js/filter.js"></script>
 <script>
 	$(()=>{
-		filter({typeNo:"${typeNo}"});
+		filter({typeNo:"${typeNo}",currentPage:1});
 	});
 </script>
 </head>

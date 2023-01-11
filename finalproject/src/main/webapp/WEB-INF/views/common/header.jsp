@@ -82,8 +82,7 @@
                         <ul class="dropdown-menu dropdown-menu-dark">
                             <li><a class="dropdown-item" href="form.pr?typeNo=3">6-String</a></li>
                             <li><a class="dropdown-item" href="form.pr?typeNo=4">12-String</a></li>
-                            <li><a class="dropdown-item" href="form.pr?typeNo=5">Acoustic-Electric</a></li>
-                            <li><a class="dropdown-item" href="form.pr?typeNo=6">Classical & Nylon</a></li>
+                            <li><a class="dropdown-item" href="form.pr?typeNo=5">Classical & Nylon</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
@@ -92,9 +91,9 @@
                             BASSES
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark">
-                            <li><a class="dropdown-item" href="form.pr?typeNo=7">Electric: 4-String</a></li>
-                            <li><a class="dropdown-item" href="form.pr?typeNo=8">Electric: 5+ String</a></li>
-                            <li><a class="dropdown-item" href="form.pr?typeNo=9">Acoustic</a></li>
+                            <li><a class="dropdown-item" href="form.pr?typeNo=6">Electric: 4-String</a></li>
+                            <li><a class="dropdown-item" href="form.pr?typeNo=7">Electric: 5+ String</a></li>
+                            <li><a class="dropdown-item" href="form.pr?typeNo=8">Acoustic</a></li>
                         </ul>
                     </li>
                 </ul>

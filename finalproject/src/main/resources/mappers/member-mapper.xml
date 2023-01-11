@@ -59,7 +59,7 @@
 		member_id = #{memberId} 
 		AND status = 'Y'
 		<if test="typeNo == null">
-	    	member_pwd = #{memberPwd}
+	    	AND member_pwd = #{memberPwd}
 		</if>
 	</select>
 	<select id="nicknameCheck" resultType="int" parameterType="String">
